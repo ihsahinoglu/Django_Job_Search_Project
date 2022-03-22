@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from job.models import Job, Company
+from job.models import Job
 
 
 class JobAdmin(admin.ModelAdmin):
@@ -11,10 +11,5 @@ class JobAdmin(admin.ModelAdmin):
     # prepopulated_fields = {'slug': ('title',)}
 
 
-class CompanyAdmin(admin.ModelAdmin):
-    list_display = ['company_name', 'status', 'get_logo']
-    readonly_fields = ('get_logo',)
-
-
 admin.site.register(Job, JobAdmin)
-admin.site.register(Company, CompanyAdmin)
+
