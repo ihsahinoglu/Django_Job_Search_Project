@@ -5,17 +5,18 @@ from django.shortcuts import render
 # Create your views here.
 from Django_Job_Search_Project import settings
 from home.models import ContactMessage, Setting, ContactForm
+from job.models import Job
 
 
 def index(request):
-
     setting = Setting.objects.get(pk=1)
+    populerCategories = Job.objects.all()
     page = "home"
     context = {'setting': setting,
                'page': page,
-               #'products_slider': products_slider,
-               #'products_latest': products_latest,
-               #'products_picked': products_picked,
+               'populerCategories' : populerCategories,
+               # 'products_latest': products_latest,
+               # 'products_picked': products_picked,
                # 'category':category
                }
     return render(request, 'index.html', context)
@@ -34,14 +35,14 @@ def contactus(request):
             data.message = form.cleaned_data['message']
             data.ip = request.META.get('REMOTE_ADDR')
             data.save()  # save data to table
-            #messages.success(request, "Your message has ben sent. Thank you for your message.")
+            # messages.success(request, "Your message has ben sent. Thank you for your message.")
             return HttpResponseRedirect('/contactus')
 
-    #defaultlang = settings.LANGUAGE_CODE[0:2]
-    #currentlang = request.LANGUAGE_CODE[0:2]
+    # defaultlang = settings.LANGUAGE_CODE[0:2]
+    # currentlang = request.LANGUAGE_CODE[0:2]
     setting = Setting.objects.get(pk=1)
 
     form = ContactForm
-    context = {'setting':setting,
+    context = {'setting': setting,
                'form': form}
     return render(request, 'contactus.html', context)
