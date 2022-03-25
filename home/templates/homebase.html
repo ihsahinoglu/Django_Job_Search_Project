@@ -2,7 +2,7 @@
 <html lang="en" class="no-js">
 
 <head>
-
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> {% block title %} Jobya - Responsive Job Board HTML Template {% endblock %} </title>
@@ -10,10 +10,10 @@
     <meta name="keywords" content="{% block keywords %} Home Keywords {% endblock %}" />
     <meta name="author" content="Themesdesign" />
 
-    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %} ">
 
     <!-- Bootstrap core CSS -->
-    {% load static %}
+
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
 
     <!--Material Icon -->

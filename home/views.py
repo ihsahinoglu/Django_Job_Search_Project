@@ -6,15 +6,16 @@ from django.shortcuts import render
 from Django_Job_Search_Project import settings
 from home.models import ContactMessage, Setting, ContactForm
 from job.models import Job
+from company.models import Company
 
 
 def index(request):
-    setting = Setting.objects.get(pk=1)
+    setting = Setting.objects.get(id=1)
     populerCategories = Job.objects.all()
     page = "home"
     context = {'setting': setting,
                'page': page,
-               'populerCategories' : populerCategories,
+               'populerCategories': populerCategories,
                # 'products_latest': products_latest,
                # 'products_picked': products_picked,
                # 'category':category
@@ -40,9 +41,21 @@ def contactus(request):
 
     # defaultlang = settings.LANGUAGE_CODE[0:2]
     # currentlang = request.LANGUAGE_CODE[0:2]
-    setting = Setting.objects.get(pk=1)
+    setting = Setting.objects.get(id=1)
 
     form = ContactForm
     context = {'setting': setting,
                'form': form}
     return render(request, 'contactus.html', context)
+
+
+def jobDetails(request):
+    setting = Setting.objects.get(id=1)
+    job = Job.objects.get(id=1)
+
+    # page = "home"
+    context = {'setting': setting,
+               # 'page': page,
+               'job': job,
+               }
+    return render(request, 'job-details.html', context)
