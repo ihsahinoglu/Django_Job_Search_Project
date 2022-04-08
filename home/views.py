@@ -59,3 +59,12 @@ def jobDetails(request):
                'job': job,
                }
     return render(request, 'job-details.html', context)
+
+def createResume(request):
+
+    setting = Setting.objects.get(id=1)
+    context = {'setting': setting,
+               # 'page': page,
+               #'job': job,
+               }
+    return render(request, 'create-resume.html', context)

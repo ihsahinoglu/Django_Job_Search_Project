@@ -66,3 +66,7 @@ class ContactForm(ModelForm):
             'email': TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'}),
             'message': Textarea(attrs={'class': 'input', 'placeholder': 'Your Message', 'rows': '5'}),
         }
+
+#class createResume(models.Model):
+
+

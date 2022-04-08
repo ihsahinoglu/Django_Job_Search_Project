@@ -27,7 +27,11 @@ urlpatterns = [
 
                   path('contactus/', views.contactus, name='contactus'),
                   path('job-details/', views.jobDetails, name='job-details'),
+                  path('create-resume/', views.createResume, name='create-resume'),
                   path('login/', UserViews.login_form, name='login'),
+                  path('company-login/', UserViews.login_form, name='company-login'),
+                  path('signup/', UserViews.signup_form, name='signup'),
+                  path('logout/', UserViews.logout_func, name='logout'),
                   path('admin/', admin.site.urls),
                   path('ckeditor/', include('ckeditor_uploader.urls')),
 
