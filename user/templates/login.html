@@ -31,19 +31,25 @@
                                     <div class="text-center">
                                         <h4 class="mb-4">İş Arayan Giriş</h4>
                                     </div>
+                                    {% if messages %}
+                                       {% for message in messages %}
+                                     <div class="alert alert-{{message.tags}}" role="alert">
+                                         {{ message }}
+                                     </div>
+                                        {% endfor %}
+                                      {% endif %}
                                     <form class="login-form" method="post" action="">
                                          {% csrf_token %}
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="form-group position-relative">
-                                                    <label>E-posta adresi <span class="text-danger">*</span></label>
-                                                    <input type="email" class="form-control" placeholder="Email" name="email" required="">
+                                                    <label>Kullanıcı adı <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Kullanıcı adı" name="username" required="">
                                                 </div>
                                             </div>
     
                                             <div class="col-lg-12">
                                                 <div class="form-group position-relative">
-                                                    {% csrf_token %}
                                                     <label>Şifre <span class="text-danger">*</span></label>
                                                     <input type="password" class="form-control" placeholder="Şifre" name="password" required="">
                                                 </div>

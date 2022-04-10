@@ -1,12 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.core.checks import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-# Create your views here.
 from Django_Job_Search_Project import settings
+from home.forms import CreateResumeForm
 from home.models import ContactMessage, Setting, ContactForm
 from job.models import Job
-from company.models import Company
+from user.models import UserProfile
 
 
 def index(request):
@@ -24,8 +25,6 @@ def index(request):
 
 
 def contactus(request):
-    # currentlang = request.LANGUAGE_CODE[0:2]
-    # category = categoryTree(0,'',currentlang)
     if request.method == 'POST':  # check post
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -60,11 +59,32 @@ def jobDetails(request):
                }
     return render(request, 'job-details.html', context)
 
-def createResume(request):
 
+@login_required(login_url='/login')  # Check login
+def createResume(request):
     setting = Setting.objects.get(id=1)
+    current_user = request.user
+    userprofile = UserProfile.objects.get(user_id=current_user.id)
+    if request.method == 'POST':  # check post
+        form = CreateResumeForm(request.POST, request.FILES,)
+        if form.is_valid():
+            data = userprofile  # create relation with model
+
+            data.image = "images/users/" + str(form.cleaned_data['image'])
+            data.birth_date = form.cleaned_data['birth_date']
+            data.sex = form.cleaned_data['sex']
+            data.city = form.cleaned_data['city']
+            data.phone = form.cleaned_data['phone']
+            data.email = form.cleaned_data['email']
+            data.address = form.cleaned_data['address']
+            data.web_site = form.cleaned_data['web_site']
+            data.save()  # save data to table
+            # messages.success(request, "Your message has ben sent. Thank you for your message.")
+            return HttpResponseRedirect('/')
+
     context = {'setting': setting,
-               # 'page': page,
-               #'job': job,
+               'userprofile': userprofile,
                }
     return render(request, 'create-resume.html', context)
+
+

@@ -29,7 +29,7 @@
                             <div class="col-md-6">
                                 <div class="login_page bg-white shadow rounded p-4">
                                     <div class="text-center">
-                                        <h4 class="mb-4">Signup</h4>  
+                                        <h4 class="mb-4">Kayıt Ol</h4>
                                     </div>
                                      {% if messages %}
                                        {% for message in messages %}
@@ -41,34 +41,40 @@
                                     <form class="login-form" method="post" action="">
                                          {% csrf_token %}
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group position-relative">
+                                                    <label>Kullanıcı adı <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Kullanıcı adı" name="username" required="">
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <div class="form-group position-relative">                                               
-                                                    <label>First name <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" placeholder="First Name" name="username" required="">
+                                                    <label>Ad <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Ad" name="first_name" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group position-relative">                                                
-                                                    <label>Last name <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" placeholder="Last Name" name="first_name" required="">
+                                                    <label>Soyad <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Soyad" name="last_name" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group position-relative">
-                                                    <label>Your Email <span class="text-danger">*</span></label>
-                                                    <input type="email" class="form-control" placeholder="Email" name="email" required="">
+                                                    <label>E-mail <span class="text-danger">*</span></label>
+                                                    <input type="email" class="form-control" placeholder="E-mail" name="email" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group position-relative">
-                                                    <label>Password <span class="text-danger">*</span></label>
-                                                    <input type="password" class="form-control" placeholder="Password" name="password1" required="">
+                                                    <label>Şifre <span class="text-danger">*</span></label>
+                                                    <input type="password" class="form-control" placeholder="Şifre" name="password1" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group position-relative">
-                                                    <label>Confirm Password <span class="text-danger">*</span></label>
-                                                    <input type="password" class="form-control" placeholder="Confirm Password" name="password2" required="">
+                                                    <label>Şifre tekrar <span class="text-danger">*</span></label>
+                                                    <input type="password" class="form-control" placeholder="Şifre tekrar" name="password2" required="">
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -80,10 +86,10 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary w-100">Register</button>
+                                                <button class="btn btn-primary w-100">Kayıt Ol</button>
                                             </div>
                                             <div class="mx-auto">
-                                                <p class="mb-0 mt-3"><small class="text-dark mr-2">Already have an account ?</small> <a href="login.html" class="text-dark font-weight-bold">Sign in</a></p>
+                                                <p class="mb-0 mt-3"><small class="text-dark mr-2">Zeten bir hesabın var mı ?</small> <a href="login.html" class="text-dark font-weight-bold">Giriş yap</a></p>
                                             </div>
                                         </div>
                                     </form>

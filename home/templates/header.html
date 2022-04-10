@@ -13,27 +13,51 @@
     <!-- Navigation Bar-->
     <header id="topnav"  class="defaultscroll scroll-active">
         <!-- Tagline STart -->
+        {% if user.id is not None %}
         <div class="tagline">
             <div class="container">
                 <div class="float-left">
-                    <div class="phone">
-                        <i class="mdi mdi-phone-classic"></i> {{  user.phone }}
-                    </div>
                     <div class="email">
                         <a href="#">
-                            <i class="mdi mdi-email"></i> {{  user.email }}
+                            <i class="mdi mdi-email"></i> {{user.email}}
                         </a>
                     </div>
                 </div>
                 <div class="float-right">
                     <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
-                        <li class="list-inline-item"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"></i>{{  user.firstname }} {{  user.lastname }}</a></li>
+                        <li class="list-inline-item"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"></i>{{  user.first_name }} {{  user.last_name }}</a></li>
                         <li class="list-inline-item"><a href="logout"><i class="mdi mdi-logout mr-2"></i>Çıkış Yap</a></li>
+
                     </ul>
                 </div>
                 <div class="clearfix"></div>
+
             </div>
         </div>
+        {%else%}
+         <div class="tagline">
+            <div class="container">
+                <div class="float-left">
+                    <div class="phone">
+                        <i class="mdi mdi-phone-classic"></i> 444 0 444
+                    </div>
+                    <div class="email">
+                        <a href="#">
+                            <i class="mdi mdi-email"></i> support@isbul.com
+                        </a>
+                    </div>
+                </div>
+                <div class="float-right">
+                    <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
+                        <li class="list-inline-item"><a href="/login"><i class="mdi mdi-account mr-2"></i>Giriş yap</a></li>
+
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+        {%endif%}
         <!-- Tagline End -->
 
         <!-- Menu Start -->
