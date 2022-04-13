@@ -33,21 +33,22 @@
                     <div class="col-lg-12">
                         <h5 class="text-dark">Genel Bilgiler :</h5>
                     </div>
-                    <form class="login-form" method="post" action="">
+                    <form class="login-form" method="post" action="" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <img src="\uploads\{{userprofile.image}}" class="img-fluid avatar avatar-medium d-block mx-auto"
+                        <img src="\uploads\{{userprofile.image}}" height="250"
+                             class="img-fluid avatar avatar-medium d-block mx-auto rounded-pill"
                              alt="">
                         <div align="center">
-                            <label class="text-muted" for="image">Profil Fotografını değiştirmek için dosya
-                                seçiniz </label>
-                            <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
+                            <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png"
+                                   value="{{userprofile.image}}">
                         </div>
                         <div class="row mt-4">
                             <div class="col-md-4">
                                 <div class="form-group app-label">
                                     <label class="text-muted">Doğum Tarihi :</label>
                                     <input id="date-of-birth" type="date" class="form-control resume"
-                                           placeholder="13.02.1999" name="birth_date">
+                                           placeholder="13.02.1999" name="birth_date"
+                                           value="{{userprofile.birth_date}}">
                                 </div>
                             </div>
 
@@ -56,7 +57,7 @@
                                     <label class="text-muted">Cinsiyet :</label>
                                     <div class="form-button">
                                         <select class="nice-select rounded" name="sex">
-                                            <option data-display="Cinsiyet"></option>
+                                            <option selected="selected" data-display="">{{userprofile.sex}}</option>
                                             <option value="Erkek">Erkek</option>
                                             <option value="Kadın">Kadın</option>
                                         </select>
@@ -69,7 +70,7 @@
                                     <label class="text-muted">Şehir</label>
                                     <div class="form-button">
                                         <select class="nice-select rounded" name="city">
-                                            <option data-display="Şehir"></option>
+                                            <option selected="selected" data-display="">{{userprofile.city}}</option>
                                             <option value="1">Abilene</option>
                                             <option value="2">Babbitt</option>
                                             <option value="3">Cape Coral</option>
@@ -84,7 +85,7 @@
                                 <div class="form-group app-label">
                                     <label class="text-muted">Telefon Numarası :</label>
                                     <input id="phone" type="text" class="form-control resume"
-                                           placeholder="Telefon No. :" name="phone">
+                                           placeholder="Telefon Numarası" name="phone" value="{{userprofile.phone}}">
                                 </div>
                             </div>
 
@@ -100,194 +101,237 @@
                                 <div class="form-group app-label">
                                     <label class="text-muted">Web site</label>
                                     <input id="website" type="text" class="form-control resume"
-                                           placeholder="www.example.com" name="web_site">
+                                           placeholder="www.example.com" name="web_site"
+                                           value="{{userprofile.web_site}}">
                                 </div>
                             </div>
 
                             <div class="col-lg-12">
                                 <div class="form-group app-label">
                                     <label class="text-muted">Adres :</label>
-                                    <input id="address" rows="4" class="form-control resume" placeholder="Adres"
-                                           name="address">
+                                    <input id="address" class="form-control resume" placeholder="Adres"
+                                           name="address" value="{{userprofile.address}}">
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="row">
                             <div class="col-lg-12">
-                                <h5 class="text-dark mt-5">Eğitim Bilgileri : <a style="text-align:right"
-                                                                                 href="">Ekle</a></h5>
+                                <h5 class="text-dark mt-5">CV Özet Bilgi :</h5>
                             </div>
 
                             <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Graduation</label>
-                                                    <input id="graduation" type="text" class="form-control resume"
-                                                           placeholder="">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">University/College</label>
-                                                    <input id="university/college" type="text"
-                                                           class="form-control resume" placeholder="">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Degree/Certification</label>
-                                                    <input id="degree/certification" type="text"
-                                                           class="form-control resume" placeholder="">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group app-label">
-                                                            <label class="text-muted">Level</label>
-                                                            <div class="form-button">
-                                                                <select class="nice-select rounded">
-                                                                    <option data-display="Select">Select</option>
-                                                                    <option value="1">Level-1</option>
-                                                                    <option value="2">Level-2</option>
-                                                                    <option value="3">Level-3</option>
-                                                                    <option value="4">Level-4</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group app-label">
-                                                            <label class="text-muted">Course Title</label>
-                                                            <input id="course-title" type="text"
-                                                                   class="form-control resume" placeholder="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-12">
-                                                <div class="form-group app-label">
-                                                    <label>Additional Information :</label>
-                                                    <textarea id="addition-information" rows="4"
-                                                              class="form-control resume" placeholder=""></textarea>
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Özet Bilgi :</label>
+                                                <textarea id="presentation" name="presentation" rows="4"
+                                                          class="form-control resume"
+                                                          placeholder="Özgeçmişiniz için bir tanıtım yazısı yazınız.."
+                                                >{{userprofile.presentation}}</textarea>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                                    </div>
 
-                        <div class="row">
-                            <div class="col-12 mt-5">
-                                <h5 class="text-dark">Work Experience :</h5>
-                            </div>
-
-                            <div class="col-12 mt-3">
-                                <div class="custom-form p-4 border rounded">
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Company Name</label>
-                                                    <input id="company-name" type="text" class="form-control resume"
-                                                           placeholder="">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Job Position</label>
-                                                    <input id="job-position" type="text" class="form-control resume"
-                                                           placeholder="">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Location</label>
-                                                    <div class="form-button">
-                                                        <select class="nice-select rounded">
-                                                            <option data-display="Search">Search</option>
-                                                            <option value="1">New York</option>
-                                                            <option value="2">Los Angeles</option>
-                                                            <option value="3">Chicago</option>
-                                                            <option value="4">Houston</option>
-                                                            <option value="5">Indiana</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group app-label">
-                                                            <label class="text-muted">Date From</label>
-                                                            <input id="date-from" type="text"
-                                                                   class="form-control resume"
-                                                                   placeholder="01-Jan-2018">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group app-label">
-                                                            <label class="text-muted">Date To</label>
-                                                            <input id="date-to" type="text" class="form-control resume"
-                                                                   placeholder="31-March-2019">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-12">
-                                                <div class="form-group app-label">
-                                                    <label>Additional Information :</label>
-                                                    <textarea id="addition-information-1" rows="4"
-                                                              class="form-control resume" placeholder=""></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
 
 
                         <div class="row">
-                            <div class="col-12 mt-5">
-                                <h5 class="text-dark">Skills :</h5>
+                            <div class="col-lg-12">
+                                <h5 class="text-dark mt-5">Eğitim Bilgileri :
+                                    <a style="text-align:right" href="" onclick="addEducationFields()">Ekle</a></h5>
                             </div>
 
                             <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Skills</label>
-                                                    <input id="skills" type="text" class="form-control resume"
-                                                           placeholder="HTML, CSS, PHP, javascript, ...">
-                                                </div>
-                                            </div>
 
-                                            <div class="col-lg-12">
-                                                <div class="form-group app-label">
-                                                    <label class="text-muted">Skill proficiency</label>
-                                                    <input id="skill_proficiency" type="text"
-                                                           class="form-control resume" placeholder="75%">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Okul</label>
+                                                <input id="school" name="school" type="text" class="form-control resume"
+                                                       placeholder="Örn: İstanbul Üniversitesi"
+                                                       value="{{user_education.school}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Derece </label>
+                                                <div class="form-button">
+                                                    <select class="nice-select rounded" name="degree">
+                                                        <option selected="selected" data-display="">
+                                                            {{user_education.degree}}
+                                                        </option>
+                                                        <option value="Lise">Lise</option>
+                                                        <option value="Ön Lisans">Ön Lisans</option>
+                                                        <option value="Lisans">Lisans</option>
+                                                        <option value="Yüksek Lisans">Yüksek Lisans</option>
+                                                        <option value="Doktora">Doktora</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Bölüm</label>
+                                                <input id="department" name="department" type="text"
+                                                       class="form-control resume" placeholder="Örn: Matematik"
+                                                       value="{{user_education.department}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label class="text-muted">Başlangıç Tarihi</label>
+                                                        <input id="start_date" name="start_date" type="date"
+                                                               class="form-control resume" placeholder=""
+                                                               value="{{user_education.start_date}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label class="text-muted">Bitiş Tarihi</label>
+                                                        <input id="end-date" type="date" name="end_date"
+                                                               class="form-control resume" placeholder=""
+                                                               value="{{user_education.end_date}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Ek Bilgiler :</label>
+                                                <textarea id="education_add_info" name="education_add_info" rows="4"
+                                                          class="form-control resume"
+                                                          placeholder="Eğitim durumunuzla ilgili ek bilgileri yazınız.."
+                                                >{{user_education.education_add_info}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-5">
+                                <h5 class="text-dark">İş Deneyimleri :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Firma Adı</label>
+                                                <input id="company" name="company" type="text"
+                                                       class="form-control resume"
+                                                       placeholder="Firma adı" value="{{user_experience.company}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Pozisyon </label>
+                                                <input id="position" name="position" type="text"
+                                                       class="form-control resume"
+                                                       placeholder="Pozisyon, meslek"
+                                                       value="{{user_experience.position}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Şehir</label>
+                                                <div class="form-button">
+                                                    <select name="location" class="nice-select rounded"
+                                                            value="{{user_experience.location}}">
+                                                        <option data-display=""></option>
+                                                        <option value="1">New York</option>
+                                                        <option value="2">Los Angeles</option>
+                                                        <option value="3">Chicago</option>
+                                                        <option value="4">Houston</option>
+                                                        <option value="5">Indiana</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label class="text-muted">Date From</label>
+                                                        <input id="date_from" name="date_from" type="text"
+                                                               class="form-control resume"
+                                                               placeholder="01-Jan-2018"
+                                                               value="{{user_experience.date_from}}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label class="text-muted">Date To</label>
+                                                        <input id="date_to" name="date_to" type="text"
+                                                               class="form-control resume"
+                                                               placeholder="31-March-2019"
+                                                               value="{{user_experience.date_to}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label>Ek Bilgiler :</label>
+                                                <textarea id="addition-information-1" rows="4"
+                                                          class="form-control resume" name="experience_add_info"
+                                                          placeholder="Deneyiminizle ilgili açıklayıcı bilgileri yazınız..">{{user_experience.experience_add_info}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-12 mt-5">
+                                <h5 class="text-dark">Yetenekler :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Yetenek</label>
+                                                <input id="skill" name="skill" type="text" class="form-control resume"
+                                                       placeholder="HTML, CSS, PHP, javascript, ...">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Yetenek düzeyi </label>
+                                                <input id="skill_value" name="skill_value" type="number"
+                                                       class="form-control resume" placeholder="75%">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
 

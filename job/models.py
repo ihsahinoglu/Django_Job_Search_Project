@@ -1,13 +1,11 @@
-from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.forms import ModelForm, TextInput, Textarea
-from django.utils.safestring import mark_safe
+from django.db import models
+from django.urls import reverse
 
 from company.models import Company
 
 
 class Job(models.Model):
-
     STATUS = (
         ('True', 'Evet'),
         ('False', 'Hayır'),
@@ -21,6 +19,9 @@ class Job(models.Model):
     update_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS)
     slug = models.SlugField(null=False, unique=True)
-    #objects = models.Manager()
+
     def __str__(self):
         return self.profession
+
+    def get_absolute_url(self):
+        return reverse('job_detail', kwargs={'slug': self.slug})

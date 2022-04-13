@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
 from home import views
 from user import views as UserViews
 
@@ -28,6 +29,7 @@ urlpatterns = [
                   path('contactus/', views.contactus, name='contactus'),
                   path('job-details/', views.jobDetails, name='job-details'),
                   path('create-resume/', views.createResume, name='create-resume'),
+                  path('candidates-profile/', views.candidatesProfile, name='candidates-profile'),
                   path('login/', UserViews.login_form, name='login'),
                   path('company-login/', UserViews.login_form, name='company-login'),
                   path('signup/', UserViews.signup_form, name='signup'),

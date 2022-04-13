@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 from company.models import Company
-from job.models import Job
 
 
 class CompanyAdmin(admin.ModelAdmin):
