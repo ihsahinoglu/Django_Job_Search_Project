@@ -14,6 +14,18 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
 
 
+class CompanySignUpForm(UserCreationForm):
+    username = forms.CharField(max_length=30, label='User Name :')
+    first_name = forms.CharField(max_length=100, help_text='First Name', label='First Name :')
+    last_name = forms.CharField(max_length=100, help_text='Last Name', label='Last Name :')
+    company_name = forms.CharField(max_length=100, help_text='Company Name', label='Company Name :')
+    email = forms.EmailField(max_length=200, label='Email :')
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'company_name', 'email', 'password1', 'password2',)
+
+
 """""
 class UserUpdateForm(UserChangeForm):
     class Meta:

@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from home.forms import CreateResumeForm
+from company.models import Company
+from home.forms import CreateResumeForm, CompanyInfoForm
 from home.models import ContactMessage, Setting, ContactForm
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
@@ -71,8 +72,8 @@ def createResume(request):
             data2 = UserEducation()
             data3 = UserExperience()
             data4 = UserSkills()
-
-            data.image = form.cleaned_data['image']
+            if form.cleaned_data['image'] is not None:
+                data.image = form.cleaned_data['image']
             data.birth_date = form.cleaned_data['birth_date']
             data.sex = form.cleaned_data['sex']
             data.city = form.cleaned_data['city']
@@ -122,14 +123,48 @@ def candidatesProfile(request):
     setting = Setting.objects.get(id=1)
     current_user = request.user
     userprofile = UserProfile.objects.get(user_id=current_user.id)
-    user_education = UserEducation.objects.get(user_id=current_user.id)
-    user_experience = UserExperience.objects.get(user_id=current_user.id)
-    print("başla")
-    # print(user_education.school)
-    # print(user_experience.company)
+    user_education = UserEducation.objects.all().filter(user_id=current_user.id)
+    user_experience = UserExperience.objects.all().filter(user_id=current_user.id)
+    user_skills = UserSkills.objects.all().filter(user_id=current_user.id)
+    print(user_skills)
     context = {'setting': setting,
                'userprofile': userprofile,
                'user_education': user_education,
                'user_experience': user_experience,
+               'user_skills': user_skills
                }
     return render(request, 'candidates-profile.html', context)
+
+
+# @login_required(login_url='/login')  # Check login
+def companyInfo(request):
+    setting = Setting.objects.get(id=1)
+    current_user = request.user
+    company = Company.objects.get(user_id=current_user.id)
+
+    if request.method == 'POST':  # check post
+        form = CompanyInfoForm(request.POST, request.FILES, )
+        print(form.errors)
+        if form.is_valid():
+            data = company  # create relation with model
+            if form.cleaned_data['logo'] is not None:
+                data.logo = form.cleaned_data['logo']
+            data.company_name = form.cleaned_data['company_name']
+            data.sector = form.cleaned_data['sector']
+            data.employers = form.cleaned_data['employers']
+            data.city = form.cleaned_data['city']
+            data.phone = form.cleaned_data['phone']
+            data.email = form.cleaned_data['email']
+            data.web_site = form.cleaned_data['web_site']
+            data.address = form.cleaned_data['address']
+            data.about_company = form.cleaned_data['about_company']
+
+            data.save()  # save data to table
+
+            # messages.success(request, "Your message has ben sent. Thank you for your message.")
+            return HttpResponseRedirect('/')
+
+    context = {'setting': setting,
+               'company': company,
+               }
+    return render(request, 'company-info.html', context)

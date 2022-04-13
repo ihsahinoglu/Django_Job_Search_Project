@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # from user.forms import SignUpForm, UserUpdateForm, ProfileUpdateForm
-from user.forms import SignUpForm
+from company.models import Company
+from user.forms import SignUpForm, CompanySignUpForm
 from user.models import UserProfile
 
 
@@ -38,6 +39,26 @@ def login_form(request):
     return render(request, 'login.html', context)
 
 
+def company_login_form(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # current_user = request.user
+            # userprofile = UserProfile.objects.get(user_id=current_user.id)
+            # Redirect to a success page.
+            return HttpResponseRedirect('/')
+        else:
+            messages.warning(request, "Login Error !! Username or Password is incorrect")
+            return HttpResponseRedirect('/company-login')
+    # Return an 'invalid login' error message.
+    context = {  # 'category': category
+    }
+    return render(request, 'company-login.html', context)
+
+
 def signup_form(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -64,6 +85,35 @@ def signup_form(request):
         'form': form,
     }
     return render(request, 'signup.html', context)
+
+
+def company_signup_form(request):
+    if request.method == 'POST':
+        form = CompanySignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()  # completed sign up
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+            # Create data in profile table for user
+            current_user = request.user
+            data = Company()
+            data.user_id = current_user.id
+            data.auth_person = form.cleaned_data.get('first_name') + ' ' + form.cleaned_data.get('last_name')
+            data.company_name = form.cleaned_data.get('company_name')
+            data.email = form.cleaned_data.get('email')
+            data.save()
+            messages.success(request, 'Your account has been created!')
+            return HttpResponseRedirect('/')
+        else:
+            messages.warning(request, form.errors)
+            return HttpResponseRedirect('/company-signup')
+
+    form = SignUpForm()
+    # category = Category.objects.all()
+    context = {  # 'category': category,
+        'form': form,
+    }
+    return render(request, 'company-signup.html', context)
 
 
 def logout_func(request):

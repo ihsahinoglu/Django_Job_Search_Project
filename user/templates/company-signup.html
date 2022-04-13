@@ -30,7 +30,7 @@
                     <div class="col-md-6">
                         <div class="login_page bg-white shadow rounded p-4">
                             <div class="text-center">
-                                <h4 class="mb-4">İş Arayan Kayıt Ol</h4>
+                                <h4 class="mb-4"> İşveren Kayıt Ol</h4>
                             </div>
                             {% if messages %}
                             {% for message in messages %}
@@ -51,15 +51,23 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group position-relative">
-                                            <label>Ad <span class="text-danger">*</span></label>
+                                            <label> Yetkili ad <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Ad" name="first_name"
                                                    required="">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group position-relative">
-                                            <label>Soyad <span class="text-danger">*</span></label>
+                                            <label>Yetkili soyad <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" placeholder="Soyad" name="last_name"
+                                                   required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group position-relative">
+                                            <label>Firma adı <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" placeholder="Firma adı"
+                                                   name="company_name"
                                                    required="">
                                         </div>
                                     </div>

@@ -1,0 +1,178 @@
+{% extends 'homebase.html' %}
+{% block title %} {{ setting.title }}  {% endblock %}
+{% block description %} {{ setting.description }}  {% endblock %}
+{% block keywords %} {{ setting.keywords }}  {% endblock %}
+{% block header %} {% include 'header.html' %}  {% endblock %}
+{% block footer %} {% include 'footer.html' %}  {% endblock %}
+{% block body %}
+{% load static %}
+
+
+<!-- Start home -->
+<section class="bg-half page-next-level">
+    <div class="bg-overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center text-white">
+                    <h4 class="text-uppercase title mb-4">Create Resume</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end home -->
+
+<!-- CREATE RESUME START -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 mt-3">
+                <div class="custom-form p-4 border rounded">
+                    <div class="col-lg-12">
+                        <h5 class="text-dark">Firma Bilgileri :</h5>
+                    </div>
+                    <form class="login-form" method="post" action="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <img src="\uploads\{{company.logo}}" height="250"
+                             class="img-fluid avatar avatar-medium d-block mx-auto rounded-pill"
+                             alt="">
+
+                        <div align="center">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <ul class="list-inline mb-0">
+                                        <li class="list-inline-item">
+                                            <div class="input-group mt-2 mb-2">
+                                                <div class="custom-file" align="left">
+                                                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                                           name="logo" accept=".jpg, .jpeg, .png"
+                                                           aria-describedby="inputGroupFileAddon01">
+                                                    <label class="custom-file-label rounded"><i
+                                                            class="mdi mdi-cloud-upload mr-1"></i> Upload Files</label>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Firma Adı :</label>
+                                    <input id="company_name" type="text" class="form-control resume"
+                                           placeholder="" name="company_name"
+                                           value="{{company.company_name}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Firma Adı :</label>
+                                    <input id="sector" type="text" class="form-control resume"
+                                           placeholder="Sektör" name="sector"
+                                           value="{{company.sector}}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Firma Adı :</label>
+                                    <input id="employers" type="text" class="form-control resume"
+                                           placeholder="Çalışan sayısı" name="employers"
+                                           value="{{company.employers}}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Şehir</label>
+                                    <div class="form-button">
+                                        <select class="nice-select rounded" name="city">
+                                            <option selected="selected" data-display="">{{company.city}}</option>
+                                            <option value="1">Abilene</option>
+                                            <option value="2">Babbitt</option>
+                                            <option value="3">Cape Coral</option>
+                                            <option value="4">Dallas</option>
+                                            <option value="5">Eloy</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Telefon Numarası :</label>
+                                    <input id="phone" type="text" class="form-control resume"
+                                           placeholder="Telefon Numarası" name="phone" value="{{company.phone}}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">E-mail</label>
+                                    <input id="e-mail" type="email" name="email" class="form-control resume"
+                                           placeholder="E-mail Adres :" value="{{company.email}}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Web site</label>
+                                    <input id="website" type="text" class="form-control resume"
+                                           placeholder="www.example.com" name="web_site"
+                                           value="{{company.web_site}}">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8">
+                                <div class="form-group app-label">
+                                    <label class="text-muted">Adres :</label>
+                                    <input id="address" class="form-control resume" placeholder="Adres"
+                                           name="address" value="{{company.address}}">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h5 class="text-dark mt-5">Firmamız Hakkında :</h5>
+                            </div>
+
+                            <div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Firmamız Hakkında :</label>
+                                                <textarea id="about_company" name="about_company" rows="4"
+                                                          class="form-control resume"
+                                                          placeholder="Firmanız için bir tanıtım yazısı yazınız.."
+                                                >{{company.about_company}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4">
+                            <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary"
+                                   value="Bilgileri Kaydet">
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- CREATE RESUME END -->
+
+{% endblock %}
