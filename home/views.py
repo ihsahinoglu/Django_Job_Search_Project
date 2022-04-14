@@ -12,10 +12,16 @@ from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 def index(request):
     setting = Setting.objects.get(id=1)
     populerCategories = Job.objects.all()
+    recent_jobs = Job.objects.all()
+    populer_jobs = Job.objects.all()
+    part_time_jobs = Job.objects.all()
     page = "home"
     context = {'setting': setting,
                'page': page,
                'populerCategories': populerCategories,
+               'recent_jobs': recent_jobs,
+               'populer_jobs': populer_jobs,
+               'part_time_jobs': part_time_jobs,
                }
     return render(request, 'index.html', context)
 
@@ -44,13 +50,11 @@ def contactus(request):
     return render(request, 'contactus.html', context)
 
 
-def jobDetails(request):
+def jobDetails(request, slug):
     setting = Setting.objects.get(id=1)
-    job = Job.objects.get(id=1)
+    job = Job.objects.get(slug=slug)
 
-    # page = "home"
     context = {'setting': setting,
-               # 'page': page,
                'job': job,
                }
     return render(request, 'job-details.html', context)
@@ -168,3 +172,23 @@ def companyInfo(request):
                'company': company,
                }
     return render(request, 'company-info.html', context)
+
+
+def companyDetail(request, slug):
+    setting = Setting.objects.get(id=1)
+    current_user = request.user
+    company = Company.objects.get(slug=slug)
+
+    context = {'setting': setting,
+               'company': company,
+               }
+    return render(request, 'company-detail.html', context)
+
+
+def jobList(request):
+    setting = Setting.objects.get(id=1)
+
+    context = {'setting': setting,
+
+               }
+    return render(request, 'job-list.html', context)

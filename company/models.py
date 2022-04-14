@@ -1,6 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
@@ -34,3 +35,6 @@ class Company(models.Model):
             return mark_safe('<img src="{}" height="50"/>'.format(self.logo.url))
         else:
             return ""
+
+    def get_absolute_url(self):
+        return reverse('company_detail', kwargs={'slug': self.slug})

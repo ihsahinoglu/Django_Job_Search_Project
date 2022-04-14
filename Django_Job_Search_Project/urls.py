@@ -27,9 +27,11 @@ urlpatterns = [
                   path('user/', include('user.urls'), name='user'),
 
                   path('contactus/', views.contactus, name='contactus'),
-                  path('job-details/', views.jobDetails, name='job-details'),
+                  path('job-details/<slug:slug>/', views.jobDetails, name='job-details'),
+                  path('job-list/', views.jobList, name='job-list'),
                   path('create-resume/', views.createResume, name='create-resume'),
                   path('company-info/', views.companyInfo, name='company-info'),
+                  path('company-detail/<slug:slug>/', views.companyDetail, name='company-detail'),
                   path('candidates-profile/', views.candidatesProfile, name='candidates-profile'),
                   path('login/', UserViews.login_form, name='login'),
                   path('company-login/', UserViews.company_login_form, name='company-login'),
