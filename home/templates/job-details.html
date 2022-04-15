@@ -213,10 +213,15 @@
                     <li class="list-inline-item"><a href="#" class=" rounded"><i class="mdi mdi-linkedin"></i></a></li>
                 </ul>
 
+                <form method="post" action="" name="apply-job">
+                    {% csrf_token %}
 
-                <div class="job-detail border rounded mt-4">
-                    <a href="#" class="btn btn-primary btn-block">Apply For Job</a>
-                </div>
+                    <div class="job-detail border rounded mt-4">
+                        <button class="btn btn-primary btn-block"
+                                type="submit" id="submit" name="submit">Apply For Job
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

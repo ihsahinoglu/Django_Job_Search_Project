@@ -10,10 +10,18 @@ class Company(models.Model):
         ('True', 'Evet'),
         ('False', 'Hayır'),
     )
+    CITY = (
+        ('İstanbul', 'İstanbul'),
+        ('Ankara', 'Ankara'),
+        ('İzmir', 'İzmir'),
+        ('Kocaeli', 'Kocaeli'),
+        ('Bursa', 'Bursa'),
+        ('Şanlıurfa', 'Şanlıurfa'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=150)
     auth_person = models.CharField(blank=True, max_length=50)
-    city = models.CharField(blank=True, max_length=50)
+    city = models.CharField(blank=True, max_length=50, choices=CITY)
     address = models.CharField(blank=True, max_length=100)
     phone = models.CharField(blank=True, max_length=15)
     email = models.CharField(blank=True, max_length=50)

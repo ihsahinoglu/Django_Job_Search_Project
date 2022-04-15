@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'company.apps.CompanyConfig',
     'job.apps.JobConfig',
     'user.apps.UserConfig',
+    'apply.apps.ApplyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -31,6 +31,7 @@ urlpatterns = [
                   path('job-list/', views.jobList, name='job-list'),
                   path('create-resume/', views.createResume, name='create-resume'),
                   path('company-info/', views.companyInfo, name='company-info'),
+                  path('post-a-job/', views.PostJob, name='post-a-job'),
                   path('company-detail/<slug:slug>/', views.companyDetail, name='company-detail'),
                   path('candidates-profile/', views.candidatesProfile, name='candidates-profile'),
                   path('login/', UserViews.login_form, name='login'),

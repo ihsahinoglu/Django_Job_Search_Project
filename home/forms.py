@@ -1,7 +1,9 @@
 from django import forms
 from django.forms import TextInput, Select
 
+from apply.models import Apply
 from company.models import Company
+from job.models import Job
 from user.models import UserProfile
 
 CITY = [
@@ -108,4 +110,48 @@ class CompanyInfoForm(forms.ModelForm):
             'web_site': TextInput(attrs={'class': 'input', 'placeholder': 'web_site'}),
             'address': TextInput(attrs={'class': 'input', 'placeholder': 'address'}),
             'about_company': TextInput(attrs={'class': 'input', 'placeholder': 'about_company'})
+        }
+
+
+class PostJobForm(forms.ModelForm):
+    title = forms.CharField(required=False, max_length=50, label='title :')
+    job_type = forms.CharField(required=False, max_length=30, help_text='job_type ', label='job_type :')
+    category = forms.CharField(required=False, max_length=50, help_text='category', label='category :')
+    city = forms.CharField(required=False, max_length=100, help_text='City', label='City :')
+    gender = forms.CharField(required=False, max_length=20, label='gender :')
+    education_level = forms.CharField(required=False, max_length=40, help_text='CharField', label='CharField :')
+    experience = forms.CharField(required=False, max_length=100, help_text='experience', label='experience :')
+    description = forms.CharField(required=False, max_length=500, help_text='description', label='description :')
+
+    class Meta:
+        model = Job
+        fields = ('title', 'job_type', 'category', 'city', 'gender', 'education_level', 'experience',
+                  'description'
+                  )
+
+        widgets = {
+            'title': TextInput(attrs={'class': 'input', 'placeholder': 'title'}),
+            'job_type': Select(attrs={'class': 'input', 'placeholder': 'job_type'}, choices=CITY),
+            'category': TextInput(attrs={'class': 'input', 'placeholder': 'category'}),
+            'city': Select(attrs={'class': 'input', 'placeholder': 'city'}, choices=CITY),
+            'gender': Select(attrs={'class': 'input', 'placeholder': 'gender'}, choices=CITY),
+            'education_level': Select(attrs={'class': 'input', 'placeholder': 'education_level'}, choices=CITY),
+            'experience': Select(attrs={'class': 'input', 'placeholder': 'experience'}, choices=CITY),
+            'description': TextInput(attrs={'class': 'input', 'placeholder': 'description'}),
+        }
+
+
+class JobDetailForm(forms.ModelForm):
+    title = forms.CharField(required=False, max_length=50, label='title :')
+    job_type = forms.CharField(required=False, max_length=30, help_text='job_type ', label='job_type :')
+    category = forms.CharField(required=False, max_length=50, help_text='category', label='category :')
+    city = forms.CharField(required=False, max_length=100, help_text='City', label='City :')
+
+    class Meta:
+        model = Apply
+        fields = ('title', 'job_type', 'category', 'city'
+                  )
+
+        widgets = {
+            'title': TextInput(attrs={'class': 'input', 'placeholder': 'title'}),
         }

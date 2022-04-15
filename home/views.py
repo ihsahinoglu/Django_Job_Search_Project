@@ -2,8 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
+from apply.models import Apply
 from company.models import Company
-from home.forms import CreateResumeForm, CompanyInfoForm
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm
 from home.models import ContactMessage, Setting, ContactForm
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
@@ -53,7 +54,17 @@ def contactus(request):
 def jobDetails(request, slug):
     setting = Setting.objects.get(id=1)
     job = Job.objects.get(slug=slug)
+    current_user = request.user
+    # apply = Apply.object.get(user_id=current_user.id)
+    if request.method == 'POST':  # check post
+        print("post başarlı")
+        data = Apply()  # create relation with model
+        data.user_id = current_user.id
+        data.job_id = job.id
+        data.save()  # save data to table
 
+        # messages.success(request, "Your message has ben sent. Thank you for your message.")
+        return HttpResponseRedirect('/')
     context = {'setting': setting,
                'job': job,
                }
@@ -67,7 +78,7 @@ def createResume(request):
     userprofile = UserProfile.objects.get(user_id=current_user.id)
     user_education = UserEducation.objects.filter(user_id=current_user.id)
     user_experience = UserEducation.objects.filter(user_id=current_user.id)
-    print("burada")
+
     if request.method == 'POST':  # check post
         form = CreateResumeForm(request.POST, request.FILES, )
         print(form.errors)
@@ -106,8 +117,7 @@ def createResume(request):
             data4.user = current_user
             data4.skill = form.cleaned_data['skill']
             data4.skill_value = form.cleaned_data['skill_value']
-            print(data4.skill)
-            print(form.cleaned_data['skill'])
+
             data.save()  # save data to table
             data2.save()
             data3.save()
@@ -130,7 +140,7 @@ def candidatesProfile(request):
     user_education = UserEducation.objects.all().filter(user_id=current_user.id)
     user_experience = UserExperience.objects.all().filter(user_id=current_user.id)
     user_skills = UserSkills.objects.all().filter(user_id=current_user.id)
-    print(user_skills)
+
     context = {'setting': setting,
                'userprofile': userprofile,
                'user_education': user_education,
@@ -187,8 +197,41 @@ def companyDetail(request, slug):
 
 def jobList(request):
     setting = Setting.objects.get(id=1)
+    job_list = Job.objects.all()
+
+    context = {'setting': setting,
+               'job_list': job_list,
+               }
+    return render(request, 'job-list.html', context)
+
+
+def PostJob(request):
+    setting = Setting.objects.get(id=1)
+    current_user = request.user
+    company = Company.objects.get(user_id=current_user.id)
+    # job = Job.objects.get(company_id=current_user.id)
+
+    if request.method == 'POST':  # check post
+        form = PostJobForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            data = Job()  # create relation with model
+            data.company_id = company.id
+            data.title = form.cleaned_data['title']
+            data.job_type = form.cleaned_data['job_type']
+            data.category = form.cleaned_data['category']
+            data.city = form.cleaned_data['city']
+            data.gender = form.cleaned_data['gender']
+            data.education_level = form.cleaned_data['education_level']
+            data.experience = form.cleaned_data['experience']
+            data.description = form.cleaned_data['description']
+
+            data.save()  # save data to table
+
+            # messages.success(request, "Your message has ben sent. Thank you for your message.")
+            return HttpResponseRedirect('/')
 
     context = {'setting': setting,
 
                }
-    return render(request, 'job-list.html', context)
+    return render(request, 'post-a-job.html', context)
