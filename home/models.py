@@ -2,12 +2,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.forms import ModelForm, TextInput, Textarea
 
+from home.other import STATUS
+
 
 class Setting(models.Model):
-    STATUS = (
-        ('True', 'True'),
-        ('False', 'False'),
-    )
     title = models.CharField(max_length=150)
     keywords = models.CharField(max_length=255)
     description = models.CharField(max_length=255)

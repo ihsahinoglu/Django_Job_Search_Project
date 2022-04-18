@@ -33,7 +33,7 @@
                     <div class="col-lg-12">
                         <h5 class="text-dark">Genel Bilgiler :</h5>
                     </div>
-                    <form class="login-form" method="post" action="" enctype="multipart/form-data">
+                    <form id="login-form" class="login-form" method="post" action="" enctype="multipart/form-data">
                         {% csrf_token %}
                         <img src="\uploads\{{userprofile.image}}" height="250"
                              class="img-fluid avatar avatar-medium d-block mx-auto rounded-pill"
@@ -82,10 +82,10 @@
                                 <div class="form-group app-label">
                                     <label class="text-muted">Cinsiyet :</label>
                                     <div class="form-button">
-                                        <select class="nice-select rounded" name="sex">
-                                            <option selected="selected" data-display="">{{userprofile.sex}}</option>
-                                            <option value="Erkek">Erkek</option>
-                                            <option value="Kadın">Kadın</option>
+                                        <select class="nice-select rounded" name="gender">
+                                            <option selected="selected">{{userprofile.gender}}</option>
+                                            <option>Erkek</option>
+                                            <option>Kadın</option>
                                         </select>
                                     </div>
                                 </div>
@@ -95,13 +95,11 @@
                                 <div class="form-group app-label">
                                     <label class="text-muted">Şehir</label>
                                     <div class="form-button">
-                                        <select class="nice-select rounded" name="city">
-                                            <option selected="selected" data-display="">{{userprofile.city}}</option>
-                                            <option value="1">Abilene</option>
-                                            <option value="2">Babbitt</option>
-                                            <option value="3">Cape Coral</option>
-                                            <option value="4">Dallas</option>
-                                            <option value="5">Eloy</option>
+                                        <select id="select-country" class="demo-default" name="city">
+                                            <option>{{userprofile.city}}</option>
+                                            {%for city in CITY%}
+                                            <option>{{city}}</option>
+                                            {%endfor%}
                                         </select>
                                     </div>
                                 </div>
@@ -169,9 +167,10 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <h5 class="text-dark mt-5">Eğitim Bilgileri :
-                                    <a style="text-align:right" href="" onclick="addEducationFields()">Ekle</a></h5>
-                            </div>
 
+                                    <a style="text-align:right" href="" onclick="addEducationFields()">Ekle</a></h5>
+
+                            </div>
                             <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
 
@@ -246,13 +245,15 @@
 
                                 </div>
                             </div>
+                            <div id="content">
+                            </div>
+
                         </div>
 
                         <div class="row">
                             <div class="col-12 mt-5">
                                 <h5 class="text-dark">İş Deneyimleri :</h5>
                             </div>
-
                             <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
 
@@ -280,14 +281,11 @@
                                             <div class="form-group app-label">
                                                 <label class="text-muted">Şehir</label>
                                                 <div class="form-button">
-                                                    <select name="location" class="nice-select rounded"
-                                                            value="{{user_experience.location}}">
-                                                        <option data-display=""></option>
-                                                        <option value="1">New York</option>
-                                                        <option value="2">Los Angeles</option>
-                                                        <option value="3">Chicago</option>
-                                                        <option value="4">Houston</option>
-                                                        <option value="5">Indiana</option>
+                                                    <select id="location" class="demo-default" name="location">
+                                                        <option></option>
+                                                        {%for city in CITY%}
+                                                        <option>{{city}}</option>
+                                                        {%endfor%}
                                                     </select>
                                                 </div>
                                             </div>
@@ -329,6 +327,7 @@
 
                                 </div>
                             </div>
+
                         </div>
 
 
@@ -339,7 +338,6 @@
 
                             <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
-
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group app-label">
@@ -360,11 +358,10 @@
 
                                 </div>
                             </div>
-
-
                             <div class="col-12 mt-4">
                                 <input type="submit" id="submit" name="send" class="submitBnt btn btn-primary"
                                        value="Bilgileri Kaydet">
+
                             </div>
                         </div>
                     </form>
@@ -375,5 +372,116 @@
     </div>
 </section>
 <!-- CREATE RESUME END -->
+
+<button onclick="addEducationFields()">Ekle</button>
+<!--<script>
+    function addEducationFields () {
+
+let html=`<div class="col-12 mt-3">
+                                <div class="custom-form p-4 border rounded">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Okul</label>
+                                                <input id="school" name="school" type="text" class="form-control resume"
+                                                       placeholder="Örn: İstanbul Üniversitesi"
+                                                       value="{{user_education.school}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Derece </label>
+                                                <div class="form-button">
+                                                    <select class="nice-select rounded" name="degree">
+                                                        <option selected="selected" data-display="">
+                                                            {{user_education.degree}}
+                                                        </option>
+                                                        <option value="Lise">Lise</option>
+                                                        <option value="Ön Lisans">Ön Lisans</option>
+                                                        <option value="Lisans">Lisans</option>
+                                                        <option value="Yüksek Lisans">Yüksek Lisans</option>
+                                                        <option value="Doktora">Doktora</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Bölüm</label>
+                                                <input id="department" name="department" type="text"
+                                                       class="form-control resume" placeholder="Örn: Matematik"
+                                                       value="{{user_education.department}}">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label class="text-muted">Başlangıç Tarihi</label>
+                                                        <input id="start_date" name="start_date" type="date"
+                                                               class="form-control resume" placeholder=""
+                                                               value="{{user_education.start_date}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group app-label">
+                                                        <label class="text-muted">Bitiş Tarihi</label>
+                                                        <input id="end-date" type="date" name="end_date"
+                                                               class="form-control resume" placeholder=""
+                                                               value="{{user_education.end_date}}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                            <div class="form-group app-label">
+                                                <label class="text-muted">Ek Bilgiler :</label>
+                                                <textarea id="education_add_info" name="education_add_info" rows="4"
+                                                          class="form-control resume"
+                                                          placeholder="Eğitim durumunuzla ilgili ek bilgileri yazınız.."
+                                                >{{user_education.education_add_info}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>`;
+
+//$(document).on('submit', '#login-form', function(e){
+$('#form').submit(function(e) {
+
+        e.preventDefault();}
+       );
+console.log("Hello");
+document.querySelector('#content').insertAdjacentHTML(
+    'afterbegin',html
+
+  );
+
+}
+function removeRow (input) {
+  input.parentNode.remove()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>-->
 
 {% endblock %}

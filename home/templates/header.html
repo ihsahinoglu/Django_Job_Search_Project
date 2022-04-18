@@ -1,160 +1,163 @@
-   {% load static %}
-    <!-- Loader -->
-    <div id="preloader">
-        <div id="status">
-            <div class="spinner">
-                <div class="double-bounce1"></div>
-                <div class="double-bounce2"></div>
-            </div>
+{% load static %}
+<!-- Loader -->
+<div id="preloader">
+    <div id="status">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
         </div>
     </div>
-    <!-- Loader -->
+</div>
+<!-- Loader -->
 
-    <!-- Navigation Bar-->
-    <header id="topnav"  class="defaultscroll scroll-active">
-        <!-- Tagline STart -->
-        {% if user.id is not None %}
-        <div class="tagline">
-            <div class="container">
-                <div class="float-left">
-                    <div class="email">
-                        <a href="#">
-                            <i class="mdi mdi-email"></i> {{user.email}}
-                        </a>
-                    </div>
-                </div>
-                <div class="float-right">
-                    <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
-                        <li class="list-inline-item"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"></i>{{  user.first_name }} {{  user.last_name }}</a></li>
-                        <li class="list-inline-item"><a href="logout"><i class="mdi mdi-logout mr-2"></i>Çıkış Yap</a></li>
-
-                    </ul>
-                </div>
-                <div class="clearfix"></div>
-
-            </div>
-        </div>
-        {%else%}
-         <div class="tagline">
-            <div class="container">
-                <div class="float-left">
-                    <div class="phone">
-                        <i class="mdi mdi-phone-classic"></i> 444 0 444
-                    </div>
-                    <div class="email">
-                        <a href="#">
-                            <i class="mdi mdi-email"></i> support@isbul.com
-                        </a>
-                    </div>
-                </div>
-                <div class="float-right">
-                    <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
-                        <li class="list-inline-item"><a href="/login"><i class="mdi mdi-account mr-2"></i>Giriş yap</a></li>
-
-                    </ul>
-                </div>
-                <div class="clearfix"></div>
-
-            </div>
-        </div>
-        {%endif%}
-        <!-- Tagline End -->
-
-        <!-- Menu Start -->
+<!-- Navigation Bar-->
+<header id="topnav" class="defaultscroll scroll-active">
+    <!-- Tagline STart -->
+    {% if user.id is not None %}
+    <div class="tagline">
         <div class="container">
-            <!-- Logo container-->
-            <div>
-                <a href="index.html" class="logo">
-                    <img src=" {% static 'images/logo-light.png' %} " alt="" class="logo-light" height="18" />
-                    <img src=" {% static 'images/logo-dark.png' %} " alt="" class="logo-dark" height="18" />
-                </a>
-            </div>
-            <div class="buy-button">
-                <a href="/login" class="btn btn-primary"><i class="mdi mdi-login"></i>İş Arayan Giriş</a>
-            </div>
-            <div class="buy-button">
-                <a> &nbsp;&nbsp;</a>
-            </div>
-            <div class="buy-button">
-                <a href="/company-login" class="btn btn-primary"><i class="mdi mdi-login"></i>İşveren Giriş</a>
-            </div>
-
-
-
-                <!--end login button-->
-            <!-- End Logo container-->
-            <div class="menu-extras">
-                <div class="menu-item">
-                    <!-- Mobile menu toggle-->
-                    <a class="navbar-toggle">
-                        <div class="lines">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
+            <div class="float-left">
+                <div class="email">
+                    <a href="#">
+                        <i class="mdi mdi-email"></i> {{user.email}}
                     </a>
-                    <!-- End mobile menu toggle-->
                 </div>
             </div>
+            <div class="float-right">
+                <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
+                    <li class="list-inline-item"><a href="javascript:void(0);"><i class="mdi mdi-account mr-2"></i>
+                        {{user.first_name }} {{user.last_name}}</a></li>
+                    <li class="list-inline-item"><a href="/logout"><i class="mdi mdi-logout mr-2"></i>Çıkış Yap</a></li>
 
-            <div id="navigation">
-                <!-- Navigation Menu-->
-                <ul class="navigation-menu">
-                    <li><a href="index.html">Ana Sayfa</a></li>
-                    <li class="has-submenu">
-                        <a href="javascript:void(0)">Jobs</a><span class="menu-arrow"></span>
-                        <ul class="submenu">
-                            <li><a href="job-list.html">Job List</a></li>
-                            <li><a href="job-grid.html">Job Grid</a></li>
-                            <li><a href="job-details.html">Job Details</a></li>
-                            <li><a href="job-details-2.html">Job Details-2</a></li>
-                        </ul>
-                    </li>
+                </ul>
+            </div>
+            <div class="clearfix"></div>
 
-                    <li class="has-submenu">
-                        <a href="javascript:void(0)">Pages</a><span class="menu-arrow"></span>
-                        <ul class="submenu">
-                            <li><a href="about.html">About us</a></li>
-                            <li><a href="services.html">Services</a></li>
-                            <li><a href="team.html">Team</a></li>
-                            <li><a href="faq.html">Faqs</a></li>
-                            <li><a href="pricing.html">Pricing plans</a></li>
-                            <li class="has-submenu"><a href="javascript:void(0)"> Candidates</a><span class="submenu-arrow"></span>
-                                <ul class="submenu">
-                                    <li><a href="candidates-listing.html">Candidates Listing</a></li>
-                                    <li><a href="candidates-profile.html">Candidates Profile</a></li>
-                                    <li><a href="create-resume.html">Create Resume</a></li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu"><a href="javascript:void(0)"> Blog</a><span class="submenu-arrow"></span>
-                                <ul class="submenu">
-                                    <li><a href="blog-grid.html">Blogs</a></li>
-                                    <li><a href="blog-sidebar.html">Blog Sidebar</a></li>
-                                    <li><a href="blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu"><a href="javascript:void(0)"> Employers</a><span class="submenu-arrow"></span>
-                                <ul class="submenu">
-                                    <li><a href="employers-list.html">Employers List</a></li>
-                                    <li><a href="company-detail.html">Company Detail</a></li>
-                                </ul>
-                            </li>
-                            <li class="has-submenu"><a href="javascript:void(0)"> User Pages</a><span class="submenu-arrow"></span>
-                                <ul class="submenu">
-                                    <li><a href="login.html">Login</a></li>
-                                    <li><a href="signup.html">Signup</a></li>
-                                    <li><a href="recovery_passward.html">Forgot Password</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="components.html"> Components</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="contactus">İletişim</a>
-                    </li>
-                </ul><!--end navigation menu-->
-            </div><!--end navigation-->
-        </div><!--end container-->
-        <!--end end-->
-    </header><!--end header-->
-    <!-- Navbar End -->
+        </div>
+    </div>
+    {%else%}
+    <div class="tagline">
+        <div class="container">
+            <div class="float-left">
+                <div class="phone">
+                    <i class="mdi mdi-phone-classic"></i> 444 0 444
+                </div>
+                <div class="email">
+                    <a href="#">
+                        <i class="mdi mdi-email"></i> support@isbul.com
+                    </a>
+                </div>
+            </div>
+            <div class="float-right">
+                <ul class="topbar-list list-unstyled d-flex" style="margin: 11px 0px;">
+                    <li class="list-inline-item"><a href="/login"><i class="mdi mdi-account mr-2"></i>Giriş yap</a></li>
+
+                </ul>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+    {%endif%}
+    <!-- Tagline End -->
+
+    <!-- Menu Start -->
+    <div class="container">
+        <!-- Logo container-->
+        <div>
+            <a href="/" class="logo">
+                <img src=" {% static 'images/logo-light.png' %} " alt="" class="logo-light" height="18"/>
+                <img src=" {% static 'images/logo-dark.png' %} " alt="" class="logo-dark" height="18"/>
+            </a>
+        </div>
+        <div class="buy-button">
+            <a href="/login" class="btn btn-primary"><i class="mdi mdi-login"></i>İş Arayan Giriş</a>
+        </div>
+        <div class="buy-button">
+            <a> &nbsp;&nbsp;</a>
+        </div>
+        <div class="buy-button">
+            <a href="/company-login" class="btn btn-primary"><i class="mdi mdi-login"></i>İşveren Giriş</a>
+        </div>
+
+        <!--end login button-->
+        <!-- End Logo container-->
+        <div class="menu-extras">
+            <div class="menu-item">
+                <!-- Mobile menu toggle-->
+                <a class="navbar-toggle">
+                    <div class="lines">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </a>
+                <!-- End mobile menu toggle-->
+            </div>
+        </div>
+
+        <div id="navigation">
+            <!-- Navigation Menu-->
+            <ul class="navigation-menu">
+                <li><a href="/">Ana Sayfa</a></li>
+                <li class="has-submenu">
+                    <a href="javascript:void(0)">İş Ara</a><span class="menu-arrow"></span>
+                    <ul class="submenu">
+                        <li><a href="job-list.html">Job List</a></li>
+                        <li><a href="job-grid.html">Job Grid</a></li>
+                        <li><a href="job-details.html">Job Details</a></li>
+                        <li><a href="job-details-2.html">Job Details-2</a></li>
+                    </ul>
+                </li>
+
+                <li class="has-submenu">
+                    <a href="javascript:void(0)">Pages</a><span class="menu-arrow"></span>
+                    <ul class="submenu">
+                        <li><a href="about.html">About us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="team.html">Team</a></li>
+                        <li><a href="faq.html">Faqs</a></li>
+                        <li><a href="pricing.html">Pricing plans</a></li>
+                        <li class="has-submenu"><a href="javascript:void(0)"> Candidates</a><span
+                                class="submenu-arrow"></span>
+                            <ul class="submenu">
+                                <li><a href="candidates-listing.html">Candidates Listing</a></li>
+                                <li><a href="candidates-profile.html">Candidates Profile</a></li>
+                                <li><a href="create-resume.html">Create Resume</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu"><a href="javascript:void(0)"> Blog</a><span
+                                class="submenu-arrow"></span>
+                            <ul class="submenu">
+                                <li><a href="blog-grid.html">Blogs</a></li>
+                                <li><a href="blog-sidebar.html">Blog Sidebar</a></li>
+                                <li><a href="blog-details.html">Blog Details</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu"><a href="javascript:void(0)"> Employers</a><span
+                                class="submenu-arrow"></span>
+                            <ul class="submenu">
+                                <li><a href="employers-list.html">Employers List</a></li>
+                                <li><a href="company-detail.html">Company Detail</a></li>
+                            </ul>
+                        </li>
+                        <li class="has-submenu"><a href="javascript:void(0)"> User Pages</a><span
+                                class="submenu-arrow"></span>
+                            <ul class="submenu">
+                                <li><a href="login.html">Login</a></li>
+                                <li><a href="signup.html">Signup</a></li>
+                                <li><a href="recovery_passward.html">Forgot Password</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="components.html"> Components</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/contactus">İletişim</a>
+                </li>
+            </ul><!--end navigation menu-->
+        </div><!--end navigation-->
+    </div><!--end container-->
+    <!--end end-->
+</header><!--end header-->
+<!-- Navbar End -->

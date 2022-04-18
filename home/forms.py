@@ -3,20 +3,15 @@ from django.forms import TextInput, Select
 
 from apply.models import Apply
 from company.models import Company
+from home.other import CITY
 from job.models import Job
 from user.models import UserProfile
-
-CITY = [
-    ('Istanbul', 'Istanbul'),
-    ('Ankara', 'Ankara'),
-    ('Izmir', 'Izmir'),
-]
 
 
 class CreateResumeForm(forms.ModelForm):
     image = forms.ImageField(required=False, max_length=100, label='Image :')
     birth_date = forms.CharField(required=False, max_length=30, label='Birth Date :')
-    sex = forms.CharField(required=False, max_length=100, help_text='Sex ', label='Sex :')
+    gender = forms.CharField(required=False, max_length=100, help_text='Gender ', label='Gender :')
     city = forms.CharField(required=False, max_length=100, help_text='City', label='City :')
     phone = forms.CharField(required=False, max_length=200, label='Phone :')
     email = forms.EmailField(required=False, max_length=40, help_text='email', label='email :')
@@ -45,7 +40,7 @@ class CreateResumeForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('image', 'birth_date', 'sex', 'city', 'phone', 'email', 'web_site', 'address',
+        fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address',
                   'school', 'degree', 'department', 'start_date', 'end_date', 'education_add_info',
                   'company', 'position', 'location', 'date_from', 'date_to', 'experience_add_info',
                   'skill', 'skill_value'
@@ -54,7 +49,7 @@ class CreateResumeForm(forms.ModelForm):
         widgets = {
             'image': TextInput(attrs={'class': 'input', 'placeholder': 'city'}),
             'birth_date': TextInput(attrs={'class': 'input', 'placeholder': 'birth_date'}),
-            'sex': TextInput(attrs={'class': 'input', 'placeholder': 'sex'}),
+            'gender': TextInput(attrs={'class': 'input', 'placeholder': 'gender'}),
             'city': Select(attrs={'class': 'input', 'placeholder': 'city'}, choices=CITY),
             'phone': TextInput(attrs={'class': 'input', 'placeholder': 'phone'}),
             'address': TextInput(attrs={'class': 'input', 'placeholder': 'address'}),

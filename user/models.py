@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
-
 from django.utils.safestring import mark_safe
+
+from home.other import CITY_DICT
 
 
 class UserProfile(models.Model):
@@ -10,12 +11,12 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=30)
     email = models.CharField(max_length=30)
     birth_date = models.CharField(max_length=30)
-    sex = models.CharField(max_length=10)
+    gender = models.CharField(max_length=10)
     phone = models.CharField(blank=True, max_length=20)
     address = models.CharField(blank=True, max_length=150)
-    city = models.CharField(blank=True, max_length=20)
+    city = models.CharField(blank=True, max_length=20, choices=CITY_DICT)
     web_site = models.CharField(blank=True, max_length=50)
-    image = models.ImageField(blank=True, upload_to='images/users/', default='images/users/user.png')
+    image = models.ImageField(blank=True, upload_to='uploads/images/users/', default='uploads/images/users/user.png')
     presentation = models.CharField(blank=True, max_length=500)
 
     def __str__(self):

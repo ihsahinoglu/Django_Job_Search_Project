@@ -4,29 +4,19 @@ from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from home.other import CITY_DICT, STATUS
+
 
 class Company(models.Model):
-    STATUS = (
-        ('True', 'Evet'),
-        ('False', 'Hayır'),
-    )
-    CITY = (
-        ('İstanbul', 'İstanbul'),
-        ('Ankara', 'Ankara'),
-        ('İzmir', 'İzmir'),
-        ('Kocaeli', 'Kocaeli'),
-        ('Bursa', 'Bursa'),
-        ('Şanlıurfa', 'Şanlıurfa'),
-    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=150)
     auth_person = models.CharField(blank=True, max_length=50)
-    city = models.CharField(blank=True, max_length=50, choices=CITY)
+    city = models.CharField(blank=True, max_length=50, choices=CITY_DICT)
     address = models.CharField(blank=True, max_length=100)
     phone = models.CharField(blank=True, max_length=15)
     email = models.CharField(blank=True, max_length=50)
     about_company = RichTextUploadingField(blank=True, max_length=500)
-    logo = models.ImageField(blank=True, upload_to='images/', default='images/logo.png')
+    logo = models.ImageField(blank=True, upload_to='uploads/images/', default='uploads/images/logo.png')
     employers = models.CharField(blank=True, max_length=15)
     sector = models.CharField(blank=True, max_length=30)
     web_site = models.CharField(blank=True, max_length=40)

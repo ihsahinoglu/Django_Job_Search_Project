@@ -6,6 +6,7 @@ from apply.models import Apply
 from company.models import Company
 from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm
 from home.models import ContactMessage, Setting, ContactForm
+from home.other import CITY
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 
@@ -78,11 +79,13 @@ def createResume(request):
     userprofile = UserProfile.objects.get(user_id=current_user.id)
     user_education = UserEducation.objects.filter(user_id=current_user.id)
     user_experience = UserEducation.objects.filter(user_id=current_user.id)
+    education_counter = 1
 
     if request.method == 'POST':  # check post
         form = CreateResumeForm(request.POST, request.FILES, )
-        print(form.errors)
+
         if form.is_valid():
+
             data = userprofile  # create relation with model
             data2 = UserEducation()
             data3 = UserExperience()
@@ -90,7 +93,7 @@ def createResume(request):
             if form.cleaned_data['image'] is not None:
                 data.image = form.cleaned_data['image']
             data.birth_date = form.cleaned_data['birth_date']
-            data.sex = form.cleaned_data['sex']
+            data.gender = form.cleaned_data['gender']
             data.city = form.cleaned_data['city']
             data.phone = form.cleaned_data['phone']
             data.email = form.cleaned_data['email']
@@ -117,7 +120,7 @@ def createResume(request):
             data4.user = current_user
             data4.skill = form.cleaned_data['skill']
             data4.skill_value = form.cleaned_data['skill_value']
-
+           
             data.save()  # save data to table
             data2.save()
             data3.save()
@@ -129,6 +132,8 @@ def createResume(request):
                'userprofile': userprofile,
                'user_education': user_education,
                'user_experience': user_experience,
+               'CITY': CITY,
+               'education_counter': range(education_counter),
                }
     return render(request, 'create-resume.html', context)
 
@@ -140,12 +145,15 @@ def candidatesProfile(request):
     user_education = UserEducation.objects.all().filter(user_id=current_user.id)
     user_experience = UserExperience.objects.all().filter(user_id=current_user.id)
     user_skills = UserSkills.objects.all().filter(user_id=current_user.id)
-
+    applied_jobs = Job.objects.all()
+    jobs_for_me = Job.objects.all()
     context = {'setting': setting,
                'userprofile': userprofile,
                'user_education': user_education,
                'user_experience': user_experience,
-               'user_skills': user_skills
+               'user_skills': user_skills,
+               'applied_jobs': applied_jobs,
+               'jobs_for_me': jobs_for_me
                }
     return render(request, 'candidates-profile.html', context)
 
