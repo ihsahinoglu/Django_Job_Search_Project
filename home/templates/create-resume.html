@@ -168,8 +168,10 @@
                             <div class="col-lg-12">
                                 <h5 class="text-dark mt-5">Eğitim Bilgileri :
 
-                                    <a style="text-align:right" href="" onclick="addEducationFields()">Ekle</a></h5>
 
+                                    <button onclick="addEducationFields()">Ekle</button>
+                                    <button onclick="removeEducationFields(this)">Çıkar</button>
+                                </h5>
                             </div>
                             <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
@@ -281,7 +283,7 @@
                                             <div class="form-group app-label">
                                                 <label class="text-muted">Şehir</label>
                                                 <div class="form-button">
-                                                    <select id="location" class="demo-default" name="location">
+                                                    <select id="location" class="nice-select rounded" name="location">
                                                         <option></option>
                                                         {%for city in CITY%}
                                                         <option>{{city}}</option>
@@ -373,18 +375,21 @@
 </section>
 <!-- CREATE RESUME END -->
 
-<button onclick="addEducationFields()">Ekle</button>
-<!--<script>
-    function addEducationFields () {
-
-let html=`<div class="col-12 mt-3">
+<script>
+    function addEducationFields() {
+        var i = 0;
+        let html = `<div class="col-lg-12">
+                                <button onclick="addEducationFields()">Ekle</button>
+                                    <button onclick="removeEducationFields(this)">Çıkar</button>
+                                </h5>
+                            </div>
+                            <div class="col-12 mt-3">
                                 <div class="custom-form p-4 border rounded">
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group app-label">
                                                 <label class="text-muted">Okul</label>
-                                                <input id="school" name="school" type="text" class="form-control resume"
+                                                <input  name="school" type="text" class="form-control resume"
                                                        placeholder="Örn: İstanbul Üniversitesi"
                                                        value="{{user_education.school}}">
                                             </div>
@@ -411,7 +416,7 @@ let html=`<div class="col-12 mt-3">
                                         <div class="col-lg-6">
                                             <div class="form-group app-label">
                                                 <label class="text-muted">Bölüm</label>
-                                                <input id="department" name="department" type="text"
+                                                <input  name="department" type="text"
                                                        class="form-control resume" placeholder="Örn: Matematik"
                                                        value="{{user_education.department}}">
                                             </div>
@@ -422,7 +427,7 @@ let html=`<div class="col-12 mt-3">
                                                 <div class="col-md-6">
                                                     <div class="form-group app-label">
                                                         <label class="text-muted">Başlangıç Tarihi</label>
-                                                        <input id="start_date" name="start_date" type="date"
+                                                        <input name="start_date" type="date"
                                                                class="form-control resume" placeholder=""
                                                                value="{{user_education.start_date}}">
                                                     </div>
@@ -430,7 +435,7 @@ let html=`<div class="col-12 mt-3">
                                                 <div class="col-md-6">
                                                     <div class="form-group app-label">
                                                         <label class="text-muted">Bitiş Tarihi</label>
-                                                        <input id="end-date" type="date" name="end_date"
+                                                        <input type="date" name="end_date"
                                                                class="form-control resume" placeholder=""
                                                                value="{{user_education.end_date}}">
                                                     </div>
@@ -441,7 +446,7 @@ let html=`<div class="col-12 mt-3">
                                         <div class="col-lg-12">
                                             <div class="form-group app-label">
                                                 <label class="text-muted">Ek Bilgiler :</label>
-                                                <textarea id="education_add_info" name="education_add_info" rows="4"
+                                                <textarea name="education_add_info" rows="4"
                                                           class="form-control resume"
                                                           placeholder="Eğitim durumunuzla ilgili ek bilgileri yazınız.."
                                                 >{{user_education.education_add_info}}</textarea>
@@ -452,36 +457,22 @@ let html=`<div class="col-12 mt-3">
                                 </div>
                             </div>`;
 
-//$(document).on('submit', '#login-form', function(e){
-$('#form').submit(function(e) {
 
-        e.preventDefault();}
-       );
-console.log("Hello");
-document.querySelector('#content').insertAdjacentHTML(
-    'afterbegin',html
+        document.querySelector('#content').insertAdjacentHTML('afterbegin', html);
+        if(i=0){
+        $('#login-form').submit(function (e) {
+            console.log("Hello");
+            console.log(i);
+            e.preventDefault();
+        });
+        }
 
-  );
+    }
 
-}
-function removeRow (input) {
-  input.parentNode.remove()
-}
+    function removeEducationFields(input) {
+        input.parentNode.remove()
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>-->
+</script>
 
 {% endblock %}

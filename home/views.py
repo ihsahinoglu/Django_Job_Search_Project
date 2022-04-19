@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -6,21 +7,27 @@ from apply.models import Apply
 from company.models import Company
 from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm
 from home.models import ContactMessage, Setting, ContactForm
-from home.other import CITY
+from home.other import CITY, CATEGORY
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 
 
 def index(request):
     setting = Setting.objects.get(id=1)
-    populerCategories = Job.objects.all()
+    populerCategories = Job.objects.filter().annotate(count=Count('category')).order_by('count')
+    categoryies = dict()
+
+    #    categoryies[populerCategories.category] = populerCategories[i].count
+    #    print(categoryies)
     recent_jobs = Job.objects.all()
     populer_jobs = Job.objects.all()
     part_time_jobs = Job.objects.all()
-    page = "home"
+    categories = Job.objects.order_by('category')
+
     context = {'setting': setting,
-               'page': page,
+               'CITY': CITY,
                'populerCategories': populerCategories,
+               'categories': categories,
                'recent_jobs': recent_jobs,
                'populer_jobs': populer_jobs,
                'part_time_jobs': part_time_jobs,
@@ -100,15 +107,15 @@ def createResume(request):
             data.address = form.cleaned_data['address']
             data.web_site = form.cleaned_data['web_site']
             data.presentation = form.cleaned_data['presentation']
-
-            data2.user = current_user
-            data2.school = form.cleaned_data['school']
-            data2.degree = form.cleaned_data['degree']
-            data2.department = form.cleaned_data['department']
-            data2.start_date = form.cleaned_data['start_date']
-            data2.end_date = form.cleaned_data['end_date']
-            data2.education_add_info = form.cleaned_data['education_add_info']
-
+            for i in range(2):
+                data2.user = current_user
+                data2.school = form.cleaned_data['school']
+                data2.degree = form.cleaned_data['degree']
+                data2.department = form.cleaned_data['department']
+                data2.start_date = form.cleaned_data['start_date']
+                data2.end_date = form.cleaned_data['end_date']
+                data2.education_add_info = form.cleaned_data['education_add_info']
+                data2.save()
             data3.user = current_user
             data3.company = form.cleaned_data['company']
             data3.position = form.cleaned_data['position']
@@ -120,7 +127,7 @@ def createResume(request):
             data4.user = current_user
             data4.skill = form.cleaned_data['skill']
             data4.skill_value = form.cleaned_data['skill_value']
-           
+
             data.save()  # save data to table
             data2.save()
             data3.save()
@@ -206,9 +213,11 @@ def companyDetail(request, slug):
 def jobList(request):
     setting = Setting.objects.get(id=1)
     job_list = Job.objects.all()
-
+    categories = Job.objects.order_by('category')
     context = {'setting': setting,
                'job_list': job_list,
+               'CITY': CITY,
+               'categories': categories,
                }
     return render(request, 'job-list.html', context)
 

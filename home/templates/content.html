@@ -33,19 +33,10 @@
                                             <div class="registration-form-box">
                                                 <i class="fa fa-location-arrow"></i>
                                                 <select id="select-country" class="demo-default">
-                                                    <option value="">Şehir..</option>
-                                                    <option value="AF">Afghanistan</option>
-                                                    <option value="AX">&Aring;land Islands</option>
-                                                    <option value="AL">Albania</option>
-                                                    <option value="DZ">Algeria</option>
-                                                    <option value="AS">American Samoa</option>
-                                                    <option value="AD">Andorra</option>
-                                                    <option value="AO">Angola</option>
-                                                    <option value="AI">Anguilla</option>
-                                                    <option value="AQ">Antarctica</option>
-                                                    <option value="AG">Antigua and Barbuda</option>
-                                                    <option value="AR">Argentina</option>
-                                                    <option value="AM">Armenia</option>
+                                                     <option value="">Şehir..</option>
+                                                     {%for city in CITY%}
+                                                     <option>{{city}}</option>
+                                                    {%endfor%}
 
                                                 </select>
                                             </div>
@@ -54,11 +45,10 @@
                                             <div class="registration-form-box">
                                                 <i class="fa fa-list-alt"></i>
                                                 <select id="select-category" class="demo-default">
-                                                    <option value="">Kategori...</option>
-                                                    <option value="4">Accounting</option>
-                                                    <option value="1">IT & Software</option>
-                                                    <option value="3">Marketing</option>
-                                                    <option value="5">Banking</option>
+                                                    <option value="">Sektör...</option>
+                                                    {%for category in categories %}
+                                                     <option>{{category.category}}</option>
+                                                    {%endfor%}
                                                 </select>
                                             </div>
                                         </div>
@@ -103,7 +93,7 @@
                         </div>
                         <div class="popu-category-content">
                             <h5 class="mb-2 text-dark title">{{ populerCategory.category }}</h5>
-                            <p class="text-success mb-0 rounded">780 Jobs</p>
+                            <p class="text-success mb-0 rounded">{{ populerCategory.count }} Jobs</p>
                         </div>
                     </div>
                 </a>
@@ -172,23 +162,22 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
                                                 <div class="mo-mb-2">
-                                                    <img src="{% static 'images/featured-job/img-1.png' %}" alt=""
-                                                         class="img-fluid mx-auto d-block">
+                                                    <a href="/company-detail/{{recent_job.company.slug}}"><img src="/uploads/{{recent_job.company.logo}}" alt=""
+                                                         class="img-fluid mx-auto d-block"></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
-                                                    <h5 class="f-18"><a href="#"
+                                                    <h5 class="f-18"><a
                                                                         class="text-dark">{{recent_job.title}}</a>
                                                     </h5>
-                                                    <p class="text-muted mb-0">Web Technology pvt.Ltd</p>
+                                                    <p class="text-muted mb-0">{{recent_job.company.company_name}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>Oakridge
-                                                        Lane Richardson</p>
+                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{recent_job.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -199,7 +188,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <p class="text-muted mb-0">Full Time</p>
+                                                    <p class="text-muted mb-0">{{recent_job.job_type}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,8 +197,8 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div>
-                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Experience :</span>
-                                                        1 - 2 years</p>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Tecrübe :</span>
+                                                        {{recent_job.experience}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -221,7 +210,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <a href="#" class="text-primary">Apply Now <i
+                                                    <a href="/job-details/{{recent_job.slug}}" class="text-primary">İlana Git <i
                                                             class="mdi mdi-chevron-double-right"></i></a>
                                                 </div>
                                             </div>
@@ -249,49 +238,55 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
                                                 <div class="mo-mb-2">
-                                                    <img src="{% static 'images/featured-job/img-2.png' %}" alt=""
-                                                         class="img-fluid mx-auto d-block">
+                                                    <a href="/company-detail/{{populer_job.company.slug}}"><img src="/uploads/{{populer_job.company.logo}}" alt=""
+                                                         class="img-fluid mx-auto d-block"></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
-                                                    <h5 class="f-18"><a href="#"
+                                                    <h5 class="f-18"><a
                                                                         class="text-dark">{{populer_job.title}}</a>
                                                     </h5>
-                                                    <p class="text-muted mb-0">Web Themes pvt.Ltd</p>
+                                                    <p class="text-muted mb-0">{{populer_job.company.company_name}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>Berkshire
-                                                        Circle Knoxville</p>
+                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{populer_job.company.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-primary">$</span>900-1100/m</p>
+                                                            class="text-primary">$</span>1000-1200/m</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <p class="text-muted mb-0">Full Time</p>
+                                                    <p class="text-muted mb-0">{{populer_job.job_type}}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="p-3 bg-light">
                                         <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="mo-mb-2">
-                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Experience :</span>
-                                                        2 - 3 years</p>
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Tecrübe :</span>
+                                                        {{populer_job.experience}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span
+                                                            class="text-dark">Notes :</span> languages only differ in
+                                                        their grammar. </p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <a href="#" class="text-primary">Apply Now <i
+                                                    <a href="/job-details/{{populer_job.slug}}" class="text-primary">İlana Git <i
                                                             class="mdi mdi-chevron-double-right"></i></a>
                                                 </div>
                                             </div>
@@ -319,23 +314,22 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
                                                 <div class="mo-mb-2">
-                                                    <img src="{% static 'images/featured-job/img-1.png' %}" alt=""
-                                                         class="img-fluid mx-auto d-block">
+                                                    <a href="/company-detail/{{part_time_job.company.slug}}"><img src="/uploads/{{part_time_job.company.logo}}" alt=""
+                                                         class="img-fluid mx-auto d-block"></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
-                                                    <h5 class="f-18"><a href="#"
+                                                    <h5 class="f-18"><a
                                                                         class="text-dark">{{part_time_job.title}}</a>
                                                     </h5>
-                                                    <p class="text-muted mb-0">Web Technology pvt.Ltd</p>
+                                                    <p class="text-muted mb-0">{{part_time_job.company.company_name}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>Oakridge
-                                                        Lane Richardson</p>
+                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{part_time_job.company.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -346,7 +340,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <p class="text-muted mb-0">Full Time</p>
+                                                    <p class="text-muted mb-0">{{part_time_job.job_type}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -355,8 +349,8 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div>
-                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Experience :</span>
-                                                        1 - 2 years</p>
+                                                    <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Tecrübe :</span>
+                                                        {{part_time_job.experience}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -368,7 +362,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <a href="#" class="text-primary">Apply Now <i
+                                                    <a href="/job-details/{{part_time_job.slug}}" class="text-primary">İlana Git <i
                                                             class="mdi mdi-chevron-double-right"></i></a>
                                                 </div>
                                             </div>
