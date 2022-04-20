@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # from user.forms import SignUpForm, UserUpdateForm, ProfileUpdateForm
+from django.urls import reverse
+
 from company.models import Company
 from user.forms import SignUpForm, CompanySignUpForm
 from user.models import UserProfile
@@ -98,12 +100,13 @@ def company_signup_form(request):
             current_user = request.user
             data = Company()
             data.user_id = current_user.id
+            data.slug = current_user.username
             data.auth_person = form.cleaned_data.get('first_name') + ' ' + form.cleaned_data.get('last_name')
             data.company_name = form.cleaned_data.get('company_name')
             data.email = form.cleaned_data.get('email')
             data.save()
             messages.success(request, 'Your account has been created!')
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/company-info/'+data.slug)
         else:
             messages.warning(request, form.errors)
             return HttpResponseRedirect('/company-signup')

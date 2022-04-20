@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group app-label">
-                                    <label class="text-muted">Firma Adı :</label>
+                                    <label class="text-muted">Sektör :</label>
                                     <input id="sector" type="text" class="form-control resume"
                                            placeholder="Sektör" name="sector"
                                            value="{{company.sector}}">
@@ -79,7 +79,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group app-label">
-                                    <label class="text-muted">Firma Adı :</label>
+                                    <label class="text-muted">Çalışan Sayısı :</label>
                                     <input id="employers" type="text" class="form-control resume"
                                            placeholder="Çalışan sayısı" name="employers"
                                            value="{{company.employers}}">
@@ -92,11 +92,9 @@
                                     <div class="form-button">
                                         <select class="nice-select rounded" name="city">
                                             <option selected="selected" data-display="">{{company.city}}</option>
-                                            <option value="1">Abilene</option>
-                                            <option value="2">Babbitt</option>
-                                            <option value="3">Cape Coral</option>
-                                            <option value="4">Dallas</option>
-                                            <option value="5">Eloy</option>
+                                            {%for city in CITY%}
+                                            <option>{{city}}</option>
+                                            {%endfor%}
                                         </select>
                                     </div>
                                 </div>

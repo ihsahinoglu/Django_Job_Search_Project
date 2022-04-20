@@ -70,48 +70,6 @@
 </section>
 <!-- end home -->
 
-<!-- popular category start -->
-<section class="section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="section-title text-center mb-4 pb-2">
-                    <h4 class="title title-line pb-5">Popular Category</h4>
-                    <p class="text-muted para-desc mx-auto mb-1">Post a job to tell us about your project. We'll quickly
-                        match you with the right freelancers.</p>
-                </div>
-            </div>
-        </div>
-        <div id="owl-testi" class="owl-carousel owl-theme">  <!-- slider -->
-
-            {% for populerCategory in populerCategories %}
-            <div class="citem testi-box rounded p-4 mr-3 ml-2 mb-4 bg-light position-relative">
-                <a href="javascript:void(0)">
-                    <div class="popu-category-box bg-light rounded text-center p-4">
-                        <div class="popu-category-icon mb-3">
-                            <i class="mdi mdi-account d-inline-block rounded-pill h3 text-primary"></i>
-                        </div>
-                        <div class="popu-category-content">
-                            <h5 class="mb-2 text-dark title">{{ populerCategory.category }}</h5>
-                            <p class="text-success mb-0 rounded">{{ populerCategory.count }} Jobs</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-12 text-center mt-4 pt-2">
-                <a href="javascript:void(0)" class="btn btn-primary-outline">Browse All Categories <i
-                        class="mdi mdi-chevron-right"></i></a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- popular category end -->
-
 <!-- all jobs start -->
 <section class="section bg-light">
     <div class="container">
@@ -407,6 +365,49 @@
 </section>
 <!-- all jobs end -->
 
+
+<!-- popular category start -->
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="section-title text-center mb-4 pb-2">
+                    <h4 class="title title-line pb-5">Popüler Sektörler</h4>
+                    <p class="text-muted para-desc mx-auto mb-1">Post a job to tell us about your project. We'll quickly
+                        match you with the right freelancers.</p>
+                </div>
+            </div>
+        </div>
+        <div id="owl-testi" class="owl-carousel owl-theme">  <!-- slider -->
+
+            {% for key,value in populer_categories_dict.items %}
+            <div class="citem testi-box rounded p-4 mr-3 ml-2 mb-4 bg-light position-relative">
+                <a href="javascript:void(0)">
+                    <div class="popu-category-box bg-light rounded text-center p-4">
+                        <div class="popu-category-icon mb-3">
+                            <i class="mdi mdi-account d-inline-block rounded-pill h3 text-primary"></i>
+                        </div>
+                        <div class="popu-category-content">
+                            <h5 class="mb-2 text-dark title">{{ key }}</h5>
+                            <p class="text-success mb-0 rounded">{{ value }} Jobs</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 text-center mt-4 pt-2">
+                <a href="javascript:void(0)" class="btn btn-primary-outline">Tüm Kategorileri İncele <i
+                        class="mdi mdi-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- popular category end -->
+
 <!-- counter start -->
 <section class="section bg-counter position-relative"
          style="background: url('https://via.placeholder.com/200X700//88929f/5a6270C/O https://placeholder.com/') center center;">
@@ -419,8 +420,8 @@
                         <i class="mdi mdi-bank h1 text-white"></i>
                     </div>
                     <div class="counter-content overflow-hidden">
-                        <h1 class="counter-value text-white mb-1" data-count="120">10</h1>
-                        <p class="counter-name text-white text-uppercase mb-0">Companies</p>
+                        <h1 class="counter-value text-white mb-1" data-count="{{total_company}}"></h1>
+                        <p class="counter-name text-white text-uppercase mb-0">Firma</p>
                     </div>
                 </div>
             </div>
@@ -431,8 +432,8 @@
                         <i class="mdi mdi-file-document-box h1 text-white"></i>
                     </div>
                     <div class="counter-content overflow-hidden">
-                        <h1 class="counter-value text-white mb-1" data-count="480">80</h1>
-                        <p class="counter-name text-white text-uppercase mb-0">Applications</p>
+                        <h1 class="counter-value text-white mb-1" data-count="{{total_applications}}"></h1>
+                        <p class="counter-name text-white text-uppercase mb-0">Başvuru</p>
                     </div>
                 </div>
             </div>
@@ -443,8 +444,8 @@
                         <i class="mdi mdi-calendar-multiple-check h1 text-white"></i>
                     </div>
                     <div class="counter-content overflow-hidden">
-                        <h1 class="counter-value text-white mb-1" data-count="120">10</h1>
-                        <p class="counter-name text-white text-uppercase mb-0">Job Posted</p>
+                        <h1 class="counter-value text-white mb-1" data-count="{{total_job}}"></h1>
+                        <p class="counter-name text-white text-uppercase mb-0">İş İlanı</p>
                     </div>
                 </div>
             </div>
@@ -454,8 +455,8 @@
                         <i class="mdi mdi-account-multiple-plus h1 text-white"></i>
                     </div>
                     <div class="counter-content overflow-hidden">
-                        <h1 class="counter-value text-white mb-1" data-count="200">10</h1>
-                        <p class="counter-name text-white text-uppercase mb-0">Member</p>
+                        <h1 class="counter-value text-white mb-1" data-count="{{total_user}}"></h1>
+                        <p class="counter-name text-white text-uppercase mb-0">İş Arayan</p>
                     </div>
                 </div>
             </div>

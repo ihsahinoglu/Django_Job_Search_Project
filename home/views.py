@@ -14,22 +14,31 @@ from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 
 def index(request):
     setting = Setting.objects.get(id=1)
-    populerCategories = Job.objects.filter().annotate(count=Count('category')).order_by('count')
-    categoryies = dict()
-
-    #    categoryies[populerCategories.category] = populerCategories[i].count
-    #    print(categoryies)
     recent_jobs = Job.objects.all()
     populer_jobs = Job.objects.all()
     part_time_jobs = Job.objects.all()
-    categories = Job.objects.order_by('category')
+
+    populer_categories = Job.objects.annotate(count=Count('category')).order_by('-count')[:8]
+    populer_categories_dict = dict()
+    for populer_category in populer_categories:
+        populer_categories_dict[populer_category.category] = Job.objects.filter(
+            category=populer_category.category).count()
+
+    total_company= Company.objects.all().count()
+    total_applications= Apply.objects.all().count()
+    total_job= Job.objects.all().count()
+    total_user= UserProfile.objects.all().count()
+
 
     context = {'setting': setting,
                'CITY': CITY,
-               'populerCategories': populerCategories,
-               'categories': categories,
+               'populer_categories_dict': populer_categories_dict,
                'recent_jobs': recent_jobs,
                'populer_jobs': populer_jobs,
+               'total_company': total_company,
+               'total_applications': total_applications,
+               'total_job': total_job,
+               'total_user': total_user,
                'part_time_jobs': part_time_jobs,
                }
     return render(request, 'index.html', context)
@@ -166,10 +175,10 @@ def candidatesProfile(request):
 
 
 # @login_required(login_url='/login')  # Check login
-def companyInfo(request):
+def companyInfo(request, slug):
     setting = Setting.objects.get(id=1)
     current_user = request.user
-    company = Company.objects.get(user_id=current_user.id)
+    company = Company.objects.get(slug=slug)
 
     if request.method == 'POST':  # check post
         form = CompanyInfoForm(request.POST, request.FILES, )
@@ -195,6 +204,7 @@ def companyInfo(request):
 
     context = {'setting': setting,
                'company': company,
+               'CITY': CITY,
                }
     return render(request, 'company-info.html', context)
 
