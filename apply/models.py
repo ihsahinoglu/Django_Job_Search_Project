@@ -1,14 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from home.other import STATUS
 from job.models import Job
 
 
 class Apply(models.Model):
-    STATUS = (
-        ('True', 'Evet'),
-        ('False', 'Hayır'),
-    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, related_name='children', on_delete=models.CASCADE)

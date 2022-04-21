@@ -185,7 +185,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <!--START-->
-                                {%for populer_job in populer_jobs %}
+                                {%for popular_job in popular_jobs %}
                                 <div class="job-box bg-white overflow-hidden border rounded mt-4 position-relative overflow-hidden">
                                     <div class="lable text-center pt-2 pb-2">
                                         <ul class="list-unstyled best text-white mb-0 text-uppercase">
@@ -196,22 +196,22 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
                                                 <div class="mo-mb-2">
-                                                    <a href="/company-detail/{{populer_job.company.slug}}"><img src="/uploads/{{populer_job.company.logo}}" alt=""
+                                                    <a href="/company-detail/{{popular_job.company.slug}}"><img src="/uploads/{{popular_job.company.logo}}" alt=""
                                                          class="img-fluid mx-auto d-block"></a>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
                                                     <h5 class="f-18"><a
-                                                                        class="text-dark">{{populer_job.title}}</a>
+                                                                        class="text-dark">{{popular_job.title}}</a>
                                                     </h5>
-                                                    <p class="text-muted mb-0">{{populer_job.company.company_name}}</p>
+                                                    <p class="text-muted mb-0">{{popular_job.company.company_name}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{populer_job.company.city}}</p>
+                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{popular_job.company.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -222,7 +222,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <p class="text-muted mb-0">{{populer_job.job_type}}</p>
+                                                    <p class="text-muted mb-0">{{popular_job.job_type}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -232,7 +232,7 @@
                                             <div class="col-md-4">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Tecrübe :</span>
-                                                        {{populer_job.experience}}</p>
+                                                        {{popular_job.experience}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -244,7 +244,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
-                                                    <a href="/job-details/{{populer_job.slug}}" class="text-primary">İlana Git <i
+                                                    <a href="/job-details/{{popular_job.slug}}" class="text-primary">İlana Git <i
                                                             class="mdi mdi-chevron-double-right"></i></a>
                                                 </div>
                                             </div>
@@ -380,7 +380,7 @@
         </div>
         <div id="owl-testi" class="owl-carousel owl-theme">  <!-- slider -->
 
-            {% for key,value in populer_categories_dict.items %}
+            {% for key,value in popular_categories_dict.items %}
             <div class="citem testi-box rounded p-4 mr-3 ml-2 mb-4 bg-light position-relative">
                 <a href="javascript:void(0)">
                     <div class="popu-category-box bg-light rounded text-center p-4">
@@ -389,7 +389,7 @@
                         </div>
                         <div class="popu-category-content">
                             <h5 class="mb-2 text-dark title">{{ key }}</h5>
-                            <p class="text-success mb-0 rounded">{{ value }} Jobs</p>
+                            <p class="text-success mb-0 rounded">{{ value }} İlan</p>
                         </div>
                     </div>
                 </a>

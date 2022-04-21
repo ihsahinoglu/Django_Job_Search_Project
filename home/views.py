@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -14,27 +14,26 @@ from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 
 def index(request):
     setting = Setting.objects.get(id=1)
-    recent_jobs = Job.objects.all()
-    populer_jobs = Job.objects.all()
-    part_time_jobs = Job.objects.all()
+    recent_jobs = Job.objects.all().order_by('create_at')[:8]
+    populer_jobs = Job.objects.all()  # çok başvurulan ilanlar çekilecek
+    part_time_jobs = Job.objects.filter(job_type='Part-Time').order_by('create_at')[:8]
 
-    populer_categories = Job.objects.annotate(count=Count('category')).order_by('-count')[:8]
+    populer_categories = Job.objects.annotate(count=Count('category')).order_by('-count')
     populer_categories_dict = dict()
     for populer_category in populer_categories:
         populer_categories_dict[populer_category.category] = Job.objects.filter(
             category=populer_category.category).count()
 
-    total_company= Company.objects.all().count()
-    total_applications= Apply.objects.all().count()
-    total_job= Job.objects.all().count()
-    total_user= UserProfile.objects.all().count()
-
+    total_company = Company.objects.all().count()
+    total_applications = Apply.objects.all().count()
+    total_job = Job.objects.all().count()
+    total_user = UserProfile.objects.all().count()
 
     context = {'setting': setting,
                'CITY': CITY,
-               'populer_categories_dict': populer_categories_dict,
+               'popular_categories_dict': populer_categories_dict,
                'recent_jobs': recent_jobs,
-               'populer_jobs': populer_jobs,
+               'popular_jobs': populer_jobs,
                'total_company': total_company,
                'total_applications': total_applications,
                'total_job': total_job,
@@ -44,7 +43,7 @@ def index(request):
     return render(request, 'index.html', context)
 
 
-def contactus(request):
+def contact(request):
     if request.method == 'POST':  # check post
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -65,7 +64,7 @@ def contactus(request):
     form = ContactForm
     context = {'setting': setting,
                'form': form}
-    return render(request, 'contactus.html', context)
+    return render(request, 'contact.html', context)
 
 
 def jobDetails(request, slug):
@@ -89,6 +88,7 @@ def jobDetails(request, slug):
 
 
 @login_required(login_url='/login')  # Check login
+@permission_required('Can add user profile', login_url='/login')
 def createResume(request):
     setting = Setting.objects.get(id=1)
     current_user = request.user
@@ -174,7 +174,8 @@ def candidatesProfile(request):
     return render(request, 'candidates-profile.html', context)
 
 
-# @login_required(login_url='/login')  # Check login
+@login_required(login_url='/login')  # Check login
+@permission_required('Can add company', login_url='/login')
 def companyInfo(request, slug):
     setting = Setting.objects.get(id=1)
     current_user = request.user
@@ -232,6 +233,8 @@ def jobList(request):
     return render(request, 'job-list.html', context)
 
 
+@login_required(login_url='/login')
+@permission_required('Can add job', login_url='/login')
 def PostJob(request):
     setting = Setting.objects.get(id=1)
     current_user = request.user
@@ -262,3 +265,15 @@ def PostJob(request):
 
                }
     return render(request, 'post-a-job.html', context)
+
+def faq(request):
+    setting = Setting.objects.get(id=1)
+    context = {'setting': setting,
+               }
+    return render(request, 'faq.html', context)
+
+def about(request):
+    setting = Setting.objects.get(id=1)
+    context = {'setting': setting,
+               }
+    return render(request, 'about.html', context)

@@ -1,6 +1,8 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -67,6 +69,11 @@ def signup_form(request):
         if form.is_valid():
             user = form.save()  # completed sign up
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            group = Group.objects.get(name='job_seeker')
+            group.user_set.add(user)
+            permissions = group.permissions.all()
+            for p in permissions:
+                user.user_permissions.add(p)
 
             # Create data in profile table for user
             current_user = request.user
@@ -95,6 +102,11 @@ def company_signup_form(request):
         if form.is_valid():
             user = form.save()  # completed sign up
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            group = Group.objects.get(name='employer')
+            group.user_set.add(user)
+            permissions = group.permissions.all()
+            for p in permissions:
+                user.user_permissions.add(p)
 
             # Create data in profile table for user
             current_user = request.user
@@ -113,8 +125,7 @@ def company_signup_form(request):
 
     form = SignUpForm()
     # category = Category.objects.all()
-    context = {  # 'category': category,
-        'form': form,
+    context = {  'form': form,
     }
     return render(request, 'company-signup.html', context)
 
@@ -122,3 +133,43 @@ def company_signup_form(request):
 def logout_func(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+
+@login_required(login_url='/login')  # Check login
+def change_password(request):
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return HttpResponseRedirect('/user')
+        else:
+            messages.warning(request, 'Please correct the error below.<br>' + str(form.errors))
+            return HttpResponseRedirect('/change-password')
+    else:
+        # category = Category.objects.all()
+        form = PasswordChangeForm(request.user)
+        context = {'form': form, }
+        return render(request, 'change-password.html', context)
+
+
+def forget_password(request):
+
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return HttpResponseRedirect('/user')
+        else:
+            messages.warning(request, 'Please correct the error below.<br>' + str(form.errors))
+            return HttpResponseRedirect('/forget-password')
+    else:
+        # category = Category.objects.all()
+        form = PasswordChangeForm(request.user)
+        context = {'form': form, }
+        return render(request, 'forget-password.html', context)
+
