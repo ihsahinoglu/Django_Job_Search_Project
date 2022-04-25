@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from company.models import Company
-from user.forms import SignUpForm, CompanySignUpForm
+from user.forms import SignUpForm, CompanySignUpForm, ForgetPasswordForm
 from user.models import UserProfile
 
 
@@ -158,10 +158,10 @@ def change_password(request):
 def forget_password(request):
 
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = ForgetPasswordForm(request.user, request.POST)
         if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
+            #??
+
             messages.success(request, 'Your password was successfully updated!')
             return HttpResponseRedirect('/user')
         else:

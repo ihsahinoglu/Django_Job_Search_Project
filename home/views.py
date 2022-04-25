@@ -5,18 +5,26 @@ from django.shortcuts import render
 
 from apply.models import Apply
 from company.models import Company
-from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm
 from home.models import ContactMessage, Setting, ContactForm
-from home.other import CITY, CATEGORY
+from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 
 
 def index(request):
     setting = Setting.objects.get(id=1)
-    recent_jobs = Job.objects.all().order_by('create_at')[:8]
-    populer_jobs = Job.objects.all()  # çok başvurulan ilanlar çekilecek
-    part_time_jobs = Job.objects.filter(job_type='Part-Time').order_by('create_at')[:8]
+    recent_jobs = Job.objects.all().order_by('-create_at')[:8]
+    popular_job_list = Apply.objects.order_by('job_id').values('job_id').distinct()
+    # popular_job_list = Apply.objects.order_by('job_id')
+    print(popular_job_list)
+    popular_jobs = Job.objects.all()
+    for i in popular_job_list:
+        j = int(i['job_id'])
+        # popular_jobs=Job.objects.get(id=j)
+
+    print(popular_jobs)
+    part_time_jobs = Job.objects.filter(job_type='Part-Time').order_by('-create_at')[:8]
 
     populer_categories = Job.objects.annotate(count=Count('category')).order_by('-count')
     populer_categories_dict = dict()
@@ -28,12 +36,28 @@ def index(request):
     total_applications = Apply.objects.all().count()
     total_job = Job.objects.all().count()
     total_user = UserProfile.objects.all().count()
+    if request.method == 'POST':  # check post
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            city = form.cleaned_data['city']
+            category = form.cleaned_data['category']
+
+            job_list = Job.objects.filter(title__icontains=query)
+            print(query)
+            print(job_list)
+
+            context = {'setting': setting,
+                       'job_list': job_list,
+                       'CITY': CITY,
+                       }
+            return render(request, 'job-list.html', context)
 
     context = {'setting': setting,
                'CITY': CITY,
                'popular_categories_dict': populer_categories_dict,
                'recent_jobs': recent_jobs,
-               'popular_jobs': populer_jobs,
+               'popular_jobs': popular_jobs,
                'total_company': total_company,
                'total_applications': total_applications,
                'total_job': total_job,
@@ -225,6 +249,25 @@ def jobList(request):
     setting = Setting.objects.get(id=1)
     job_list = Job.objects.all()
     categories = Job.objects.order_by('category')
+
+    if request.method == 'POST':  # check post
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            city = form.cleaned_data['city']
+            category = form.cleaned_data['category']
+
+            job_list = Job.objects.filter(title__icontains=query)
+            print(query)
+            print(job_list)
+
+            context = {'setting': setting,
+                       'job_list': job_list,
+                       'CITY': CITY,
+                       'categories': categories,
+                       }
+            return render(request, 'job-list.html', context)
+
     context = {'setting': setting,
                'job_list': job_list,
                'CITY': CITY,
@@ -255,22 +298,30 @@ def PostJob(request):
             data.education_level = form.cleaned_data['education_level']
             data.experience = form.cleaned_data['experience']
             data.description = form.cleaned_data['description']
-
+            print(form.cleaned_data['description'])
             data.save()  # save data to table
 
             # messages.success(request, "Your message has ben sent. Thank you for your message.")
             return HttpResponseRedirect('/')
-
+    form = PostJobForm
     context = {'setting': setting,
-
+               'form': form,
+               'EDUCATION_LEVEL': EDUCATION_LEVEL,
+               'EXPERIENCE': EXPERIENCE,
+               'GENDER_': GENDER_,
+               'CITY': CITY,
+               'JOB_TYPE': JOB_TYPE,
+               'CATEGORY': CATEGORY,
                }
     return render(request, 'post-a-job.html', context)
+
 
 def faq(request):
     setting = Setting.objects.get(id=1)
     context = {'setting': setting,
                }
     return render(request, 'faq.html', context)
+
 
 def about(request):
     setting = Setting.objects.get(id=1)

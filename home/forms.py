@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField, RichTextFormField
 from django import forms
 from django.forms import TextInput, Select
 
@@ -6,6 +7,8 @@ from company.models import Company
 from home.other import CITY
 from job.models import Job
 from user.models import UserProfile
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from ckeditor.widgets import CKEditorWidget
 
 
 class CreateResumeForm(forms.ModelForm):
@@ -116,13 +119,16 @@ class PostJobForm(forms.ModelForm):
     gender = forms.CharField(required=False, max_length=20, label='gender :')
     education_level = forms.CharField(required=False, max_length=40, help_text='CharField', label='CharField :')
     experience = forms.CharField(required=False, max_length=100, help_text='experience', label='experience :')
-    description = forms.CharField(required=False, max_length=500, help_text='description', label='description :')
+    description = forms.CharField(required=False, widget=CKEditorUploadingWidget())
 
     class Meta:
         model = Job
+
         fields = ('title', 'job_type', 'category', 'city', 'gender', 'education_level', 'experience',
                   'description'
                   )
+        """
+        fields = '__all__'
 
         widgets = {
             'title': TextInput(attrs={'class': 'input', 'placeholder': 'title'}),
@@ -134,6 +140,7 @@ class PostJobForm(forms.ModelForm):
             'experience': Select(attrs={'class': 'input', 'placeholder': 'experience'}, choices=CITY),
             'description': TextInput(attrs={'class': 'input', 'placeholder': 'description'}),
         }
+"""
 
 
 class JobDetailForm(forms.ModelForm):
@@ -150,3 +157,13 @@ class JobDetailForm(forms.ModelForm):
         widgets = {
             'title': TextInput(attrs={'class': 'input', 'placeholder': 'title'}),
         }
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField(required=False, max_length=50)
+    city = forms.CharField(required=False, max_length=50)
+    category = forms.CharField(required=False, max_length=50)
+
+    class Meta:
+        model = Company
+        fields = ('query', 'city', 'category')

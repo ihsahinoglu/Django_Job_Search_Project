@@ -5,10 +5,17 @@ STATUS = (
 JOB_TYPE = (
     ('Full-Time', 'Full-Time'),
     ('Part-Time', 'Part-Time'),
+    ('Freelance', 'Freelance'),
+    ('Remote', 'Remote'),
+)
+GENDER_ = (
+    ('Farketmez', 'Farketmez'),
+    ('Erkek', 'Erkek'),
+    ('Kadın', 'Kadın'),
 )
 GENDER = (
-    ('Male', 'Erkek'),
-    ('Female', 'Kadın'),
+    ('Erkek', 'Erkek'),
+    ('Kadın', 'Kadın'),
 )
 EDUCATION_LEVEL = (
     ('ilköğretim', 'ilköğretim'),
@@ -18,14 +25,14 @@ EDUCATION_LEVEL = (
     ('Yüksek lisans', 'Yüksek lisans'),
     ('Doktora', 'Doktora'),
 )
-EXPERIENCE = (
+EXPERIENCE = [
     ('Tecrübesiz', 'Tecrübesiz'),
     ('1 yıl', '1 yıl'),
     ('2 yıl', '2 yıl'),
     ('3-5 yıl', '3-5 yıl'),
     ('5-10 yıl', '5-10 yıl'),
     ('10+ yıl', '10+ yıl'),
-)
+]
 
 CITY = ["Adana", "Adıyaman", "Afyon", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik",
         "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır",

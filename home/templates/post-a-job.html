@@ -37,12 +37,13 @@
                 <div class="rounded shadow bg-white p-4">
                     <div class="custom-form">
                         <div id="message3"></div>
-                        <form method="post" action="" name="contact-form" id="contact-form3">
+                        <form method="post" action="" name="contact-form" id="contact-form3"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
-                            <!--<fieldset class="form-group">
-                                {{ PostJobForm.as_p }}
-                                {{ profile_form.as_p }}
-                            </fieldset>-->
+                            {{ form.media }}
+                            <!--  <fieldset class="form-group">
+                            {{ form.as_p }}
+                            </fieldset> -->
                             <h4 class="text-dark mb-3">Yeni İlan Oluştur :</h4>
                             <div class="row">
                                 <div class="col-md-12">
@@ -60,9 +61,10 @@
                                         <label class="text-muted">Çalışma Şekli</label>
                                         <div class="form-button">
                                             <select class="nice-select rounded" name="job_type">
-                                                <option data-display="Job Type">Job Type</option>
-                                                <option value="1">Full Time</option>
-                                                <option value="2">Part Time</option>
+                                                <option data-display=""></option>
+                                                {%for i,j in JOB_TYPE %}
+                                                <option>{{i}}</option>
+                                                {%endfor%}
                                             </select>
                                         </div>
                                     </div>
@@ -72,11 +74,11 @@
                                         <label class="text-muted">Kategori</label>
                                         <div class="form-button">
                                             <select class="nice-select rounded" name="category">
-                                                <option data-display="Category">Category</option>
-                                                <option value="1">Web Developer</option>
-                                                <option value="2">PHP Developer</option>
-                                                <option value="3">Web Designer</option>
-                                                <option value="4">Graphic Designer</option>
+                                                <option data-display=""></option>
+                                                {%for category in CATEGORY %}
+                                                <option>{{category}}</option>
+                                                {%endfor%}
+
                                             </select>
                                         </div>
                                     </div>
@@ -87,18 +89,23 @@
                                 <div class="col-md-6">
                                     <div class="form-group app-label mt-2">
                                         <label class="text-muted">City</label>
-                                        <input id="city" name="city" type="text" class="form-control resume"
-                                               placeholder="">
+                                        <select id="select-country" class="demo-default" name="city">
+                                                <option data-display=""></option>
+                                                {%for city in CITY %}
+                                                <option>{{city}}</option>
+                                                {%endfor%}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group app-label mt-2">
-                                        <label class="text-muted">Gender</label>
+                                        <label class="text-muted">Cinsiyet</label>
                                         <div class="form-button">
                                             <select class="nice-select rounded" name="gender">
-                                                <option data-display="Gender">Gender</option>
-                                                <option value="1">Male</option>
-                                                <option value="2">Female</option>
+                                                  <option data-display=""></option>
+                                                {%for i,j in GENDER_ %}
+                                                <option>{{i}}</option>
+                                                {%endfor%}
                                             </select>
                                         </div>
                                     </div>
@@ -111,11 +118,10 @@
                                         <label class="text-muted">Education Level</label>
                                         <div class="form-button">
                                             <select class="nice-select rounded" name="education_level">
-                                                <option data-display="Level">Level</option>
-                                                <option value="1">Level-1</option>
-                                                <option value="2">Level-2</option>
-                                                <option value="3">Level-3</option>
-                                                <option value="4">Level-4</option>
+                                            <option data-display=""></option>
+                                                {%for i,j in EDUCATION_LEVEL %}
+                                                <option>{{i}}</option>
+                                                {%endfor%}
                                             </select>
                                         </div>
                                     </div>
@@ -126,10 +132,10 @@
                                         <label class="text-muted">Year of Experience</label>
                                         <div class="form-button">
                                             <select class="nice-select rounded" name="experience">
-                                                <option data-display="Experience">Experience</option>
-                                                <option value="1">1 Year</option>
-                                                <option value="2">2 Year</option>
-                                                <option value="3">3 Year</option>
+                                                <option data-display=""></option>
+                                                {%for i,j in EXPERIENCE %}
+                                                <option>{{i}}</option>
+                                                {%endfor%}
                                             </select>
                                         </div>
                                     </div>
@@ -140,8 +146,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group app-label mt-2">
                                         <label class="text-muted">Job Description</label>
-                                        <textarea id="description" rows="10" class="form-control resume"
-                                                  placeholder="" name="description"></textarea>
+                                        {{form.description}}
                                     </div>
                                 </div>
                             </div>
