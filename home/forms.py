@@ -1,9 +1,10 @@
 from ckeditor.fields import RichTextField, RichTextFormField
 from django import forms
-from django.forms import TextInput, Select
+from django.forms import TextInput, Select, Textarea
 
 from apply.models import Apply
 from company.models import Company
+from home.models import ContactMessage
 from home.other import CITY
 from job.models import Job
 from user.models import UserProfile
@@ -20,6 +21,7 @@ class CreateResumeForm(forms.ModelForm):
     email = forms.EmailField(required=False, max_length=40, help_text='email', label='email :')
     web_site = forms.CharField(required=False, max_length=100, help_text='web_site', label='web_site :')
     address = forms.CharField(required=False, max_length=200, help_text='address', label='address :')
+    title = forms.CharField(required=False, max_length=50, help_text='başlık', label='başlık :')
     presentation = forms.CharField(required=False, max_length=500, help_text='presentation', label='presentation :')
 
     school = forms.CharField(required=False, max_length=100, help_text='school', label='school :')
@@ -43,7 +45,7 @@ class CreateResumeForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address',
+        fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address','title',
                   'school', 'degree', 'department', 'start_date', 'end_date', 'education_add_info',
                   'company', 'position', 'location', 'date_from', 'date_to', 'experience_add_info',
                   'skill', 'skill_value'
@@ -167,3 +169,23 @@ class SearchForm(forms.Form):
     class Meta:
         model = Company
         fields = ('query', 'city', 'category')
+
+class FAQForm(forms.Form):
+    query = forms.CharField(required=False, max_length=50)
+    city = forms.CharField(required=False, max_length=50)
+    category = forms.CharField(required=False, max_length=50)
+
+    class Meta:
+        model = Company
+        fields = ('query', 'city', 'category')
+
+class ContactForm(forms.Form):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'email', 'subject', 'message']
+        widgets = {
+            'name': TextInput(attrs={'class': 'input', 'placeholder': 'Name & Surname'}),
+            'subject': TextInput(attrs={'class': 'input', 'placeholder': 'Subject'}),
+            'email': TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'}),
+            'message': Textarea(attrs={'class': 'input', 'placeholder': 'Your Message', 'rows': '5'}),
+        }

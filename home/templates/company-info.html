@@ -72,9 +72,14 @@
                             <div class="col-md-4">
                                 <div class="form-group app-label">
                                     <label class="text-muted">Sektör :</label>
-                                    <input id="sector" type="text" class="form-control resume"
-                                           placeholder="Sektör" name="sector"
-                                           value="{{company.sector}}">
+                                    <div class="form-button">
+                                    <select class="nice-select rounded" name="sector">
+                                        <option>{{company.sector}}</option>
+                                        {%for category in CATEGORY %}
+                                        <option>{{category}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -90,7 +95,7 @@
                                 <div class="form-group app-label">
                                     <label class="text-muted">Şehir</label>
                                     <div class="form-button">
-                                        <select class="nice-select rounded" name="city">
+                                        <select id="select-country" class="demo-default" name="city">
                                             <option selected="selected" data-display="">{{company.city}}</option>
                                             {%for city in CITY%}
                                             <option>{{city}}</option>

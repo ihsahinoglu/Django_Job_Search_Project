@@ -38,7 +38,6 @@
                                                      {%for city in CITY%}
                                                      <option>{{city}}</option>
                                                     {%endfor%}
-
                                                 </select>
                                             </div>
                                         </div>
@@ -47,8 +46,8 @@
                                                 <i class="fa fa-list-alt"></i>
                                                 <select id="select-category" class="demo-default" name="category">
                                                     <option value="">Sektör...</option>
-                                                    {%for category in categories %}
-                                                     <option>{{category.category}}</option>
+                                                    {%for category in CATEGORY %}
+                                                     <option>{{category}}</option>
                                                     {%endfor%}
                                                 </select>
                                             </div>
@@ -112,11 +111,6 @@
                                 <!--START-->
                                 {%for recent_job in recent_jobs %}
                                 <div class="job-box bg-white overflow-hidden border rounded mt-4 position-relative overflow-hidden">
-                                    <div class="lable text-center pt-2 pb-2">
-                                        <ul class="list-unstyled best text-white mb-0 text-uppercase">
-                                            <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
-                                        </ul>
-                                    </div>
                                     <div class="p-4">
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
@@ -136,13 +130,14 @@
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{recent_job.city}}</p>
+                                                            class="mdi mdi-map-marker text-muted mr-2"></i>{{recent_job.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-primary">$</span>1000-1200/m</p>
+                                                             class="mdi mdi-folder"> </span> {{recent_job.category}}</p>
+
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -163,8 +158,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-dark">Notes :</span> languages only differ in
-                                                        their grammar. </p>
+                                                            class="text-dark">Eğitim :</span> {{recent_job.education_level}} </p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -188,11 +182,6 @@
                                 <!--START-->
                                 {%for popular_job in popular_jobs %}
                                 <div class="job-box bg-white overflow-hidden border rounded mt-4 position-relative overflow-hidden">
-                                    <div class="lable text-center pt-2 pb-2">
-                                        <ul class="list-unstyled best text-white mb-0 text-uppercase">
-                                            <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
-                                        </ul>
-                                    </div>
                                     <div class="p-4">
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
@@ -212,13 +201,13 @@
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{popular_job.company.city}}</p>
+                                                            class="mdi mdi-map-marker text-muted mr-2"></i>{{popular_job.company.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-primary">$</span>1000-1200/m</p>
+                                                            class="mdi mdi-folder"> </span> {{popular_job.category}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -239,8 +228,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-dark">Notes :</span> languages only differ in
-                                                        their grammar. </p>
+                                                            class="text-dark">Eğitim :</span> {{popular_job.education_level}} </p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -254,7 +242,6 @@
                                 </div>
                                 {% endfor %}
                                 <!--END-->
-
                             </div>
                         </div>
                     </div>
@@ -264,11 +251,6 @@
                                 <!--START-->
                                 {%for part_time_job in part_time_jobs %}
                                 <div class="job-box bg-white overflow-hidden border rounded mt-4 position-relative overflow-hidden">
-                                    <div class="lable text-center pt-2 pb-2">
-                                        <ul class="list-unstyled best text-white mb-0 text-uppercase">
-                                            <li class="list-inline-item"><i class="mdi mdi-star"></i></li>
-                                        </ul>
-                                    </div>
                                     <div class="p-4">
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
@@ -288,13 +270,13 @@
                                             <div class="col-md-3">
                                                 <div>
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-map-marker text-primary mr-2"></i>{{part_time_job.company.city}}</p>
+                                                            class="mdi mdi-map-marker text-muted mr-2"></i>{{part_time_job.company.city}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-primary">$</span>1000-1200/m</p>
+                                                            class="mdi mdi-folder"> </span> {{part_time_job.category}}</p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -315,8 +297,7 @@
                                             <div class="col-md-6">
                                                 <div>
                                                     <p class="text-muted mb-0 mo-mb-2"><span
-                                                            class="text-dark">Notes :</span> languages only differ in
-                                                        their grammar. </p>
+                                                            class="text-dark">Eğitim :</span> {{part_time_job.education_level}} </p>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
@@ -401,7 +382,7 @@
 
         <div class="row justify-content-center">
             <div class="col-12 text-center mt-4 pt-2">
-                <a href="javascript:void(0)" class="btn btn-primary-outline">Tüm Kategorileri İncele <i
+                <a href="/job-list" class="btn btn-primary-outline">Tüm Kategorileri İncele <i
                         class="mdi mdi-chevron-right"></i></a>
             </div>
         </div>

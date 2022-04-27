@@ -35,6 +35,7 @@ urlpatterns = [
                   path('company-detail/<slug:slug>/', views.companyDetail, name='company-detail'),
                   path('candidates-profile/', views.candidatesProfile, name='candidates-profile'),
                   path('faq/', views.faq, name='faq'),
+                  path('employers-list/', views.employersList, name='employers-list'),
                   path('about/', views.about, name='about'),
                   path('login/', UserViews.login_form, name='login'),
                   path('company-login/', UserViews.company_login_form, name='company-login'),

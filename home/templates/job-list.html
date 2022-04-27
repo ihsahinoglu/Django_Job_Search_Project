@@ -307,15 +307,18 @@
                                     <div class="col-lg-7 col-md-9">
                                         <div class="job-list-desc">
                                             <h6 class="mb-2"><a class="text-dark">{{job.title|title}}</a></h6>
-                                            <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2"></i>{{job.company.company_name|title}}</p>
+                                            <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2"></i>{{job.company.company_name|title}}
+                                            </p>
                                             <ul class="list-inline mb-0">
                                                 <li class="list-inline-item mr-3">
-                                                    <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{job.city}}</p>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{job.city}}
+                                                    </p>
                                                 </li>
 
                                                 <li class="list-inline-item">
                                                     <p class="text-muted mb-0"><i
-                                                            class="mdi mdi-clock-outline mr-2"></i>{{job.create_at|timesince}}</p>
+                                                            class="mdi mdi-clock-outline mr-2"></i>{{job.create_at|timesince}}
+                                                    </p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -338,25 +341,25 @@
                     <!--END-->
 
                     <div class="col-lg-12 mt-4 pt-2">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination job-pagination mb-0 justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                            <i class="mdi mdi-chevron-double-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">
-                                            <i class="mdi mdi-chevron-double-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination job-pagination mb-0 justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                        <i class="mdi mdi-chevron-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="mdi mdi-chevron-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>

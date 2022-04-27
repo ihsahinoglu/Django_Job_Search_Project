@@ -111,7 +111,82 @@
                     <p class="text-muted">{{company.about_company}}</p>
 
                 </div>
+                &nbsp;
+                <h4>Firma İlanları :</h4>
+
+                <div class="row">
+                    <!--START-->
+                    {%for job in company_job%}
+                    <div class="col-lg-12 mt-4 pt-2">
+                        <div class="job-list-box border rounded">
+                            <div class="p-3">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-2">
+                                        <div class="company-logo-img">
+                                            <a href="/company-detail/{{job.company.slug}}"><img
+                                                    src="/uploads/{{job.company.logo}}" alt=""
+                                                    class="img-fluid mx-auto d-block"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-7 col-md-9">
+                                        <div class="job-list-desc">
+                                            <h6 class="mb-2"><a class="text-dark">{{job.title|title}}</a></h6>
+                                            <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2"></i>{{job.company.company_name|title}}
+                                            </p>
+                                            <ul class="list-inline mb-0">
+                                                <li class="list-inline-item mr-3">
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{job.city}}
+                                                    </p>
+                                                </li>
+
+                                                <li class="list-inline-item">
+                                                    <p class="text-muted mb-0"><i
+                                                            class="mdi mdi-clock-outline mr-2"></i>{{job.create_at|timesince}}
+                                                    </p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-3">
+                                        <div class="job-list-button-sm text-right">
+                                            <span class="badge badge-success">{{job.job_type}}</span>
+
+                                            <div class="mt-3">
+                                                <a href="/job-details/{{job.slug}}"
+                                                   class="btn btn-sm btn-primary">İlan Detay</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {%endfor%}
+                    <!--END-->
+
+                    <div class="col-lg-12 mt-4 pt-2">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination job-pagination mb-0 justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                        <i class="mdi mdi-chevron-double-left"></i>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        <i class="mdi mdi-chevron-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
+
             <div class="col-lg-4 col-md-5 mt-4">
                 <div class="p-4 rounded text-center shadow">
                     <h5 class="text-dark">Share This Job</h5>

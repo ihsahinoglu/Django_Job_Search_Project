@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from apply.models import Apply
 from company.models import Company
-from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm
-from home.models import ContactMessage, Setting, ContactForm
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm
+from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
@@ -15,22 +16,17 @@ from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 def index(request):
     setting = Setting.objects.get(id=1)
     recent_jobs = Job.objects.all().order_by('-create_at')[:8]
-    popular_job_list = Apply.objects.order_by('job_id').values('job_id').distinct()
-    # popular_job_list = Apply.objects.order_by('job_id')
-    print(popular_job_list)
-    popular_jobs = Job.objects.all()
-    for i in popular_job_list:
-        j = int(i['job_id'])
-        # popular_jobs=Job.objects.get(id=j)
 
-    print(popular_jobs)
+    popular_job_list = Apply.objects.order_by('job_id').values('job_id').distinct()
+    popular_jobs = Job.objects.filter(id__in=popular_job_list)[:8]
+
     part_time_jobs = Job.objects.filter(job_type='Part-Time').order_by('-create_at')[:8]
 
-    populer_categories = Job.objects.annotate(count=Count('category')).order_by('-count')
-    populer_categories_dict = dict()
-    for populer_category in populer_categories:
-        populer_categories_dict[populer_category.category] = Job.objects.filter(
-            category=populer_category.category).count()
+    popular_categories = Job.objects.annotate(count=Count('category')).order_by('-count')
+    popular_categories_dict = dict()
+    for popular_category in popular_categories:
+        popular_categories_dict[popular_category.category] = Job.objects.filter(
+            category=popular_category.category).count()
 
     total_company = Company.objects.all().count()
     total_applications = Apply.objects.all().count()
@@ -55,7 +51,7 @@ def index(request):
 
     context = {'setting': setting,
                'CITY': CITY,
-               'popular_categories_dict': populer_categories_dict,
+               'popular_categories_dict': popular_categories_dict,
                'recent_jobs': recent_jobs,
                'popular_jobs': popular_jobs,
                'total_company': total_company,
@@ -63,6 +59,7 @@ def index(request):
                'total_job': total_job,
                'total_user': total_user,
                'part_time_jobs': part_time_jobs,
+               'CATEGORY': CATEGORY,
                }
     return render(request, 'index.html', context)
 
@@ -138,6 +135,7 @@ def createResume(request):
             data.phone = form.cleaned_data['phone']
             data.email = form.cleaned_data['email']
             data.address = form.cleaned_data['address']
+            data.title = form.cleaned_data['title']
             data.web_site = form.cleaned_data['web_site']
             data.presentation = form.cleaned_data['presentation']
             for i in range(2):
@@ -185,8 +183,10 @@ def candidatesProfile(request):
     user_education = UserEducation.objects.all().filter(user_id=current_user.id)
     user_experience = UserExperience.objects.all().filter(user_id=current_user.id)
     user_skills = UserSkills.objects.all().filter(user_id=current_user.id)
-    applied_jobs = Job.objects.all()
-    jobs_for_me = Job.objects.all()
+    applied = Apply.objects.values_list('job_id').filter(user_id=current_user.id)
+    applied_jobs = Job.objects.filter(id__in=applied)
+    jobs_for_me = Job.objects.all()  # düzelt
+
     context = {'setting': setting,
                'userprofile': userprofile,
                'user_education': user_education,
@@ -207,7 +207,7 @@ def companyInfo(request, slug):
 
     if request.method == 'POST':  # check post
         form = CompanyInfoForm(request.POST, request.FILES, )
-        print(form.errors)
+
         if form.is_valid():
             data = company  # create relation with model
             if form.cleaned_data['logo'] is not None:
@@ -230,6 +230,7 @@ def companyInfo(request, slug):
     context = {'setting': setting,
                'company': company,
                'CITY': CITY,
+               'CATEGORY': CATEGORY,
                }
     return render(request, 'company-info.html', context)
 
@@ -239,8 +240,11 @@ def companyDetail(request, slug):
     current_user = request.user
     company = Company.objects.get(slug=slug)
 
+    company_job = Job.objects.filter(company_id=company.id)
+
     context = {'setting': setting,
                'company': company,
+               'company_job': company_job,
                }
     return render(request, 'company-detail.html', context)
 
@@ -318,7 +322,9 @@ def PostJob(request):
 
 def faq(request):
     setting = Setting.objects.get(id=1)
+    faqs = FAQ.objects.all()
     context = {'setting': setting,
+               'faqs': faqs,
                }
     return render(request, 'faq.html', context)
 
@@ -328,3 +334,15 @@ def about(request):
     context = {'setting': setting,
                }
     return render(request, 'about.html', context)
+
+
+def employersList(request):
+    setting = Setting.objects.get(id=1)
+    #employers = User.objects.filter(groups=2)  # job_seeker
+    employers = UserProfile.objects.all()
+    print(employers)
+    context = {'setting': setting,
+               'CITY': CITY,
+               'employers': employers
+               }
+    return render(request, 'employers-list.html', context)
