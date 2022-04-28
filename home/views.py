@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from apply.models import Apply
 from company.models import Company
-from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, FilterForm
 from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
@@ -27,6 +27,7 @@ def index(request):
     for popular_category in popular_categories:
         popular_categories_dict[popular_category.category] = Job.objects.filter(
             category=popular_category.category).count()
+    all_categories = Job.objects.values_list('category', flat=True).distinct()
 
     total_company = Company.objects.all().count()
     total_applications = Apply.objects.all().count()
@@ -35,13 +36,19 @@ def index(request):
     if request.method == 'POST':  # check post
         form = SearchForm(request.POST)
         if form.is_valid():
+            q = Q()
             query = form.cleaned_data['query']
+            if query != "":
+                q |= Q(title__icontains=query)                  # search from title
+                q |= Q(company__company_name__icontains=query)  # search from company name
+                q |= Q(description__icontains=query)            # search from description
             city = form.cleaned_data['city']
+            if city != "":
+                q &= Q(city=city)                               # and search from city
             category = form.cleaned_data['category']
-
-            job_list = Job.objects.filter(title__icontains=query)
-            print(query)
-            print(job_list)
+            if category != "":
+                q &= Q(category=category)                       # and search from category
+            job_list = Job.objects.filter(q)[:20]
 
             context = {'setting': setting,
                        'job_list': job_list,
@@ -59,7 +66,7 @@ def index(request):
                'total_job': total_job,
                'total_user': total_user,
                'part_time_jobs': part_time_jobs,
-               'CATEGORY': CATEGORY,
+               'all_categories': all_categories,
                }
     return render(request, 'index.html', context)
 
@@ -78,8 +85,6 @@ def contact(request):
             # messages.success(request, "Your message has ben sent. Thank you for your message.")
             return HttpResponseRedirect('/contactus')
 
-    # defaultlang = settings.LANGUAGE_CODE[0:2]
-    # currentlang = request.LANGUAGE_CODE[0:2]
     setting = Setting.objects.get(id=1)
 
     form = ContactForm
@@ -94,7 +99,6 @@ def jobDetails(request, slug):
     current_user = request.user
     # apply = Apply.object.get(user_id=current_user.id)
     if request.method == 'POST':  # check post
-        print("post başarlı")
         data = Apply()  # create relation with model
         data.user_id = current_user.id
         data.job_id = job.id
@@ -199,7 +203,7 @@ def candidatesProfile(request):
 
 
 @login_required(login_url='/login')  # Check login
-@permission_required('Can add company', login_url='/login')
+@permission_required('company.add_company', login_url='/login')
 def companyInfo(request, slug):
     setting = Setting.objects.get(id=1)
     current_user = request.user
@@ -241,10 +245,13 @@ def companyDetail(request, slug):
     company = Company.objects.get(slug=slug)
 
     company_job = Job.objects.filter(company_id=company.id)
+    images = ['/uploads/images/arcelik.png', '/uploads/images/hb.png', '/uploads/images/iskur.png',
+              '/uploads/images/arcelik.png', '/uploads/images/hb.png', '/uploads/images/iskur.png']
 
     context = {'setting': setting,
                'company': company,
                'company_job': company_job,
+               'images': images
                }
     return render(request, 'company-detail.html', context)
 
@@ -252,33 +259,57 @@ def companyDetail(request, slug):
 def jobList(request):
     setting = Setting.objects.get(id=1)
     job_list = Job.objects.all()
-    categories = Job.objects.order_by('category')
+    all_categories = Job.objects.values_list('category', flat=True).distinct()
 
-    if request.method == 'POST':  # check post
+    if request.method == 'POST' and 'search-form' in request.POST:  # check post
         form = SearchForm(request.POST)
         if form.is_valid():
+            q = Q()
             query = form.cleaned_data['query']
+            if query != "":
+                q |= Q(title__icontains=query)                  # search from title
+                q |= Q(company__company_name__icontains=query)  # search from company name
+                q |= Q(description__icontains=query)            # search from description
             city = form.cleaned_data['city']
+            if city != "":                                      # and search from city
+                q &= Q(city=city)
             category = form.cleaned_data['category']
+            if category != "":
+                q &= Q(category=category)                       # and search from category
+            job_list = Job.objects.filter(q)[:20]
 
-            job_list = Job.objects.filter(title__icontains=query)
-            print(query)
-            print(job_list)
+            if request.method == 'POST' and 'filter-form' in request.POST:
+                form = FilterForm(request.POST)
+                if form.is_valid():
+                    q = Q()
+                    customRadio1 = form.cleaned_data['customRadio1']
+                    if customRadio1 != "":
+                        q &= Q(city=city)
 
+
+
+                    job_list = Job.objects.filter(q)[:20]
             context = {'setting': setting,
                        'job_list': job_list,
                        'CITY': CITY,
-                       'categories': categories,
+                       'all_categories': all_categories,
+                       'EXPERIENCE': EXPERIENCE,
+                       'GENDER_': GENDER_,
                        }
             return render(request, 'job-list.html', context)
+
+
+
+
 
     context = {'setting': setting,
                'job_list': job_list,
                'CITY': CITY,
-               'categories': categories,
+               'all_categories': all_categories,
+               'EXPERIENCE': EXPERIENCE,
+               'GENDER_': GENDER_,
                }
     return render(request, 'job-list.html', context)
-
 
 @login_required(login_url='/login')
 @permission_required('Can add job', login_url='/login')
@@ -338,7 +369,7 @@ def about(request):
 
 def employersList(request):
     setting = Setting.objects.get(id=1)
-    #employers = User.objects.filter(groups=2)  # job_seeker
+    # employers = User.objects.filter(groups=2)  # job_seeker
     employers = UserProfile.objects.all()
     print(employers)
     context = {'setting': setting,

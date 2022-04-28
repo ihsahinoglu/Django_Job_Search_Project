@@ -5,7 +5,7 @@ from django.forms import TextInput, Select, Textarea
 from apply.models import Apply
 from company.models import Company
 from home.models import ContactMessage
-from home.other import CITY
+from home.other import CITY, CATEGORY, GENDER_
 from job.models import Job
 from user.models import UserProfile
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
@@ -189,3 +189,7 @@ class ContactForm(forms.Form):
             'email': TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'}),
             'message': Textarea(attrs={'class': 'input', 'placeholder': 'Your Message', 'rows': '5'}),
         }
+
+class FilterForm(forms.Form):
+    class Meta:
+        fields = ['customRadio1', 'customRadio2', 'customRadio3', 'customRadio4']

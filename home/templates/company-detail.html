@@ -218,4 +218,23 @@
     </div>
 </section>
 <!-- EMPLOYERS DETAILS END -->
+
+{% for image in images %}
+    {% if forloop.first %}
+        <div class="row ">
+    {% endif %}
+    <div class="col-lg-4 col-md-4 col-12">
+        <div class="text-center mt-2">
+            <img src="{{image}}" height="70%" width="70%" class="img-thumbnail" alt="">
+        </div>
+    </div>
+    {% if forloop.counter|divisibleby:3 %}
+        </div>
+            <div class=row>
+    {% endif %}
+    {% if forloop.last %}
+          </div>
+    {% endif %}
+{% endfor %}
+
 {% endblock %}
