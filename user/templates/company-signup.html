@@ -33,12 +33,11 @@
                                 <h4 class="mb-4"> İşveren Kayıt Ol</h4>
                             </div>
                             {% if messages %}
-                            {% for message in messages %}
-                            <div class="alert alert-{{message.tags}}" role="alert">
-                                {{ message }}
-                            </div>
-                            {% endfor %}
-                            {% endif %}
+                                       {% for message in messages %}
+                                         <script type=text/javascript>
+                                             toastr.{{ message.tags }}('{{ message }}')</script>
+                                        {% endfor %}
+                                    {% endif %}
                             <form class="login-form" method="post" action="">
                                 {% csrf_token %}
                                 <div class="row">

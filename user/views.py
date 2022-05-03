@@ -5,10 +5,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
-# from user.forms import SignUpForm, UserUpdateForm, ProfileUpdateForm
-from django.urls import reverse
-
 from company.models import Company
 from user.forms import SignUpForm, CompanySignUpForm, ForgetPasswordForm
 from user.models import UserProfile
@@ -16,9 +12,6 @@ from user.models import UserProfile
 
 @login_required(login_url='/login')  # Check login
 def index(request):
-    current_user = request.user  # Access User Session information
-    # profile = UserProfile.objects.get(user_id=current_user.id)
-
     return render(request, 'login.html')
 
 
@@ -27,20 +20,16 @@ def login_form(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and user.has_perm('user.add_userprofile'):
             login(request, user)
-            # current_user = request.user
-            # userprofile = UserProfile.objects.get(user_id=current_user.id)
-            # Redirect to a success page.
+            messages.success(request, "Başarılı bir şekilde giriş yapıldı")
             return HttpResponseRedirect('/')
-        else:
-            messages.warning(request, "Login Error !! Username or Password is incorrect")
-            return HttpResponseRedirect('/login')
-    # Return an 'invalid login' error message.
 
-    context = {  # 'category': category
-    }
-    return render(request, 'login.html', context)
+        else:
+            messages.warning(request, "Kullanıcı adı veya şifre hatalıdır")
+            return HttpResponseRedirect('/login')
+
+    return render(request, 'login.html')
 
 
 def company_login_form(request):
@@ -48,19 +37,16 @@ def company_login_form(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+
+        if user is not None and user.has_perm('company.add_company'):
             login(request, user)
-            # current_user = request.user
-            # userprofile = UserProfile.objects.get(user_id=current_user.id)
-            # Redirect to a success page.
+            messages.success(request, "Başarılı bir şekilde giriş yapıldı")
             return HttpResponseRedirect('/')
         else:
-            messages.warning(request, "Login Error !! Username or Password is incorrect")
+            messages.warning(request, "Kullanıcı adı veya şifre hatalıdır")
             return HttpResponseRedirect('/company-login')
-    # Return an 'invalid login' error message.
-    context = {  # 'category': category
-    }
-    return render(request, 'company-login.html', context)
+
+    return render(request, 'company-login.html')
 
 
 def signup_form(request):
@@ -82,18 +68,13 @@ def signup_form(request):
             data.first_name = form.cleaned_data.get('first_name')
             data.last_name = form.cleaned_data.get('last_name')
             data.save()
-            messages.success(request, 'Your account has been created!')
+            messages.success(request, "Kaydınız başarı ile tamamlandı")
             return HttpResponseRedirect('/create-resume')
         else:
             messages.warning(request, form.errors)
             return HttpResponseRedirect('/signup')
 
-    form = SignUpForm()
-    # category = Category.objects.all()
-    context = {  # 'category': category,
-        'form': form,
-    }
-    return render(request, 'signup.html', context)
+    return render(request, 'signup.html')
 
 
 def company_signup_form(request):
@@ -108,7 +89,6 @@ def company_signup_form(request):
             for p in permissions:
                 user.user_permissions.add(p)
 
-            # Create data in profile table for user
             current_user = request.user
             data = Company()
             data.user_id = current_user.id
@@ -117,17 +97,13 @@ def company_signup_form(request):
             data.company_name = form.cleaned_data.get('company_name')
             data.email = form.cleaned_data.get('email')
             data.save()
-            messages.success(request, 'Your account has been created!')
-            return HttpResponseRedirect('/company-info/'+data.slug)
+            messages.success(request, "Kaydınız başarı ile tamamlandı")
+            return HttpResponseRedirect('/company-info/' + data.slug)
         else:
             messages.warning(request, form.errors)
             return HttpResponseRedirect('/company-signup')
 
-    form = SignUpForm()
-    # category = Category.objects.all()
-    context = {  'form': form,
-    }
-    return render(request, 'company-signup.html', context)
+    return render(request, 'company-signup.html')
 
 
 def logout_func(request):
@@ -137,7 +113,6 @@ def logout_func(request):
 
 @login_required(login_url='/login')  # Check login
 def change_password(request):
-
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -156,11 +131,10 @@ def change_password(request):
 
 
 def forget_password(request):
-
     if request.method == 'POST':
         form = ForgetPasswordForm(request.user, request.POST)
         if form.is_valid():
-            #???
+            # ???
 
             messages.success(request, 'Your password was successfully updated!')
             return HttpResponseRedirect('/user')
@@ -172,4 +146,3 @@ def forget_password(request):
         form = PasswordChangeForm(request.user)
         context = {'form': form, }
         return render(request, 'forget-password.html', context)
-

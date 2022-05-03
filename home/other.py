@@ -18,7 +18,7 @@ GENDER = (
     ('Kadın', 'Kadın'),
 )
 EDUCATION_LEVEL = (
-    ('ilköğretim', 'ilköğretim'),
+    ('İlköğretim', 'ilköğretim'),
     ('Lise', 'Lise'),
     ('Önlisans', 'Önlisans'),
     ('Lisans', 'Lisans'),

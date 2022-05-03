@@ -2,6 +2,7 @@ from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.urls import reverse
+from autoslug import AutoSlugField
 
 from company.models import Company
 from home.other import CITY_DICT, STATUS, JOB_TYPE, EDUCATION_LEVEL, EXPERIENCE, GENDER_
@@ -20,10 +21,10 @@ class Job(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS)
-    slug = models.SlugField(null=False, unique=True)
+    slug = AutoSlugField(populate_from='get_slug', unique=True, null=False)
+
+    def get_slug(self):
+        return self.company.company_name + " " + self.title
 
     def __str__(self):
         return self.title
-
-    def get_absolute_url(self):
-        return reverse('job_detail', kwargs={'slug': self.slug})

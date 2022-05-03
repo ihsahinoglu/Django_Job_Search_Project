@@ -37,13 +37,16 @@
                 <div class="rounded shadow bg-white p-4">
                     <div class="custom-form">
                         <div id="message3"></div>
+                         {% if messages %}
+                                       {% for message in messages %}
+                                         <script type=text/javascript>
+                                             toastr.{{ message.tags }}('{{ message }}')</script>
+                                        {% endfor %}
+                                    {% endif %}
                         <form method="post" action="" name="contact-form" id="contact-form3"
                               enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.media }}
-                            <!--  <fieldset class="form-group">
-                            {{ form.as_p }}
-                            </fieldset> -->
                             <h4 class="text-dark mb-3">Yeni İlan Oluştur :</h4>
                             <div class="row">
                                 <div class="col-md-12">

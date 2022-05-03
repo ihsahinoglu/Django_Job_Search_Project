@@ -1,12 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
+from django.urls import reverse
+from django.utils import timezone
 from apply.models import Apply
 from company.models import Company
-from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, FilterForm
+from home import forms
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, FilterForm, SortForm
 from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
@@ -39,15 +42,15 @@ def index(request):
             q = Q()
             query = form.cleaned_data['query']
             if query != "":
-                q |= Q(title__icontains=query)                  # search from title
+                q |= Q(title__icontains=query)  # search from title
                 q |= Q(company__company_name__icontains=query)  # search from company name
-                q |= Q(description__icontains=query)            # search from description
+                q |= Q(description__icontains=query)  # search from description
             city = form.cleaned_data['city']
             if city != "":
-                q &= Q(city=city)                               # and search from city
+                q &= Q(city=city)  # and search from city
             category = form.cleaned_data['category']
             if category != "":
-                q &= Q(category=category)                       # and search from category
+                q &= Q(category=category)  # and search from category
             job_list = Job.objects.filter(q)[:20]
 
             context = {'setting': setting,
@@ -113,7 +116,7 @@ def jobDetails(request, slug):
 
 
 @login_required(login_url='/login')  # Check login
-@permission_required('Can add user profile', login_url='/login')
+@permission_required('user.add_userprofile', login_url='/login')
 def createResume(request):
     setting = Setting.objects.get(id=1)
     current_user = request.user
@@ -167,9 +170,11 @@ def createResume(request):
             data2.save()
             data3.save()
             data4.save()
-            # messages.success(request, "Your message has ben sent. Thank you for your message.")
+
+            messages.success(request, "Bilgileriniz başarıyla güncellendi")
             return HttpResponseRedirect('/')
 
+        messages.warning(request, form.errors)
     context = {'setting': setting,
                'userprofile': userprofile,
                'user_education': user_education,
@@ -258,61 +263,82 @@ def companyDetail(request, slug):
 
 def jobList(request):
     setting = Setting.objects.get(id=1)
-    job_list = Job.objects.all()
+    job_list = Job.objects.all().order_by('-create_at')[:20]
     all_categories = Job.objects.values_list('category', flat=True).distinct()
+    q = Q()
+    if request.method == 'POST':
+        if request.method == 'POST' and 'search-form' in request.POST:
+            form = SearchForm(request.POST)
+            if form.is_valid():
+                query = form.cleaned_data['query']
+                if query != "":
+                    q |= Q(title__icontains=query)
+                    q |= Q(company__company_name__icontains=query)
+                    q |= Q(description__icontains=query)
+                city = form.cleaned_data['city']
+                if city != "":  # and search from city
+                    q &= Q(city=city)
+                category = form.cleaned_data['category']
+                if category != "":
+                    q &= Q(category=category)
 
-    if request.method == 'POST' and 'search-form' in request.POST:  # check post
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            q = Q()
-            query = form.cleaned_data['query']
-            if query != "":
-                q |= Q(title__icontains=query)                  # search from title
-                q |= Q(company__company_name__icontains=query)  # search from company name
-                q |= Q(description__icontains=query)            # search from description
-            city = form.cleaned_data['city']
-            if city != "":                                      # and search from city
-                q &= Q(city=city)
-            category = form.cleaned_data['category']
-            if category != "":
-                q &= Q(category=category)                       # and search from category
-            job_list = Job.objects.filter(q)[:20]
+        if request.method == 'POST' and 'filter-form' in request.POST:
+            form = FilterForm(request.POST)
+            if form.is_valid():
+                selected1 = form.cleaned_data['customRadio1']
+                selected2 = form.cleaned_data['customRadio2']
+                selected3 = form.cleaned_data['customRadio3']
+                selected4 = form.cleaned_data['customRadio4']
 
-            if request.method == 'POST' and 'filter-form' in request.POST:
-                form = FilterForm(request.POST)
-                if form.is_valid():
-                    q = Q()
-                    customRadio1 = form.cleaned_data['customRadio1']
-                    if customRadio1 != "":
-                        q &= Q(city=city)
+                if selected1 == '1':  # filter by last 24 hours
+                    date_from = timezone.now() - timezone.timedelta(days=1)
+                    q &= Q(create_at__date__gte=date_from)
+                if selected1 == '2':  # filter by last 1 week
+                    date_from = timezone.now() - timezone.timedelta(days=7)
+                    q &= Q(create_at__date__gte=date_from)
+                if selected1 == '3':  # filter by last 1 mounth
+                    date_from = timezone.now() - timezone.timedelta(days=30)
+                    q &= Q(create_at__date__gte=date_from)
 
+                if selected2 != '':  # filter by education level
+                    q &= Q(education_level=selected2)
 
+                if selected3 != '':  # filter by experience level
+                    q &= Q(experience=selected3)
 
-                    job_list = Job.objects.filter(q)[:20]
-            context = {'setting': setting,
-                       'job_list': job_list,
-                       'CITY': CITY,
-                       'all_categories': all_categories,
-                       'EXPERIENCE': EXPERIENCE,
-                       'GENDER_': GENDER_,
-                       }
-            return render(request, 'job-list.html', context)
+                if selected4 != '':  # filter by gender
+                    q &= Q(gender=selected4)
+        job_list = Job.objects.filter(q).order_by('-create_at')[:20]
 
+        if request.method == 'POST' and 'sort' in request.POST:
+            print("burada")
+            form = SortForm(request.POST)
+            if form.is_valid():
+                sort = form.cleaned_data['sort']
 
+                print(sort)
+                if sort == 'descending':
+                    job_list = Job.objects.filter(q).order_by('-create_at')[:20]
+                if sort == 'ascending':
+                    job_list = Job.objects.filter(q).order_by('create_at')[:20]
 
-
+        context = {'setting': setting,
+                   'job_list': job_list,
+                   'CITY': CITY,
+                   'all_categories': all_categories,
+                   }
+        return render(request, 'job-list.html', context)
 
     context = {'setting': setting,
                'job_list': job_list,
                'CITY': CITY,
                'all_categories': all_categories,
-               'EXPERIENCE': EXPERIENCE,
-               'GENDER_': GENDER_,
                }
     return render(request, 'job-list.html', context)
 
-@login_required(login_url='/login')
-@permission_required('Can add job', login_url='/login')
+
+@login_required(login_url='/company-login')
+@permission_required('job.add_job', login_url='/company-login')
 def PostJob(request):
     setting = Setting.objects.get(id=1)
     current_user = request.user
@@ -321,7 +347,6 @@ def PostJob(request):
 
     if request.method == 'POST':  # check post
         form = PostJobForm(request.POST)
-        print(form.errors)
         if form.is_valid():
             data = Job()  # create relation with model
             data.company_id = company.id
@@ -333,11 +358,12 @@ def PostJob(request):
             data.education_level = form.cleaned_data['education_level']
             data.experience = form.cleaned_data['experience']
             data.description = form.cleaned_data['description']
-            print(form.cleaned_data['description'])
+
             data.save()  # save data to table
 
-            # messages.success(request, "Your message has ben sent. Thank you for your message.")
+            messages.success(request, "İlanınız başarıyla oluşturuldu")
             return HttpResponseRedirect('/')
+        messages.warning(request, form.errors)
     form = PostJobForm
     context = {'setting': setting,
                'form': form,

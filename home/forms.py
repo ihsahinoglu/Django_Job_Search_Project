@@ -1,7 +1,5 @@
-from ckeditor.fields import RichTextField, RichTextFormField
 from django import forms
 from django.forms import TextInput, Select, Textarea
-
 from apply.models import Apply
 from company.models import Company
 from home.models import ContactMessage
@@ -9,7 +7,6 @@ from home.other import CITY, CATEGORY, GENDER_
 from job.models import Job
 from user.models import UserProfile
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
-from ckeditor.widgets import CKEditorWidget
 
 
 class CreateResumeForm(forms.ModelForm):
@@ -17,10 +14,10 @@ class CreateResumeForm(forms.ModelForm):
     birth_date = forms.CharField(required=False, max_length=30, label='Birth Date :')
     gender = forms.CharField(required=False, max_length=100, help_text='Gender ', label='Gender :')
     city = forms.CharField(required=False, max_length=100, help_text='City', label='City :')
-    phone = forms.CharField(required=False, max_length=200, label='Phone :')
+    phone = forms.CharField(required=False,max_length=200, label='Phone :')
     email = forms.EmailField(required=False, max_length=40, help_text='email', label='email :')
     web_site = forms.CharField(required=False, max_length=100, help_text='web_site', label='web_site :')
-    address = forms.CharField(required=False, max_length=200, help_text='address', label='address :')
+    address = forms.CharField(required=False,max_length=200, help_text='address', label='address :')
     title = forms.CharField(required=False, max_length=50, help_text='başlık', label='başlık :')
     presentation = forms.CharField(required=False, max_length=500, help_text='presentation', label='presentation :')
 
@@ -45,41 +42,11 @@ class CreateResumeForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address','title',
+        fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address', 'title',
                   'school', 'degree', 'department', 'start_date', 'end_date', 'education_add_info',
                   'company', 'position', 'location', 'date_from', 'date_to', 'experience_add_info',
                   'skill', 'skill_value'
                   )
-
-        widgets = {
-            'image': TextInput(attrs={'class': 'input', 'placeholder': 'city'}),
-            'birth_date': TextInput(attrs={'class': 'input', 'placeholder': 'birth_date'}),
-            'gender': TextInput(attrs={'class': 'input', 'placeholder': 'gender'}),
-            'city': Select(attrs={'class': 'input', 'placeholder': 'city'}, choices=CITY),
-            'phone': TextInput(attrs={'class': 'input', 'placeholder': 'phone'}),
-            'address': TextInput(attrs={'class': 'input', 'placeholder': 'address'}),
-            'web_site': TextInput(attrs={'class': 'input', 'placeholder': 'web_site'}),
-            'presentation': TextInput(attrs={'class': 'input', 'placeholder': 'presentation'}),
-
-            'school': TextInput(attrs={'class': 'input', 'placeholder': 'school'}),
-            'degree': Select(attrs={'class': 'input', 'placeholder': 'degree'}),
-            'department': TextInput(attrs={'class': 'input', 'placeholder': 'department'}),
-            'start_date': TextInput(attrs={'class': 'input', 'placeholder': 'start_date'}),
-            'end_date': TextInput(attrs={'class': 'input', 'placeholder': 'end_date'}),
-            'education_add_info': TextInput(attrs={'class': 'input', 'placeholder': 'education_add_info'}),
-
-            'company': TextInput(attrs={'class': 'input', 'placeholder': 'company'}),
-            'position': TextInput(attrs={'class': 'input', 'placeholder': 'position'}),
-            'location': Select(attrs={'class': 'input', 'placeholder': 'location'}),
-            'date_from': TextInput(attrs={'class': 'input', 'placeholder': 'date_from'}),
-            'date_to': TextInput(attrs={'class': 'input', 'placeholder': 'date_to'}),
-            'experience_add_info': TextInput(attrs={'class': 'input', 'placeholder': 'experience_add_info'}),
-
-            'skill': TextInput(attrs={'class': 'input', 'placeholder': 'skill'}),
-            'skill_value': TextInput(attrs={'class': 'input', 'placeholder': 'skill_value'}),
-
-        }
-
 
 class CompanyInfoForm(forms.ModelForm):
     logo = forms.ImageField(required=False, max_length=100, label='Image :')
@@ -170,6 +137,15 @@ class SearchForm(forms.Form):
         model = Company
         fields = ('query', 'city', 'category')
 
+
+class SortForm(forms.Form):
+    sort = forms.CharField(required=False, max_length=50)
+
+    class Meta:
+        model:Job
+        fields = ('sort',)
+
+
 class FAQForm(forms.Form):
     query = forms.CharField(required=False, max_length=50)
     city = forms.CharField(required=False, max_length=50)
@@ -178,6 +154,7 @@ class FAQForm(forms.Form):
     class Meta:
         model = Company
         fields = ('query', 'city', 'category')
+
 
 class ContactForm(forms.Form):
     class Meta:
@@ -190,6 +167,12 @@ class ContactForm(forms.Form):
             'message': Textarea(attrs={'class': 'input', 'placeholder': 'Your Message', 'rows': '5'}),
         }
 
+
 class FilterForm(forms.Form):
+    customRadio1 = forms.CharField(required=False, max_length=50)
+    customRadio2 = forms.CharField(required=False, max_length=50)
+    customRadio3 = forms.CharField(required=False, max_length=50)
+    customRadio4 = forms.CharField(required=False, max_length=50)
+
     class Meta:
         fields = ['customRadio1', 'customRadio2', 'customRadio3', 'customRadio4']
