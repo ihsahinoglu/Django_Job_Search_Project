@@ -100,7 +100,9 @@ def jobDetails(request, slug):
     setting = Setting.objects.get(id=1)
     job = Job.objects.get(slug=slug)
     current_user = request.user
-    # apply = Apply.object.get(user_id=current_user.id)
+    q = Apply.objects.values_list('user_id', flat=True).filter(job_id=job.id).distinct()
+    applied_this_job = UserProfile.objects.filter(user_id__in=q)
+    print(applied_this_job)
     if request.method == 'POST':  # check post
         data = Apply()  # create relation with model
         data.user_id = current_user.id
@@ -111,6 +113,7 @@ def jobDetails(request, slug):
         return HttpResponseRedirect('/')
     context = {'setting': setting,
                'job': job,
+               'applied_this_job':applied_this_job
                }
     return render(request, 'job-details.html', context)
 
