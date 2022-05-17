@@ -7,13 +7,15 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 from apply.models import Apply
-from company.models import Company
+from company.forms import ImageForm, CompanyForm
+from company.models import Company, CompanyPhotoGallery
 from home import forms
 from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, FilterForm, SortForm
 from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
+from django.forms import modelformset_factory
 
 
 def index(request):
@@ -251,15 +253,33 @@ def companyDetail(request, slug):
     setting = Setting.objects.get(id=1)
     current_user = request.user
     company = Company.objects.get(slug=slug)
+    gallery = CompanyPhotoGallery.objects.filter(company_id=company.id)
 
     company_job = Job.objects.filter(company_id=company.id)
-    images = ['/uploads/images/arcelik.png', '/uploads/images/hb.png', '/uploads/images/iskur.png',
-              '/uploads/images/arcelik.png', '/uploads/images/hb.png', '/uploads/images/iskur.png']
+    ImageFormSet = modelformset_factory(CompanyPhotoGallery, form=ImageForm, extra=3)
+    form = CompanyForm()
+    formset = ImageFormSet(queryset=CompanyPhotoGallery.objects.none())
+    if request.method == "POST":
+        form = CompanyForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES)
+
+        if form.is_valid() and formset.is_valid():
+            obj = form.save()
+
+            for f in formset.cleaned_data:
+                if f:
+                    image = f['image']
+                    CompanyPhotoGallery.objects.create(image=image, company=obj)
+            return HttpResponseRedirect('company-detail.html')
+        else:
+            print(form.errors, formset.errors)
 
     context = {'setting': setting,
                'company': company,
                'company_job': company_job,
-               'images': images
+               'gallery': gallery,
+               "form": form,
+               "formset": formset
                }
     return render(request, 'company-detail.html', context)
 

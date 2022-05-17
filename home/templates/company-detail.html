@@ -6,8 +6,11 @@
 {% block footer %} {% include 'footer.html' %}  {% endblock %}
 {% block body %}
 {% load static %}
-
-<!-- EMPLOYERS DETAILS START -->
+{% load crispy_forms_tags %}
+<section class="bg-half">
+    <div class="bg-overlay"></div>
+</section>
+<!-- COMPANY DETAILS START -->
 <section class="section">
     <div class="container">
         <div class="row">
@@ -161,6 +164,9 @@
                         </nav>
                     </div>
                 </div>
+                &nbsp;
+
+
             </div>
 
             <div class="col-lg-4 col-md-5 mt-4">
@@ -193,24 +199,42 @@
 
     </div>
 </section>
-<!-- EMPLOYERS DETAILS END -->
+<!-- COMPANY DETAILS END -->
 
-{% for image in images %}
-    {% if forloop.first %}
-        <div class="row ">
-    {% endif %}
-    <div class="col-lg-4 col-md-4 col-12">
-        <div class="text-center mt-2">
-            <img src="{{image}}" height="70%" width="70%" class="img-thumbnail" alt="">
+
+<!-- PHOTO GALLERY START -->
+<div class="container">
+    <div class="col">
+        <h4>İşyerinden Fotoğraflar :</h4>
+        &nbsp;
+        <div class="row">
+            <section class="photo_gallery">
+                {% for gallery_image in gallery %}
+                <a href="{{ gallery_image.image.url }}"><img src="{{ gallery_image.image.url }}" width="200"
+                                                             height="200" alt=""
+                                                             title=""/></a>
+                {% endfor %}
+            </section>
         </div>
     </div>
-    {% if forloop.counter|divisibleby:3 %}
-        </div>
-            <div class=row>
-    {% endif %}
-    {% if forloop.last %}
-          </div>
-    {% endif %}
-{% endfor %}
+</div>
+&nbsp;
+<!-- PHOTO GALLERY END -->
+<div class="row">
+    <div class="col-6 offset-md-3">
+        <form id="form" method="post" action="." enctype="multipart/form-data">
 
+            {% csrf_token %}
+
+            {{ form|crispy }}
+
+            {{ formset.management_form }}
+            {% for form in formset %}
+            {{ form|crispy }}
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Submit"/>
+        </form>
+    </div>
+</div>
 {% endblock %}
