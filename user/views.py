@@ -98,16 +98,18 @@ def company_signup_form(request):
             data.email = form.cleaned_data.get('email')
             data.save()
             messages.success(request, "Kaydınız başarı ile tamamlandı")
-            return HttpResponseRedirect('/company-info/' + data.slug)
+            return HttpResponseRedirect('/company-signup')
         else:
             messages.warning(request, form.errors)
-            return HttpResponseRedirect('/company-signup')
+            print(form.errors)
+            return HttpResponseRedirect('/signup')
 
     return render(request, 'company-signup.html')
 
 
 def logout_func(request):
     logout(request)
+    messages.success(request, "Çıkış yapıldı")
     return HttpResponseRedirect('/')
 
 

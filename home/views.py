@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 from apply.models import Apply
-from company.forms import ImageForm, CompanyForm
+from company.forms import ImageForm
 from company.models import Company, CompanyPhotoGallery
 from home import forms
 from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, FilterForm, SortForm
@@ -15,7 +15,7 @@ from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory,formset_factory
 
 
 def index(request):
@@ -111,7 +111,7 @@ def jobDetails(request, slug):
         data.job_id = job.id
         data.save()  # save data to table
 
-        # messages.success(request, "Your message has ben sent. Thank you for your message.")
+        messages.success(request, "İlana başvuru yapıldı")
         return HttpResponseRedirect('/')
     context = {'setting': setting,
                'job': job,
@@ -128,11 +128,11 @@ def createResume(request):
     userprofile = UserProfile.objects.get(user_id=current_user.id)
     user_education = UserEducation.objects.filter(user_id=current_user.id)
     user_experience = UserEducation.objects.filter(user_id=current_user.id)
-    education_counter = 1
 
     if request.method == 'POST':  # check post
         form = CreateResumeForm(request.POST, request.FILES, )
-
+        ItemFormSet = formset_factory(CreateResumeForm)
+        item_formset = ItemFormSet()
         if form.is_valid():
 
             data = userprofile  # create relation with model
@@ -150,15 +150,25 @@ def createResume(request):
             data.title = form.cleaned_data['title']
             data.web_site = form.cleaned_data['web_site']
             data.presentation = form.cleaned_data['presentation']
-            for i in range(2):
+
+            education_count = int(form.cleaned_data['educationCount'])
+
+            for item in item_formset:
+                print(item)
+                #print(item.cleaned_data.get('school'))
+
+            for i in range(education_count):
                 data2.user = current_user
                 data2.school = form.cleaned_data['school']
+                print(i)
+                print(form.cleaned_data['school'])
                 data2.degree = form.cleaned_data['degree']
                 data2.department = form.cleaned_data['department']
                 data2.start_date = form.cleaned_data['start_date']
                 data2.end_date = form.cleaned_data['end_date']
                 data2.education_add_info = form.cleaned_data['education_add_info']
                 data2.save()
+
             data3.user = current_user
             data3.company = form.cleaned_data['company']
             data3.position = form.cleaned_data['position']
@@ -185,7 +195,6 @@ def createResume(request):
                'user_education': user_education,
                'user_experience': user_experience,
                'CITY': CITY,
-               'education_counter': range(education_counter),
                }
     return render(request, 'create-resume.html', context)
 
@@ -238,7 +247,7 @@ def companyInfo(request, slug):
 
             data.save()  # save data to table
 
-            # messages.success(request, "Your message has ben sent. Thank you for your message.")
+            messages.success(request, "Bilgileriniz kaydedildi")
             return HttpResponseRedirect('/')
 
     context = {'setting': setting,
@@ -256,29 +265,30 @@ def companyDetail(request, slug):
     gallery = CompanyPhotoGallery.objects.filter(company_id=company.id)
 
     company_job = Job.objects.filter(company_id=company.id)
-    ImageFormSet = modelformset_factory(CompanyPhotoGallery, form=ImageForm, extra=3)
-    form = CompanyForm()
+    ImageFormSet = modelformset_factory(CompanyPhotoGallery, form=ImageForm, extra=5)
     formset = ImageFormSet(queryset=CompanyPhotoGallery.objects.none())
+
     if request.method == "POST":
-        form = CompanyForm(request.POST)
         formset = ImageFormSet(request.POST, request.FILES)
-
-        if form.is_valid() and formset.is_valid():
-            obj = form.save()
-
+        if formset.is_valid():
             for f in formset.cleaned_data:
                 if f:
                     image = f['image']
-                    CompanyPhotoGallery.objects.create(image=image, company=obj)
-            return HttpResponseRedirect('company-detail.html')
+                    CompanyPhotoGallery.objects.create(image=image, company=company)
+            context = {'setting': setting,
+                       'company': company,
+                       'company_job': company_job,
+                       'gallery': gallery,
+                       "formset": formset
+                       }
+            return render(request, 'company-detail.html', context)
         else:
-            print(form.errors, formset.errors)
+            print(formset.errors)
 
     context = {'setting': setting,
                'company': company,
                'company_job': company_job,
                'gallery': gallery,
-               "form": form,
                "formset": formset
                }
     return render(request, 'company-detail.html', context)

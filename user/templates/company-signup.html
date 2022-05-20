@@ -5,6 +5,12 @@
 {% block footer %} {% include 'footer2.html' %}  {% endblock %}
 {% block body %}
 
+ {% for message in messages %}
+   <script type=text/javascript>
+       toastr.{{ message.tags }}('{{ message }}')
+   </script>
+ {% endfor %}
+
 <!-- Loader -->
 <div id="preloader">
     <div id="status">
@@ -32,12 +38,6 @@
                             <div class="text-center">
                                 <h4 class="mb-4"> İşveren Kayıt Ol</h4>
                             </div>
-                            {% if messages %}
-                                       {% for message in messages %}
-                                         <script type=text/javascript>
-                                             toastr.{{ message.tags }}('{{ message }}')</script>
-                                        {% endfor %}
-                                    {% endif %}
                             <form class="login-form" method="post" action="">
                                 {% csrf_token %}
                                 <div class="row">
@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="mx-auto">
                                         <p class="mb-0 mt-3"><small class="text-dark mr-2">Zeten bir hesabın var mı
-                                            ?</small> <a href="login.html" class="text-dark font-weight-bold">Giriş
+                                            ?</small> <a href="/company-login" class="text-dark font-weight-bold">Giriş
                                             yap</a></p>
                                     </div>
                                 </div>

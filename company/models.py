@@ -16,7 +16,7 @@ class Company(models.Model):
     phone = models.CharField(max_length=15)
     email = models.CharField(max_length=50)
     about_company = RichTextUploadingField(blank=True, max_length=500)
-    logo = models.ImageField(blank=True, upload_to='uploads/images/', default='uploads/images/logo.png')
+    logo = models.ImageField(blank=True, upload_to='images/', default='images/logo.png')
     employers = models.CharField(blank=True, max_length=15)
     sector = models.CharField(blank=True, max_length=30)
     web_site = models.CharField(blank=True, max_length=40)

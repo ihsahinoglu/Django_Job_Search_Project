@@ -21,6 +21,7 @@ class CreateResumeForm(forms.ModelForm):
     title = forms.CharField(required=False, max_length=50, help_text='başlık', label='başlık :')
     presentation = forms.CharField(required=False, max_length=500, help_text='presentation', label='presentation :')
 
+    educationCount = forms.CharField(required=False, max_length=100, help_text='school', label='school :')
     school = forms.CharField(required=False, max_length=100, help_text='school', label='school :')
     degree = forms.CharField(required=False, max_length=100, help_text='degree', label='degree :')
     department = forms.CharField(required=False, max_length=100, help_text='department', label='department :')
@@ -45,7 +46,7 @@ class CreateResumeForm(forms.ModelForm):
         fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address', 'title',
                   'school', 'degree', 'department', 'start_date', 'end_date', 'education_add_info',
                   'company', 'position', 'location', 'date_from', 'date_to', 'experience_add_info',
-                  'skill', 'skill_value'
+                  'skill', 'skill_value', 'educationCount',
                   )
 
 class CompanyInfoForm(forms.ModelForm):

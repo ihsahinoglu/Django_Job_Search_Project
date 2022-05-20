@@ -6,6 +6,13 @@
 {% block footer %} {% include 'footer.html' %}  {% endblock %}
 {% block body %}
 {% load static %}
+
+ {% for message in messages %}
+   <script type=text/javascript>
+       toastr.{{ message.tags }}('{{ message }}')
+   </script>
+ {% endfor %}
+
 <section class="bg-half">
     <div class="bg-overlay"></div>
 </section>

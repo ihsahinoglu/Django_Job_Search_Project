@@ -220,14 +220,12 @@
 </div>
 &nbsp;
 <!-- PHOTO GALLERY END -->
+{% if user.id == company.user.id %}
 <div class="row">
     <div class="col-6 offset-md-3">
         <form id="form" method="post" action="." enctype="multipart/form-data">
 
             {% csrf_token %}
-
-            {{ form|crispy }}
-
             {{ formset.management_form }}
             {% for form in formset %}
             {{ form|crispy }}
@@ -237,4 +235,5 @@
         </form>
     </div>
 </div>
+{% endif %}
 {% endblock %}
