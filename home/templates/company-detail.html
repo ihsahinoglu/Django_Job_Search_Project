@@ -87,7 +87,7 @@
             <div class="col-lg-8 col-md-7">
                 <h4>Firma Hakkında :</h4>
                 <div class="rounded border p-4 mt-3">
-                    <p class="text-muted">{{company.about_company}}</p>
+                    <p class="text-muted">{{company.about_company|safe}}</p>
 
                 </div>
                 &nbsp;
@@ -221,19 +221,100 @@
 &nbsp;
 <!-- PHOTO GALLERY END -->
 {% if user.id == company.user.id %}
-<div class="row">
-    <div class="col-6 offset-md-3">
-        <form id="form" method="post" action="." enctype="multipart/form-data">
+<div class="container">
+    <div class="col">
+        <h4>Fotoğraf yükleyin :</h4>
+        &nbsp;
+        <div class="row">
+            <div class="col-6 offset-md-3">
+                <form id="form" method="post" action="." enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-md-12">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <div class="input-group mt-2 mb-2">
+                                    <div class="custom-file" align="left">
+                                        <input type="file" class="custom-file-input"
+                                               name="image1" accept=".jpg, .jpeg, .png"
+                                               aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label rounded"><i
+                                                class="mdi mdi-cloud-upload mr-1"></i> Upload Files</label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <div class="input-group mt-2 mb-2">
+                                    <div class="custom-file" align="left">
+                                        <input type="file" class="custom-file-input"
+                                               name="image2" accept=".jpg, .jpeg, .png"
+                                               aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label rounded"><i
+                                                class="mdi mdi-cloud-upload mr-1"></i> Upload Files</label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <div class="input-group mt-2 mb-2">
+                                    <div class="custom-file" align="left">
+                                        <input type="file" class="custom-file-input"
+                                               name="image3" accept=".jpg, .jpeg, .png"
+                                               aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label rounded"><i
+                                                class="mdi mdi-cloud-upload mr-1"></i> Upload Files</label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <div class="input-group mt-2 mb-2">
+                                    <div class="custom-file" align="left">
+                                        <input type="file" class="custom-file-input"
+                                               name="image4" accept=".jpg, .jpeg, .png"
+                                               aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label rounded"><i
+                                                class="mdi mdi-cloud-upload mr-1"></i> Upload Files</label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-12">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <div class="input-group mt-2 mb-2">
+                                    <div class="custom-file" align="left">
+                                        <input type="file" class="custom-file-input"
+                                               name="image5" accept=".jpg, .jpeg, .png"
+                                               aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label rounded"><i
+                                                class="mdi mdi-cloud-upload mr-1"></i> Upload Files</label>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-12 mt-4">
+                                <input type="submit" id="submit" name="submit" class="submitBnt btn btn-primary"
+                                       value="Yükle">
+                            </div>
 
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-            {{ form|crispy }}
-            {% endfor %}
-
-            <input type="submit" name="submit" value="Submit"/>
-        </form>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+
 {% endif %}
 {% endblock %}

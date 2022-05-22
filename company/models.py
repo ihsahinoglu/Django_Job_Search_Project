@@ -42,7 +42,7 @@ def upload_gallery_image(instance, filename):
 
 class CompanyPhotoGallery(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, upload_to=upload_gallery_image)
+    image = models.ImageField(blank=True, upload_to='images/')
     status = models.CharField(max_length=10, choices=STATUS)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

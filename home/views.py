@@ -6,6 +6,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django import template
+from django.contrib.auth.models import Group
+import user
 from apply.models import Apply
 from company.forms import ImageForm
 from company.models import Company, CompanyPhotoGallery
@@ -15,7 +18,7 @@ from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
 from user.models import UserProfile, UserEducation, UserExperience, UserSkills
-from django.forms import modelformset_factory,formset_factory
+from django.forms import modelformset_factory, formset_factory
 
 
 def index(request):
@@ -87,9 +90,10 @@ def contact(request):
             data.message = form.cleaned_data['message']
             data.ip = request.META.get('REMOTE_ADDR')
             data.save()  # save data to table
-            # messages.success(request, "Your message has ben sent. Thank you for your message.")
-            return HttpResponseRedirect('/contactus')
-
+            messages.success(request, "Mesajınız başarılı bir şekilde iletildi")
+            return HttpResponseRedirect('/')
+        else:
+            messages.warning(request, form.errors)
     setting = Setting.objects.get(id=1)
 
     form = ContactForm
@@ -115,7 +119,7 @@ def jobDetails(request, slug):
         return HttpResponseRedirect('/')
     context = {'setting': setting,
                'job': job,
-               'applied_this_job':applied_this_job
+               'applied_this_job': applied_this_job
                }
     return render(request, 'job-details.html', context)
 
@@ -131,14 +135,9 @@ def createResume(request):
 
     if request.method == 'POST':  # check post
         form = CreateResumeForm(request.POST, request.FILES, )
-        ItemFormSet = formset_factory(CreateResumeForm)
-        item_formset = ItemFormSet()
         if form.is_valid():
 
-            data = userprofile  # create relation with model
-            data2 = UserEducation()
-            data3 = UserExperience()
-            data4 = UserSkills()
+            data = userprofile
             if form.cleaned_data['image'] is not None:
                 data.image = form.cleaned_data['image']
             data.birth_date = form.cleaned_data['birth_date']
@@ -150,41 +149,53 @@ def createResume(request):
             data.title = form.cleaned_data['title']
             data.web_site = form.cleaned_data['web_site']
             data.presentation = form.cleaned_data['presentation']
+            data.save()
 
             education_count = int(form.cleaned_data['educationCount'])
-
-            for item in item_formset:
-                print(item)
-                #print(item.cleaned_data.get('school'))
-
+            school = request.POST.getlist('school')
+            degree = request.POST.getlist('degree')
+            department = request.POST.getlist('department')
+            start_date = request.POST.getlist('start_date')
+            end_date = request.POST.getlist('end_date')
+            education_add_info = request.POST.getlist('education_add_info')
             for i in range(education_count):
+                data2 = UserEducation()
                 data2.user = current_user
-                data2.school = form.cleaned_data['school']
-                print(i)
-                print(form.cleaned_data['school'])
-                data2.degree = form.cleaned_data['degree']
-                data2.department = form.cleaned_data['department']
-                data2.start_date = form.cleaned_data['start_date']
-                data2.end_date = form.cleaned_data['end_date']
-                data2.education_add_info = form.cleaned_data['education_add_info']
+                data2.school = school[i]
+                data2.degree = degree[i]
+                data2.department = department[i]
+                data2.start_date = start_date[i]
+                data2.end_date = end_date[i]
+                data2.education_add_info = education_add_info[i]
                 data2.save()
 
-            data3.user = current_user
-            data3.company = form.cleaned_data['company']
-            data3.position = form.cleaned_data['position']
-            data3.location = form.cleaned_data['location']
-            data3.date_from = form.cleaned_data['date_from']
-            data3.date_to = form.cleaned_data['date_to']
-            data3.experience_add_info = form.cleaned_data['experience_add_info']
+            experience_count = int(form.cleaned_data['experienceCount'])
+            company = request.POST.getlist('company')
+            position = request.POST.getlist('position')
+            location = request.POST.getlist('location')
+            date_from = request.POST.getlist('date_from')
+            date_to = request.POST.getlist('date_to')
+            experience_add_info = request.POST.getlist('experience_add_info')
+            for i in range(experience_count):
+                data3 = UserExperience()
+                data3.user = current_user
+                data3.company = company[i]
+                data3.position = position[i]
+                data3.location = location[i]
+                data3.date_from = date_from[i]
+                data3.date_to = date_to[i]
+                data3.experience_add_info = experience_add_info[i]
+                data3.save()
 
-            data4.user = current_user
-            data4.skill = form.cleaned_data['skill']
-            data4.skill_value = form.cleaned_data['skill_value']
-
-            data.save()  # save data to table
-            data2.save()
-            data3.save()
-            data4.save()
+            skill_count = int(form.cleaned_data['skillCount'])
+            skill = request.POST.getlist('skill')
+            skill_value = request.POST.getlist('skill_value')
+            for i in range(skill_count):
+                data4 = UserSkills()
+                data4.user = current_user
+                data4.skill = skill[i]
+                data4.skill_value = skill_value[i]
+                data4.save()
 
             messages.success(request, "Bilgileriniz başarıyla güncellendi")
             return HttpResponseRedirect('/')
@@ -199,9 +210,9 @@ def createResume(request):
     return render(request, 'create-resume.html', context)
 
 
-def candidatesProfile(request):
+def candidatesProfile(request, slug):
     setting = Setting.objects.get(id=1)
-    current_user = request.user
+    current_user = User.objects.get(username=slug)
     userprofile = UserProfile.objects.get(user_id=current_user.id)
     user_education = UserEducation.objects.all().filter(user_id=current_user.id)
     user_experience = UserExperience.objects.all().filter(user_id=current_user.id)
@@ -260,36 +271,37 @@ def companyInfo(request, slug):
 
 def companyDetail(request, slug):
     setting = Setting.objects.get(id=1)
-    current_user = request.user
     company = Company.objects.get(slug=slug)
     gallery = CompanyPhotoGallery.objects.filter(company_id=company.id)
 
     company_job = Job.objects.filter(company_id=company.id)
-    ImageFormSet = modelformset_factory(CompanyPhotoGallery, form=ImageForm, extra=5)
-    formset = ImageFormSet(queryset=CompanyPhotoGallery.objects.none())
+    form = ImageForm(request.POST, request.FILES)
 
     if request.method == "POST":
-        formset = ImageFormSet(request.POST, request.FILES)
-        if formset.is_valid():
-            for f in formset.cleaned_data:
-                if f:
-                    image = f['image']
-                    CompanyPhotoGallery.objects.create(image=image, company=company)
+        if form.is_valid():
+            for i in range(5):
+                data = CompanyPhotoGallery()
+                data.company = company
+                s = 'image'+str(i+1)
+                if form.cleaned_data[s] is not None:
+                    data.image = form.cleaned_data[s]
+                    data.save()
+
+            gallery = CompanyPhotoGallery.objects.filter(company_id=company.id)
+            messages.success(request, "Fotoğraflar yüklendi")
             context = {'setting': setting,
                        'company': company,
                        'company_job': company_job,
                        'gallery': gallery,
-                       "formset": formset
                        }
             return render(request, 'company-detail.html', context)
         else:
-            print(formset.errors)
+            messages.warning(request, form.errors)
 
     context = {'setting': setting,
                'company': company,
                'company_job': company_job,
                'gallery': gallery,
-               "formset": formset
                }
     return render(request, 'company-detail.html', context)
 

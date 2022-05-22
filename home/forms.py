@@ -14,10 +14,10 @@ class CreateResumeForm(forms.ModelForm):
     birth_date = forms.CharField(required=False, max_length=30, label='Birth Date :')
     gender = forms.CharField(required=False, max_length=100, help_text='Gender ', label='Gender :')
     city = forms.CharField(required=False, max_length=100, help_text='City', label='City :')
-    phone = forms.CharField(required=False,max_length=200, label='Phone :')
+    phone = forms.CharField(required=False, max_length=200, label='Phone :')
     email = forms.EmailField(required=False, max_length=40, help_text='email', label='email :')
     web_site = forms.CharField(required=False, max_length=100, help_text='web_site', label='web_site :')
-    address = forms.CharField(required=False,max_length=200, help_text='address', label='address :')
+    address = forms.CharField(required=False, max_length=200, help_text='address', label='address :')
     title = forms.CharField(required=False, max_length=50, help_text='başlık', label='başlık :')
     presentation = forms.CharField(required=False, max_length=500, help_text='presentation', label='presentation :')
 
@@ -30,6 +30,7 @@ class CreateResumeForm(forms.ModelForm):
     education_add_info = forms.CharField(required=False, max_length=500, help_text='education_add_info',
                                          label='education_add_info :')
 
+    experienceCount = forms.CharField(required=False, max_length=100, help_text='school', label='school :')
     company = forms.CharField(required=False, max_length=100, help_text='company', label='company :')
     position = forms.CharField(required=False, max_length=100, help_text='position', label='position :')
     location = forms.CharField(required=False, max_length=50, help_text='location', label='location :')
@@ -38,6 +39,7 @@ class CreateResumeForm(forms.ModelForm):
     experience_add_info = forms.CharField(required=False, max_length=500, help_text='experience_add_info',
                                           label='experience_add_info :')
 
+    skillCount = forms.CharField(required=False, max_length=100, help_text='school', label='school :')
     skill = forms.CharField(required=False, max_length=100, help_text='skill', label='skill :')
     skill_value = forms.CharField(required=False, max_length=100, help_text='skill_value', label='skill_value :')
 
@@ -46,8 +48,9 @@ class CreateResumeForm(forms.ModelForm):
         fields = ('image', 'birth_date', 'gender', 'city', 'phone', 'email', 'web_site', 'address', 'title',
                   'school', 'degree', 'department', 'start_date', 'end_date', 'education_add_info',
                   'company', 'position', 'location', 'date_from', 'date_to', 'experience_add_info',
-                  'skill', 'skill_value', 'educationCount',
+                  'skill', 'skill_value', 'educationCount', 'experienceCount', 'skillCount'
                   )
+
 
 class CompanyInfoForm(forms.ModelForm):
     logo = forms.ImageField(required=False, max_length=100, label='Image :')
@@ -67,19 +70,6 @@ class CompanyInfoForm(forms.ModelForm):
                   'address', 'about_company'
                   )
 
-        widgets = {
-            'logo': TextInput(attrs={'class': 'input', 'placeholder': 'logo'}),
-            'company_name': TextInput(attrs={'class': 'input', 'placeholder': 'company_name'}),
-            'sector': TextInput(attrs={'class': 'input', 'placeholder': 'sector'}),
-            'employers': TextInput(attrs={'class': 'input', 'placeholder': 'employers'}),
-            'city': Select(attrs={'class': 'input', 'placeholder': 'city'}, choices=CITY),
-            'phone': TextInput(attrs={'class': 'input', 'placeholder': 'phone'}),
-            'email': TextInput(attrs={'class': 'input', 'placeholder': 'email'}),
-            'web_site': TextInput(attrs={'class': 'input', 'placeholder': 'web_site'}),
-            'address': TextInput(attrs={'class': 'input', 'placeholder': 'address'}),
-            'about_company': TextInput(attrs={'class': 'input', 'placeholder': 'about_company'})
-        }
-
 
 class PostJobForm(forms.ModelForm):
     title = forms.CharField(required=False, max_length=50, label='title :')
@@ -97,20 +87,6 @@ class PostJobForm(forms.ModelForm):
         fields = ('title', 'job_type', 'category', 'city', 'gender', 'education_level', 'experience',
                   'description'
                   )
-        """
-        fields = '__all__'
-
-        widgets = {
-            'title': TextInput(attrs={'class': 'input', 'placeholder': 'title'}),
-            'job_type': Select(attrs={'class': 'input', 'placeholder': 'job_type'}, choices=CITY),
-            'category': TextInput(attrs={'class': 'input', 'placeholder': 'category'}),
-            'city': Select(attrs={'class': 'input', 'placeholder': 'city'}, choices=CITY),
-            'gender': Select(attrs={'class': 'input', 'placeholder': 'gender'}, choices=CITY),
-            'education_level': Select(attrs={'class': 'input', 'placeholder': 'education_level'}, choices=CITY),
-            'experience': Select(attrs={'class': 'input', 'placeholder': 'experience'}, choices=CITY),
-            'description': TextInput(attrs={'class': 'input', 'placeholder': 'description'}),
-        }
-"""
 
 
 class JobDetailForm(forms.ModelForm):
@@ -143,7 +119,7 @@ class SortForm(forms.Form):
     sort = forms.CharField(required=False, max_length=50)
 
     class Meta:
-        model:Job
+        model: Job
         fields = ('sort',)
 
 
@@ -158,15 +134,14 @@ class FAQForm(forms.Form):
 
 
 class ContactForm(forms.Form):
+    name = forms.CharField(max_length=50)
+    email = forms.CharField(max_length=50)
+    subject = forms.CharField(max_length=50)
+    message = forms.CharField(max_length=500)
+
     class Meta:
         model = ContactMessage
         fields = ['name', 'email', 'subject', 'message']
-        widgets = {
-            'name': TextInput(attrs={'class': 'input', 'placeholder': 'Name & Surname'}),
-            'subject': TextInput(attrs={'class': 'input', 'placeholder': 'Subject'}),
-            'email': TextInput(attrs={'class': 'input', 'placeholder': 'Email Address'}),
-            'message': Textarea(attrs={'class': 'input', 'placeholder': 'Your Message', 'rows': '5'}),
-        }
 
 
 class FilterForm(forms.Form):
