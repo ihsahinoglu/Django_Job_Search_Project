@@ -15,7 +15,7 @@ class Company(models.Model):
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.CharField(max_length=50)
-    about_company = RichTextUploadingField(blank=True, max_length=500)
+    about_company = RichTextUploadingField(blank=True, max_length=5000)
     logo = models.ImageField(blank=True, upload_to='images/', default='images/logo.png')
     employers = models.CharField(blank=True, max_length=15)
     sector = models.CharField(blank=True, max_length=30)
@@ -37,9 +37,6 @@ class Company(models.Model):
     def get_absolute_url(self):
         return reverse('company_detail', kwargs={'slug': self.slug})
 
-def upload_gallery_image(instance, filename):
-    return f"images/{instance.company.company_name}/gallery/{filename}"
-
 class CompanyPhotoGallery(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, upload_to='images/')
@@ -49,3 +46,6 @@ class CompanyPhotoGallery(models.Model):
 
     def __str__(self):
         return self.status
+
+def upload_gallery_image(instance, filename):
+    return f"images/{instance.company.company_name}/gallery/{filename}"

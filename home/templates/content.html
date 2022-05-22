@@ -7,7 +7,7 @@
  {% endfor %}
 
 <section class="bg-home"
-         style="background: url('https://via.placeholder.com/2000X1333//88929f/5a6270C/O https://placeholder.com/') center center;">
+         style="background: url('/uploads/images/bg.jpg')">
     <div class="bg-overlay"></div>
     <div class="home-center">
         <div class="home-desc-center">
@@ -15,9 +15,8 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
                         <div class="title-heading text-center text-white">
-                            <h6 class="small-title text-uppercase text-light mb-3">Find jobs, create trackable resumes
-                                and enrich your applications.</h6>
-                            <h1 class="heading font-weight-bold mb-4">The Easiest Way to Get Your New Job</h1>
+                            <h6 class="small-title text-uppercase text-light mb-3">İş bul, özgeçmiş oluştur ve başvur</h6>
+                            <h1 class="heading font-weight-bold mb-4">İş Bulmanın En Kolay Yolu</h1>
                         </div>
                     </div>
                 </div>
@@ -370,7 +369,7 @@
 
             {% for key,value in popular_categories_dict.items %}
             <div class="citem testi-box rounded p-4 mr-3 ml-2 mb-4 bg-light position-relative">
-                <a href="javascript:void(0)">
+                <a href="/job-list/{{key}}">
                     <div class="popu-category-box bg-light rounded text-center p-4">
                         <div class="popu-category-icon mb-3">
                             <i class="mdi mdi-account d-inline-block rounded-pill h3 text-primary"></i>

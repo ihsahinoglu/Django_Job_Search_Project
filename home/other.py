@@ -62,4 +62,4 @@ CITY_DICT = (
     ("Bartın", "Bartın"), ("Ardahan", "Ardahan"), ("Iğdır", "Iğdır"), ("Yalova", "Yalova"), ("Karabük", "Karabük"),
     ("Kilis", "Kilis"), ("Osmaniye", "Osmaniye"), ("Düzce", "Düzce"),
 )
-CATEGORY = ["Bilişim","İnşaat","Tekstil","Üretim","Lojistik","Hizmet","Finans", "Güvenlik"]
+CATEGORY = ["Bilişim","İnşaat","Tekstil","Üretim","Lojistik","Hizmet","Finans", "Güvenlik",]

@@ -6,7 +6,20 @@
 {% block footer %} {% include 'footer.html' %}  {% endblock %}
 {% block body %}
 {% load static %}
-<section class="bg-half">
+
+{% for message in messages %}
+<script type=text/javascript>
+    toastr.
+    {
+        {
+            message.tags
+        }
+    }
+    ('{{ message }}')
+</script>
+{% endfor %}
+
+<section class="bg-half" style="background: url('/uploads/images/bg.jpg')">
     <div class="bg-overlay"></div>
 </section>
 
@@ -17,42 +30,132 @@
             <div class="col-lg-12">
                 <h3 class="mb-2">{{job.title}}</a></h3>
             </div>
+            <div class="col-lg-12">
+                <h5 class="mb-0"><a  ><i class="mdi mdi-bank mr-1"></i></a> {{job.company.company_name}}</h5>
+            </div>
         </div>
-
+        &nbsp;
         <div class="row">
             <div class="col-lg-8 col-md-7">
-                <div class="job-detail border rounded p-4">
-                    <div class="job-detail-content">
-                        <div class="job-detail-com-desc overflow-hidden d-block">
-                            <p class="text-muted mb-0"><i class="mdi mdi-link-variant mr-2"></i>{{job.company.company_name}}
-                            </p>
-                            <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{job.company.address}}
-                            </p>
-                            <h5 class="text-dark mt-4">Firmamız Hakkında</h5>
-                            <p class="text-muted mb-3">{{job.company.about_us}}</p>
-                            <h5 class="text-dark mt-4">Genel Nitelikler ve İş Tanımı</h5>
-                            <p class="text-muted mb-3">{{job.description|safe}}I</p>
+                <div class="job-detail border rounded">
+                        <div class="job-detail job-overview mt-4 mb-4">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="single-post-item mb-4">
+                                            <div class="float-left mr-3">
+                                                <i class="mdi mdi-map-marker text-muted mdi-24px"></i>
+                                            </div>
+                                            <div class="overview-details">
+                                                <h6 class="text-muted mb-0">Konum</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{job.city}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="single-post-item mb-4">
+                                            <div class="float-left mr-3">
+                                                <i class="mdi mdi-apps text-muted mdi-24px"></i>
+                                            </div>
+                                            <div class="overview-details">
+                                                <h6 class="text-muted mb-0">Sektör</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{job.category}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="single-post-item mb-4">
+                                            <div class="float-left mr-3">
+                                                <i class="mdi mdi-security text-muted mdi-24px"></i>
+                                            </div>
+                                            <div class="overview-details">
+                                                <h6 class="text-muted mb-0">Tecrübe</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{job.experience}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="single-post-item mb-4">
+                                            <div class="float-left mr-3">
+                                                <i class="mdi mdi-library-books text-muted mdi-24px"></i>
+                                            </div>
+                                            <div class="overview-details">
+                                                <h6 class="text-muted mb-0">Eğitim</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{job.education_level}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="single-post-item mb-4">
+                                            <div class="float-left mr-3">
+                                                <i class="mdi mdi-human-male-female text-muted mdi-24px"></i>
+                                            </div>
+                                            <div class="overview-details">
+                                                <h6 class="text-muted mb-0">Cinsiyet</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{job.gender}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="single-post-item mb-4">
+                                            <div class="float-left mr-3">
+                                                <i class="mdi mdi-calendar-today text-muted mdi-24px"></i>
+                                            </div>
+                                            <div class="overview-details">
+                                                <h6 class="text-muted mb-0">İlan Tarihi</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{job.create_at|timesince}}</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+
+                </div>
+                &nbsp;
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h5 class="mb-2">Firma Hakkında: </a></h5>
                     </div>
+                </div>
+                <div class="job-detail border rounded p-4">
                     <div class="job-detail-desc mt-4">
-                        <p class="text-muted mb-3">{{job.company.about_us}}</p>
+                        <p class="text-muted mb-3">{{job.company.about_company|safe}}</p>
+                    </div>
+                </div>
+                &nbsp;
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h5 class="mb-2">Genel Nitelikler ve İş Tanımı: </a></h5>
+                    </div>
+                </div>
+                <div class="job-detail border rounded p-4">
+
+                    <div class="job-detail-desc mt-4">
+                        <p class="text-muted mb-3">{{job.description|safe}}I</p>
                     </div>
                 </div>
                 &nbsp;
                 {% if job.company.email == user.email %}
                 <div class="col-lg-12">
-                        <h3 class="mb-2">Bu ilana başvuru yapan adaylar</a></h3>
-                    </div>
+                    <h3 class="mb-2">Bu ilana başvuru yapan adaylar</a></h3>
+                </div>
                 <div class="row">
                     {%if applied_this_job|length > 0 %}
                     <!--START-->
                     {%for employer in applied_this_job %}
                     <div class="col-lg-4 col-md-6 mt-4 pt-2">
                         <div class="employers-list position-relative pb-3 pt-3 pl-2 pr-2 border rounded">
-                            <img src="/{{employer.image}}" alt=""
+                            <img src="/uploads/{{employer.image}}" alt=""
                                  class="mx-auto d-block shadow border rounded-circle" height="90">
                             <div class="grid-list-desc text-center mt-3">
-                                <h5 class="mb-2"><a href="/candidates-profile/{{employer.user.username}}" class="text-dark name">{{employer.first_name}}
+                                <h5 class="mb-2"><a href="/candidates-profile/{{employer.user.username}}"
+                                                    class="text-dark name">{{employer.first_name}}
                                     {{employer.last_name}}</a></h5>
                                 <p class="text-muted mb-0">{{employer.title}}</p>
                                 <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{employer.city}}</p>
@@ -71,35 +174,16 @@
                                 </ul>
                             </div>
                             <div class="apply-button text-center mt-3">
-                                <a href="/candidates-profile/{{employer.user.username}}" class="btn btn-primary btn-sm">Profile Git</a>
+                                <a href="/candidates-profile/{{employer.user.username}}" class="btn btn-primary btn-sm">Profile
+                                    Git</a>
                             </div>
                         </div>
                     </div>
                     {%endfor%}
                     <!--END-->
-                    <div class="col-lg-12 mt-4 pt-2">
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination job-pagination mb-0 justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                        <i class="mdi mdi-chevron-double-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">
-                                        <i class="mdi mdi-chevron-double-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
                     {% else %}
                     <div class="col-lg-12">
-                         <h5 class="text-dark mb-0 pt-2 f-18">Bu ilana henüz başvuru yapılmadı</h5>
+                        <h5 class="text-dark mb-0 pt-2 f-18">Bu ilana henüz başvuru yapılmadı</h5>
                     </div>
                     {% endif %}
                 </div>
@@ -107,8 +191,12 @@
             </div>
             <div class="col-lg-4 col-md-5 mt-4 mt-sm-0">
                 <div class="job-detail border rounded p-4">
-                    <img src="/uploads/{{job.company.logo}}" alt=""
-                         class="img-fluid float-left mr-md-3 mr-2 mx-auto d-block">
+                    <div class="col-lg-12">
+                        <a href="/company-detail/{{job.company.slug}}"  target ="_blank">
+                        <img  src="/uploads/{{job.company.logo}}" alt=""
+                             class="img-fluid float-left mr-md-3 mr-2 mx-auto d-block">
+                            </a>
+                    </div>
                     <div class="job-detail-location pt-4">
                         &nbsp;
                         <div class="job-details-desc-item">
@@ -129,35 +217,28 @@
                             <div class="float-left mr-2">
                                 <i class="mdi mdi-web text-muted"></i>
                             </div>
-                            <p class="text-muted mb-2">: https://www.WebThemes.com</p>
+                            <p class="text-muted mb-2">: {{job.company.web_site}}</p>
                         </div>
 
                         <div class="job-details-desc-item">
                             <div class="float-left mr-2">
                                 <i class="mdi mdi-cellphone-iphone text-muted"></i>
                             </div>
-                            <p class="text-muted mb-2">: 1987 6543 21</p>
+                            <p class="text-muted mb-2">: {{job.company.phone}}</p>
                         </div>
 
                         <div class="job-details-desc-item">
                             <div class="float-left mr-2">
                                 <i class="mdi mdi-map-marker text-muted"></i>
                             </div>
-                            <p class="text-muted mb-2">{{job.company.city}}
+                            <p class="text-muted mb-2">: {{job.company.city}}
                         </div>
 
                         <div class="job-details-desc-item">
                             <div class="float-left mr-2">
                                 <i class="mdi mdi-security text-muted"></i>
                             </div>
-                            <p class="text-muted mb-2">: 1 To 3 Years.</p>
-                        </div>
-
-                        <div class="job-details-desc-item">
-                            <div class="float-left mr-2">
-                                <i class="mdi mdi-clock-outline text-muted"></i>
-                            </div>
-                            <p class="text-muted mb-2">: {{job.create_at|timesince}}</p>
+                            <p class="text-muted mb-2">: {{job.company.sector}}</p>
                         </div>
                     </div>
                 </div>

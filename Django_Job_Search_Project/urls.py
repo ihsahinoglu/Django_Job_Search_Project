@@ -27,6 +27,7 @@ urlpatterns = [
                   path('user/', include('user.urls'), name='user'),
                   path('contact/', views.contact, name='contact'),
                   path('job-details/<slug:slug>/', views.jobDetails, name='job-details'),
+                  path('job-list/<str:query_word>/', views.jobList, name='job-list'),
                   path('job-list/', views.jobList, name='job-list'),
                   path('create-resume/', views.createResume, name='create-resume'),
                   path('company-info/<slug:slug>', views.companyInfo, name='company-info'),

@@ -12,7 +12,7 @@ class Job(models.Model):
     company = models.ForeignKey(Company, related_name='children', on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     job_type = models.CharField(max_length=30, choices=JOB_TYPE)
-    description = RichTextUploadingField(blank=True)
+    description = RichTextUploadingField(blank=True, max_length=5000,)
     category = models.CharField(max_length=30)
     city = models.CharField(max_length=20, choices=CITY_DICT)
     education_level = models.CharField(max_length=30, choices=EDUCATION_LEVEL)

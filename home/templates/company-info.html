@@ -13,7 +13,7 @@
    </script>
  {% endfor %}
 
-<section class="bg-half">
+<section class="bg-half" style="background: url('/uploads/images/bg.jpg')">>
     <div class="bg-overlay"></div>
 </section>
 
@@ -66,14 +66,8 @@
                             <div class="col-md-4">
                                 <div class="form-group app-label">
                                     <label class="text-muted">Sektör :</label>
-                                    <div class="form-button">
-                                    <select class="nice-select rounded" name="sector">
-                                        <option>{{company.sector}}</option>
-                                        {%for category in CATEGORY %}
-                                        <option>{{category}}</option>
-                                        {%endfor%}
-                                    </select>
-                                </div>
+                                   <input id="sector" type="text" class="form-control resume"
+                                           placeholder="" name="sector" value="{{company.sector}}">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -148,7 +142,7 @@
                                                 <textarea id="about_company" name="about_company" rows="4"
                                                           class="form-control resume"
                                                           placeholder="Firmanız için bir tanıtım yazısı yazınız.."
-                                                >{{company.about_company}}</textarea>
+                                                >{{company.about_company|safe}}</textarea>
                                             </div>
                                         </div>
                                     </div>

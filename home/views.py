@@ -63,7 +63,6 @@ def index(request):
                        'CITY': CITY,
                        }
             return render(request, 'job-list.html', context)
-
     context = {'setting': setting,
                'CITY': CITY,
                'popular_categories_dict': popular_categories_dict,
@@ -108,15 +107,18 @@ def jobDetails(request, slug):
     current_user = request.user
     q = Apply.objects.values_list('user_id', flat=True).filter(job_id=job.id).distinct()
     applied_this_job = UserProfile.objects.filter(user_id__in=q)
-    print(applied_this_job)
-    if request.method == 'POST':  # check post
-        data = Apply()  # create relation with model
-        data.user_id = current_user.id
-        data.job_id = job.id
-        data.save()  # save data to table
 
-        messages.success(request, "İlana başvuru yapıldı")
-        return HttpResponseRedirect('/')
+    if request.method == 'POST':
+        if current_user.groups.name == 'job_seeker':
+            data = Apply()  # create relation with model
+            data.user_id = current_user.id
+            data.job_id = job.id
+            data.save()  # save data to table
+
+            messages.success(request, "İlana başvuru yapıldı")
+            return HttpResponseRedirect('/')
+        else:
+            messages.warning(request, "Sadece iş arayan statüsündeki kişiler başvuru yapabilir")
     context = {'setting': setting,
                'job': job,
                'applied_this_job': applied_this_job
@@ -306,7 +308,7 @@ def companyDetail(request, slug):
     return render(request, 'company-detail.html', context)
 
 
-def jobList(request):
+def jobList(request, query_word=None):
     setting = Setting.objects.get(id=1)
     job_list = Job.objects.all().order_by('-create_at')[:20]
     all_categories = Job.objects.values_list('category', flat=True).distinct()
@@ -356,7 +358,7 @@ def jobList(request):
         job_list = Job.objects.filter(q).order_by('-create_at')[:20]
 
         if request.method == 'POST' and 'sort' in request.POST:
-            print("burada")
+
             form = SortForm(request.POST)
             if form.is_valid():
                 sort = form.cleaned_data['sort']
@@ -373,7 +375,8 @@ def jobList(request):
                    'all_categories': all_categories,
                    }
         return render(request, 'job-list.html', context)
-
+    if query_word is not None:  # from popular category slider
+        job_list = Job.objects.filter(category=query_word).order_by('-create_at')[:20]
     context = {'setting': setting,
                'job_list': job_list,
                'CITY': CITY,
@@ -417,7 +420,6 @@ def PostJob(request):
                'GENDER_': GENDER_,
                'CITY': CITY,
                'JOB_TYPE': JOB_TYPE,
-               'CATEGORY': CATEGORY,
                }
     return render(request, 'post-a-job.html', context)
 
