@@ -107,13 +107,12 @@ def jobDetails(request, slug):
     current_user = request.user
     q = Apply.objects.values_list('user_id', flat=True).filter(job_id=job.id).distinct()
     applied_this_job = UserProfile.objects.filter(user_id__in=q)
-
     if request.method == 'POST':
-        if current_user.groups.name == 'job_seeker':
-            data = Apply()  # create relation with model
+        if request.user.groups.values_list('name', flat=True).first() == 'job_seeker':
+            data = Apply()
             data.user_id = current_user.id
             data.job_id = job.id
-            data.save()  # save data to table
+            data.save()
 
             messages.success(request, "İlana başvuru yapıldı")
             return HttpResponseRedirect('/')
@@ -169,7 +168,8 @@ def createResume(request):
                 data2.start_date = start_date[i]
                 data2.end_date = end_date[i]
                 data2.education_add_info = education_add_info[i]
-                data2.save()
+                if data2.school and data2.degree and data2.department is not None:
+                    data2.save()
 
             experience_count = int(form.cleaned_data['experienceCount'])
             company = request.POST.getlist('company')
@@ -187,7 +187,8 @@ def createResume(request):
                 data3.date_from = date_from[i]
                 data3.date_to = date_to[i]
                 data3.experience_add_info = experience_add_info[i]
-                data3.save()
+                if data3.company and data3.position is not None:
+                    data3.save()
 
             skill_count = int(form.cleaned_data['skillCount'])
             skill = request.POST.getlist('skill')
@@ -197,7 +198,8 @@ def createResume(request):
                 data4.user = current_user
                 data4.skill = skill[i]
                 data4.skill_value = skill_value[i]
-                data4.save()
+                if data4.skill and data4.skill_value is not None:
+                    data4.save()
 
             messages.success(request, "Bilgileriniz başarıyla güncellendi")
             return HttpResponseRedirect('/')

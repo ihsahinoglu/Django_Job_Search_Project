@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     address = models.CharField(blank=True, max_length=150)
     city = models.CharField(blank=True, max_length=20, choices=CITY_DICT)
     web_site = models.CharField(blank=True, max_length=50)
-    image = models.ImageField(blank=True, upload_to='uploads/images/users/', default='uploads/images/users/user.png')
+    image = models.ImageField(blank=True, upload_to='images/users/', default='images/users/user.png')
     title = models.CharField(blank=True, max_length=50)
     presentation = models.CharField(blank=True, max_length=500)
 

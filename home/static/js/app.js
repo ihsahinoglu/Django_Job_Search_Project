@@ -19,7 +19,7 @@
     }); 
 
     // Selectize
-    $('#select-category, #select-lang,#select-country').selectize({
+    $('#select-category, #select-lang,#select-country,#select-country2').selectize({
         create: true,
         sortField: {
             field: 'text',
