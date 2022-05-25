@@ -1,9 +1,7 @@
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.forms import ModelForm, TextInput, Textarea
-
 from home.other import STATUS
-
 
 class Setting(models.Model):
     title = models.CharField(max_length=150)
@@ -32,7 +30,6 @@ class Setting(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class ContactMessage(models.Model):
     STATUS = (

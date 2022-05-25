@@ -148,3 +148,19 @@ def forget_password(request):
         form = PasswordChangeForm(request.user)
         context = {'form': form, }
         return render(request, 'forget-password.html', context)
+
+@login_required(login_url='/login') # Check login
+def user_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Şifreniz başarıyla güncellendi')
+            return HttpResponseRedirect('/')
+        else:
+            messages.error(request, str(form.errors))
+            return HttpResponseRedirect('/change-password')
+    else:
+        form = PasswordChangeForm(request.user)
+        return render(request, 'change-password.html', {'form': form})

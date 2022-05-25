@@ -5,7 +5,7 @@
 {% block footer %} {% include 'footer2.html' %}  {% endblock %}
 {% block body %}
 
- {% for message in messages %}
+{% for message in messages %}
    <script type=text/javascript>
        toastr.{{ message.tags }}('{{ message }}')
    </script>

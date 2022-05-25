@@ -6,7 +6,7 @@
 {% block footer %} {% include 'footer.html' %}  {% endblock %}
 {% block body %}
 {% load static %}
-<section class="bg-half" style="background: url('/uploads/images/bg.jpg')">>
+<section class="bg-half" style="background: url('/uploads/images/bg.jpg')">
     <div class="bg-overlay"></div>
 </section>
 <div class="container">
@@ -16,9 +16,25 @@
                 <img src="/uploads/{{userprofile.image}}"
                      height="250" alt="" class="d-block mx-auto shadow rounded-pill mb-4">
                 <h5 class="text-dark mb-2">{{userprofile.full_name}}</h5>
-                <p class="text-dark-50 h6 mb-2"><i class="mdi mdi-bank mr-2"></i>{{user_experience.company}}</p>
-                <p class="text-dark-50 h6 mb-2">{{user_experience.position}}</p>
+                <p class="text-dark-50 h6 mb-2">{{userprofile.title}}</p>
+                <ul class="list-inline pt-3 mb-0">
+                        <li class="list-inline-item mr-3">
+                            <a class="text-dark f-15 mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{userprofile.address}}</a>
+                        </li>
 
+                        <li class="list-inline-item mr-3">
+                            <a  class="text-dark f-15 mb-0"><i class="mdi mdi-web mr-2"></i>{{userprofile.web_site}}</a>
+                        </li>
+
+                        <li class="list-inline-item mr-3">
+                            <a class="text-dark f-15 mb-0"><i class="mdi mdi-email mr-2"></i>{{userprofile.email}}</a>
+                        </li>
+
+                        <li class="list-inline-item mr-3">
+                            <a class="text-dark f-15 mb-0"><i class="mdi mdi-cellphone-iphone mr-2"></i>{{userprofile.phone}}</a>
+                        </li>
+                    </ul>
+                &nbsp;
                 <ul class="list-unstyled social-icon social mb-0">
                     <li class="list-inline-item"><a href="#" class="rounded"><i class="mdi mdi-facebook"></i></a>
                     </li>
@@ -37,36 +53,6 @@
 <!-- CANDIDATES PROFILE START -->
 <section class="section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h4 class="text-dark">Bilgilerim :</h4>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12 mt-3">
-                <div class="border rounded p-4">
-                    <ul class="list-inline pt-3 mb-0">
-                        <li class="list-inline-item mr-3">
-                            <a href="" class="text-muted f-15 mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{userprofile.address}}</a>
-                        </li>
-
-                        <li class="list-inline-item mr-3">
-                            <a href="" class="text-muted f-15 mb-0"><i class="mdi mdi-web mr-2"></i>{{userprofile.web_site}}</a>
-                        </li>
-
-                        <li class="list-inline-item mr-3">
-                            <a href="" class="text-muted f-15 mb-0"><i class="mdi mdi-email mr-2"></i>{{userprofile.email}}</a>
-                        </li>
-
-                        <li class="list-inline-item mr-3">
-                            <a href="" class="text-muted f-15 mb-0"><i class="mdi mdi-cellphone-iphone mr-2"></i>{{userprofile.phone}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-lg-12 mt-4 pt-2">
                 <h4 class="text-dark">Hakkımda :</h4>
@@ -98,7 +84,7 @@
                     <div class="profile-education-icon border rounded-pill bg-white text-primary">
                         <i class="mdi mdi-36px mdi-school"></i>
                     </div>
-                    <h6 class="text-uppercase f-17"><a href="#" class="text-muted">{{education.school}}</a></h6>
+                    <h6 class="text-uppercase f-17"><a class="text-muted">{{education.school}}</a></h6>
                     <p class="f-14 mb-1">{{education.start_date}} - {{education.end_date}}</p>
                     <p class="pb-3 mb-0">{{education.department}}</p>
 
@@ -130,14 +116,9 @@
                             <div class="job-list-desc candidates-profile-exp-desc">
                                 <h5 class="f-19 mb-2"><a href="#" class="text-dark">{{experience.company}}</a></h5>
                                 <p class="text-muted mb-0 f-16">{{experience.position}}</p>
-                                <p class="text-muted mb-0 f-16">{{experience.date_from}} -
-                                    {{experience.date_to}}</p>
-                                <p class="text-muted mb-0 f-16">Salary : $950</p>
-                                <p class="text-muted mb-0 f-16"><i class="mdi mdi-bank mr-2"></i>www.webthemesltd.co.in
-                                </p>
-                                <p class="text-muted mb-0 f-16"><i class="mdi mdi-map-marker mr-2"></i>1919 Ward
-                                    Road
-                                    West Nyack, NY 10994</p>
+                                <p class="text-muted mb-0 f-16">{{experience.date_from}} - {{experience.date_to}}</p>
+                                <p class="text-muted mb-0 f-16">{{experience.location}}</p>
+                                <p class="text-muted mb-0 f-16">{{experience.experience_add_info}}</p>
                             </div>
                         </div>
                     </div>

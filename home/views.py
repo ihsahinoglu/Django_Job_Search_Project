@@ -41,28 +41,14 @@ def index(request):
     total_applications = Apply.objects.all().count()
     total_job = Job.objects.all().count()
     total_user = UserProfile.objects.all().count()
-    if request.method == 'POST':  # check post
+    if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            q = Q()
             query = form.cleaned_data['query']
-            if query != "":
-                q |= Q(title__icontains=query)  # search from title
-                q |= Q(company__company_name__icontains=query)  # search from company name
-                q |= Q(description__icontains=query)  # search from description
             city = form.cleaned_data['city']
-            if city != "":
-                q &= Q(city=city)  # and search from city
             category = form.cleaned_data['category']
-            if category != "":
-                q &= Q(category=category)  # and search from category
-            job_list = Job.objects.filter(q)[:20]
+            return jobList(request, query, city, category)
 
-            context = {'setting': setting,
-                       'job_list': job_list,
-                       'CITY': CITY,
-                       }
-            return render(request, 'job-list.html', context)
     context = {'setting': setting,
                'CITY': CITY,
                'popular_categories_dict': popular_categories_dict,
@@ -125,7 +111,7 @@ def jobDetails(request, slug):
     return render(request, 'job-details.html', context)
 
 
-@login_required(login_url='/login')  # Check login
+@login_required(login_url='/login')
 @permission_required('user.add_userprofile', login_url='/login')
 def createResume(request):
     setting = Setting.objects.get(id=1)
@@ -236,7 +222,7 @@ def candidatesProfile(request, slug):
     return render(request, 'candidates-profile.html', context)
 
 
-@login_required(login_url='/login')  # Check login
+@login_required(login_url='/login')
 @permission_required('company.add_company', login_url='/login')
 def companyInfo(request, slug):
     setting = Setting.objects.get(id=1)
@@ -286,7 +272,7 @@ def companyDetail(request, slug):
             for i in range(5):
                 data = CompanyPhotoGallery()
                 data.company = company
-                s = 'image'+str(i+1)
+                s = 'image' + str(i + 1)
                 if form.cleaned_data[s] is not None:
                     data.image = form.cleaned_data[s]
                     data.save()
@@ -310,26 +296,65 @@ def companyDetail(request, slug):
     return render(request, 'company-detail.html', context)
 
 
-def jobList(request, query_word=None):
+def jobList(request, query_word=None, query_city=None, query_category=None):
     setting = Setting.objects.get(id=1)
-    job_list = Job.objects.all().order_by('-create_at')[:20]
     all_categories = Job.objects.values_list('category', flat=True).distinct()
-    q = Q()
+
+    def find_job(query=None, city=None, category=None):
+        q = Q()
+        if query != "":
+            q |= Q(title__icontains=query)  # search in title
+            q |= Q(company__company_name__icontains=query)  # search in company name
+            q |= Q(description__icontains=query)  # search in job description
+        if city != "":
+            q &= Q(city=city)
+        if category != "":
+            q &= Q(category=category)
+
+        return Job.objects.filter(q).order_by('-create_at')[:20]
+
+    def filter_job(list, selected1=None, selected2=None, selected3=None, selected4=None):
+        q = Q()
+        if selected1 == '1':  # filter by last 24 hours
+            date_from = timezone.now() - timezone.timedelta(days=1)
+            q &= Q(create_at__date__gte=date_from)
+        if selected1 == '2':  # filter by last 1 week
+            date_from = timezone.now() - timezone.timedelta(days=7)
+            q &= Q(create_at__date__gte=date_from)
+        if selected1 == '3':  # filter by last 1 mounth
+            date_from = timezone.now() - timezone.timedelta(days=30)
+            q &= Q(create_at__date__gte=date_from)
+
+        if selected2 != '':  # filter by education level
+            q &= Q(education_level=selected2)
+
+        if selected3 != '':  # filter by experience level
+            q &= Q(experience=selected3)
+
+        if selected4 != '':  # filter by gender
+            q &= Q(gender=selected4)
+
+        return list.filter(q).order_by('-create_at')[:20]
+
+    def sort_job(list, sort):
+        if sort == 'descending':
+            return list.order_by('-create_at')[:20]
+        if sort == 'ascending':
+            return list.order_by('create_at')[:20]
+
+    if query_word != "" or query_city != "" or query_category != "":
+        job_list = find_job(query_word, query_city, query_category)
+    else:
+        job_list = Job.objects.all().order_by('-create_at')[:20]
+
     if request.method == 'POST':
         if request.method == 'POST' and 'search-form' in request.POST:
             form = SearchForm(request.POST)
             if form.is_valid():
                 query = form.cleaned_data['query']
-                if query != "":
-                    q |= Q(title__icontains=query)
-                    q |= Q(company__company_name__icontains=query)
-                    q |= Q(description__icontains=query)
                 city = form.cleaned_data['city']
-                if city != "":  # and search from city
-                    q &= Q(city=city)
                 category = form.cleaned_data['category']
-                if category != "":
-                    q &= Q(category=category)
+                job_list = find_job(query, city, category)
 
         if request.method == 'POST' and 'filter-form' in request.POST:
             form = FilterForm(request.POST)
@@ -338,38 +363,13 @@ def jobList(request, query_word=None):
                 selected2 = form.cleaned_data['customRadio2']
                 selected3 = form.cleaned_data['customRadio3']
                 selected4 = form.cleaned_data['customRadio4']
-
-                if selected1 == '1':  # filter by last 24 hours
-                    date_from = timezone.now() - timezone.timedelta(days=1)
-                    q &= Q(create_at__date__gte=date_from)
-                if selected1 == '2':  # filter by last 1 week
-                    date_from = timezone.now() - timezone.timedelta(days=7)
-                    q &= Q(create_at__date__gte=date_from)
-                if selected1 == '3':  # filter by last 1 mounth
-                    date_from = timezone.now() - timezone.timedelta(days=30)
-                    q &= Q(create_at__date__gte=date_from)
-
-                if selected2 != '':  # filter by education level
-                    q &= Q(education_level=selected2)
-
-                if selected3 != '':  # filter by experience level
-                    q &= Q(experience=selected3)
-
-                if selected4 != '':  # filter by gender
-                    q &= Q(gender=selected4)
-        job_list = Job.objects.filter(q).order_by('-create_at')[:20]
+                job_list = filter_job(job_list, selected1, selected2, selected3, selected4)
 
         if request.method == 'POST' and 'sort' in request.POST:
-
             form = SortForm(request.POST)
             if form.is_valid():
                 sort = form.cleaned_data['sort']
-
-                print(sort)
-                if sort == 'descending':
-                    job_list = Job.objects.filter(q).order_by('-create_at')[:20]
-                if sort == 'ascending':
-                    job_list = Job.objects.filter(q).order_by('create_at')[:20]
+                job_list = sort_job(job_list, sort)
 
         context = {'setting': setting,
                    'job_list': job_list,
@@ -377,8 +377,7 @@ def jobList(request, query_word=None):
                    'all_categories': all_categories,
                    }
         return render(request, 'job-list.html', context)
-    if query_word is not None:  # from popular category slider
-        job_list = Job.objects.filter(category=query_word).order_by('-create_at')[:20]
+
     context = {'setting': setting,
                'job_list': job_list,
                'CITY': CITY,
