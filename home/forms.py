@@ -109,10 +109,15 @@ class SearchForm(forms.Form):
     query = forms.CharField(required=False, max_length=50)
     city = forms.CharField(required=False, max_length=50)
     category = forms.CharField(required=False, max_length=50)
+    customRadio1 = forms.CharField(required=False, max_length=50)
+    customRadio2 = forms.CharField(required=False, max_length=50)
+    customRadio3 = forms.CharField(required=False, max_length=50)
+    customRadio4 = forms.CharField(required=False, max_length=50)
+    sort = forms.CharField(required=False, max_length=50)
 
     class Meta:
         model = Company
-        fields = ('query', 'city', 'category')
+        fields = ('query', 'city', 'category','customRadio1', 'customRadio2', 'customRadio3', 'customRadio4','sort')
 
 
 class SortForm(forms.Form):
@@ -145,10 +150,13 @@ class ContactForm(forms.Form):
 
 
 class FilterForm(forms.Form):
+    query = forms.CharField(required=False, max_length=50)
+    city = forms.CharField(required=False, max_length=50)
+    category = forms.CharField(required=False, max_length=50)
     customRadio1 = forms.CharField(required=False, max_length=50)
     customRadio2 = forms.CharField(required=False, max_length=50)
     customRadio3 = forms.CharField(required=False, max_length=50)
     customRadio4 = forms.CharField(required=False, max_length=50)
 
     class Meta:
-        fields = ['customRadio1', 'customRadio2', 'customRadio3', 'customRadio4']
+        fields = ['query', 'city', 'category','customRadio1', 'customRadio2', 'customRadio3', 'customRadio4']

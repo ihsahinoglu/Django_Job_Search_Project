@@ -44,10 +44,12 @@ def index(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
-            query = form.cleaned_data['query']
-            city = form.cleaned_data['city']
-            category = form.cleaned_data['category']
-            return jobList(request, query, city, category)
+            query_dict = {'category': form.cleaned_data['category'],
+                          'city': form.cleaned_data['city'],
+                          'query': form.cleaned_data['query'],
+                          }
+            request.method = 'GET'
+            return jobList(request, **query_dict)
 
     context = {'setting': setting,
                'CITY': CITY,
@@ -209,7 +211,7 @@ def candidatesProfile(request, slug):
     user_skills = UserSkills.objects.all().filter(user_id=current_user.id)
     applied = Apply.objects.values_list('job_id').filter(user_id=current_user.id)
     applied_jobs = Job.objects.filter(id__in=applied)
-    jobs_for_me = Job.objects.all()  # düzelt
+    jobs_for_me = Job.objects.filter(Q(title__icontains=userprofile.title) or Q(description__icontains=userprofile.title))
 
     context = {'setting': setting,
                'userprofile': userprofile,
@@ -296,92 +298,83 @@ def companyDetail(request, slug):
     return render(request, 'company-detail.html', context)
 
 
-def jobList(request, query_word=None, query_city=None, query_category=None):
+def jobList(request, **kwargs):
     setting = Setting.objects.get(id=1)
     all_categories = Job.objects.values_list('category', flat=True).distinct()
+    query_dict = {'category': None,
+                  'city': None,
+                  'query': None,
+                  'selected1': None,
+                  'selected2': None,
+                  'selected3': None,
+                  'selected4': None,
+                  'sort': None,
+                  }
+    for key, value in kwargs.items():
+        if kwargs[key] is not "":
+            query_dict[key] = value
+    print(query_dict)
 
-    def find_job(query=None, city=None, category=None):
+    def find_job(**query_dict):
         q = Q()
-        if query != "":
-            q |= Q(title__icontains=query)  # search in title
-            q |= Q(company__company_name__icontains=query)  # search in company name
-            q |= Q(description__icontains=query)  # search in job description
-        if city != "":
-            q &= Q(city=city)
-        if category != "":
-            q &= Q(category=category)
+        if query_dict['category']:
+            q &= Q(category=query_dict['category'])
+        if query_dict['city']:
+            q &= Q(city=query_dict['city'])
+        if query_dict['query']:
+            q2 = Q()
+            q2 |= Q(title__icontains=query_dict['query'])  # search in title
+            q2 |= Q(company__company_name__icontains=query_dict['query'])  # search in company name
+            q2 |= Q(description__icontains=query_dict['query'])  # search in job description
+            q &= q2
+        if query_dict['selected1']:
+            if query_dict['selected1'] == '1':  # filter by last 24 hours
+                date_from = timezone.now() - timezone.timedelta(days=1)
+                q &= Q(create_at__date__gte=date_from)
+            if query_dict['selected1'] == '2':  # filter by last 1 week
+                date_from = timezone.now() - timezone.timedelta(days=7)
+                q &= Q(create_at__date__gte=date_from)
+            if query_dict['selected1'] == '3':  # filter by last 1 mounth
+                date_from = timezone.now() - timezone.timedelta(days=30)
+                q &= Q(create_at__date__gte=date_from)
+
+        if query_dict['selected2']:  # filter by education level
+            q &= Q(education_level=query_dict['selected2'])
+
+        if query_dict['selected3']:  # filter by experience level
+            q &= Q(experience=query_dict['selected3'])
+
+        if query_dict['selected4']:  # filter by gender
+            q &= Q(gender=query_dict['selected4'])
+
+        if query_dict['sort'] == 'descending':
+            return Job.objects.filter(q).order_by('-create_at')[:20]
+        if query_dict['sort'] == 'ascending':
+            return Job.objects.filter(q).order_by('create_at')[:20]
 
         return Job.objects.filter(q).order_by('-create_at')[:20]
 
-    def filter_job(list, selected1=None, selected2=None, selected3=None, selected4=None):
-        q = Q()
-        if selected1 == '1':  # filter by last 24 hours
-            date_from = timezone.now() - timezone.timedelta(days=1)
-            q &= Q(create_at__date__gte=date_from)
-        if selected1 == '2':  # filter by last 1 week
-            date_from = timezone.now() - timezone.timedelta(days=7)
-            q &= Q(create_at__date__gte=date_from)
-        if selected1 == '3':  # filter by last 1 mounth
-            date_from = timezone.now() - timezone.timedelta(days=30)
-            q &= Q(create_at__date__gte=date_from)
-
-        if selected2 != '':  # filter by education level
-            q &= Q(education_level=selected2)
-
-        if selected3 != '':  # filter by experience level
-            q &= Q(experience=selected3)
-
-        if selected4 != '':  # filter by gender
-            q &= Q(gender=selected4)
-
-        return list.filter(q).order_by('-create_at')[:20]
-
-    def sort_job(list, sort):
-        if sort == 'descending':
-            return list.order_by('-create_at')[:20]
-        if sort == 'ascending':
-            return list.order_by('create_at')[:20]
-
-    if query_word != "" or query_city != "" or query_category != "":
-        job_list = find_job(query_word, query_city, query_category)
-    else:
-        job_list = Job.objects.all().order_by('-create_at')[:20]
+    job_list = find_job(**query_dict)
 
     if request.method == 'POST':
-        if request.method == 'POST' and 'search-form' in request.POST:
-            form = SearchForm(request.POST)
-            if form.is_valid():
-                query = form.cleaned_data['query']
-                city = form.cleaned_data['city']
-                category = form.cleaned_data['category']
-                job_list = find_job(query, city, category)
-
-        if request.method == 'POST' and 'filter-form' in request.POST:
-            form = FilterForm(request.POST)
-            if form.is_valid():
-                selected1 = form.cleaned_data['customRadio1']
-                selected2 = form.cleaned_data['customRadio2']
-                selected3 = form.cleaned_data['customRadio3']
-                selected4 = form.cleaned_data['customRadio4']
-                job_list = filter_job(job_list, selected1, selected2, selected3, selected4)
-
-        if request.method == 'POST' and 'sort' in request.POST:
-            form = SortForm(request.POST)
-            if form.is_valid():
-                sort = form.cleaned_data['sort']
-                job_list = sort_job(job_list, sort)
-
-        context = {'setting': setting,
-                   'job_list': job_list,
-                   'CITY': CITY,
-                   'all_categories': all_categories,
-                   }
-        return render(request, 'job-list.html', context)
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query_dict['query'] = form.cleaned_data['query']
+            query_dict['city'] = form.cleaned_data['city']
+            query_dict['category'] = form.cleaned_data['category']
+            query_dict['selected1'] = form.cleaned_data['customRadio1']
+            query_dict['selected2'] = form.cleaned_data['customRadio2']
+            query_dict['selected3'] = form.cleaned_data['customRadio3']
+            query_dict['selected4'] = form.cleaned_data['customRadio4']
+            query_dict['sort'] = form.cleaned_data['sort']
+            request.method = 'GET'
+            return jobList(request, **query_dict)
 
     context = {'setting': setting,
                'job_list': job_list,
                'CITY': CITY,
                'all_categories': all_categories,
+               'query_dict': query_dict,
                }
     return render(request, 'job-list.html', context)
 
