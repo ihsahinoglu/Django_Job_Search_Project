@@ -13,445 +13,457 @@
 
 </section>
 <!-- end home -->
-<form class="registration-form" method="post" action="" id="search-form" name="search-form">
-    {% csrf_token %}
-    <div class="container">
-        <div class="home-form-position">"
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="home-registration-form job-list-reg-form bg-light shadow p-4 mb-3">
+<div>
+    <form class="registration-form" method="post" action="" id="search-form" name="search-form">
+        {% csrf_token %}
+        <div class="container">
+            <div class="home-form-position">"
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="home-registration-form job-list-reg-form bg-light shadow p-4 mb-3">
 
-                        <div class="row">
-                            <div class="col-lg-3 col-md-6">
-                                <div class="registration-form-box">
-                                    <i class="fa fa-briefcase"></i>
-                                    {%if query_dict.query is not None %}
-                                    <input type="text" id="exampleInputName1" name="query"
-                                           class="form-control rounded registration-input-box"
-                                           placeholder="Meslek, firma adı veya sektör.."
-                                           value="{{query_dict.query}}">
-                                    {% else %}
-                                    <input type="text" id="exampleInputName1" name="query"
-                                           class="form-control rounded registration-input-box"
-                                           placeholder="Meslek, firma adı veya sektör..">
-                                    {% endif %}
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <i class="fa fa-briefcase"></i>
+                                        {%if query_dict.query is not None %}
+                                        <input type="text" name="query"
+                                               class="form-control rounded registration-input-box"
+                                               placeholder="Meslek, firma adı veya sektör.."
+                                               value="{{query_dict.query}}">
+                                        {% else %}
+                                        <input type="text" name="query"
+                                               class="form-control rounded registration-input-box"
+                                               placeholder="Meslek, firma adı veya sektör..">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <i class="fa fa-location-arrow"></i>
+                                        {%if query_dict.city is not None %}
+                                        <select id="select-country" class="demo-default" name="city">
+                                            <option>{{query_dict.city}}</option>
+                                            <option value="">Tüm iller</option>
+                                            {%for city in CITY%}
+                                            <option>{{city}}</option>
+                                            {%endfor%}
+                                        </select>
+                                        {% else %}
+                                        <select id="select-country" class="demo-default" name="city">
+                                            <option value="">Şehir..</option>
+                                            {%for city in CITY%}
+                                            <option>{{city}}</option>
+                                            {%endfor%}
+                                        </select>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <i class="fa fa-list-alt"></i>
+                                        {%if query_dict.category is not None %}
+                                        <select id="select-category" class="demo-default" name="category">
+                                            <option>{{query_dict.category}}</option>
+                                            <option value="">Tüm sektörler</option>
+                                            {%for category in all_categories %}
+                                            <option>{{category}}</option>
+                                            {%endfor%}
+                                        </select>
+                                        {% else %}
+                                        <select id="select-category" class="demo-default" name="category">
+                                            <option value="">Sektör...</option>
+                                            {%for category in all_categories %}
+                                            <option>{{category}}</option>
+                                            {%endfor%}
+                                        </select>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="registration-form-box">
+                                        <input type="submit"  name="search-form"
+                                               class="submitBnt btn btn-primary btn-block" value="Ara">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="registration-form-box">
-                                    <i class="fa fa-location-arrow"></i>
-                                    {%if query_dict.city is not None %}
-                                    <select id="select-country" class="demo-default" name="city">
-                                        <option>{{query_dict.city}}</option>
-                                        <option value="">Tüm iller</option>
-                                        {%for city in CITY%}
-                                        <option>{{city}}</option>
-                                        {%endfor%}
-                                    </select>
-                                    {% else %}
-                                    <select id="select-country" class="demo-default" name="city">
-                                        <option value="">Şehir..</option>
-                                        {%for city in CITY%}
-                                        <option>{{city}}</option>
-                                        {%endfor%}
-                                    </select>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="registration-form-box">
-                                    <i class="fa fa-list-alt"></i>
-                                    {%if query_dict.category is not None %}
-                                    <select id="select-category" class="demo-default" name="category">
-                                        <option>{{query_dict.category}}</option>
-                                        <option value="">Tüm sektörler</option>
-                                        {%for category in all_categories %}
-                                        <option>{{category}}</option>
-                                        {%endfor%}
-                                    </select>
-                                    {% else %}
-                                    <select id="select-category" class="demo-default" name="category">
-                                        <option value="">Sektör...</option>
-                                        {%for category in all_categories %}
-                                        <option>{{category}}</option>
-                                        {%endfor%}
-                                    </select>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="registration-form-box">
-                                    <input type="submit" id="submit" name="search-form"
-                                           class="submitBnt btn btn-primary btn-block" value="Ara">
-                                </div>
-                            </div>
+
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- JOB LIST START -->
-    <section class="section pt-0">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="left-sidebar">
-                        <!--START FILTER SIDEBAR-->
+        <!-- JOB LIST START -->
+        <section class="section pt-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="left-sidebar">
+                            <!--START FILTER SIDEBAR-->
 
-                        <div class="accordion" id="accordionExample">
-                            <div class="card rounded mt-4">
-                                <a data-toggle="collapse" href="#collapseOne" class="job-list" aria-expanded="true"
-                                   aria-controls="collapseOne">
-                                    <div class="card-header" id="headingOne">
-                                        <h6 class="mb-0 text-dark f-18">Tarihe göre</h6>
-                                    </div>
-                                </a>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
-                                    <div class="card-body p-0">
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected1 == '1' %}
-                                            <input type="radio" id="customRadio1" name="customRadio1"
-                                                   class="custom-control-input" value="1" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio1" name="customRadio1"
-                                                   class="custom-control-input" value="1">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted" for="customRadio1">Son
-                                                24 saat</label>
+                            <div class="accordion" id="accordionExample">
+                                <div class="card rounded mt-4">
+                                    <a data-toggle="collapse" href="#collapseOne" class="job-list" aria-expanded="true"
+                                       aria-controls="collapseOne">
+                                        <div class="card-header" id="headingOne">
+                                            <h6 class="mb-0 text-dark f-18">Tarihe göre</h6>
                                         </div>
+                                    </a>
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                                        <div class="card-body p-0">
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected1 == '1' %}
+                                                <input type="radio" id="customRadio1" name="customRadio1"
+                                                       class="custom-control-input" value="1" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio1" name="customRadio1"
+                                                       class="custom-control-input" value="1">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted" for="customRadio1">Son
+                                                    24 saat</label>
+                                            </div>
 
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected1 == '2' %}
-                                            <input type="radio" id="customRadio2" name="customRadio1"
-                                                   class="custom-control-input" value="2" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio2" name="customRadio1"
-                                                   class="custom-control-input" value="2">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted" for="customRadio2">Son 1
-                                                hafta</label>
-                                        </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected1 == '2' %}
+                                                <input type="radio" id="customRadio2" name="customRadio1"
+                                                       class="custom-control-input" value="2" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio2" name="customRadio1"
+                                                       class="custom-control-input" value="2">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted" for="customRadio2">Son
+                                                    1
+                                                    hafta</label>
+                                            </div>
 
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected1 == '3' %}
-                                            <input type="radio" id="customRadio3" name="customRadio1"
-                                                   class="custom-control-input" value="3" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio3" name="customRadio1"
-                                                   class="custom-control-input" value="3">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted" for="customRadio3">Son 1
-                                                ay</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- collapse one end -->
-                            <div class="card rounded mt-4">
-                                <a data-toggle="collapse" href="#collapsetwo" class="job-list" aria-expanded="true"
-                                   aria-controls="collapsetwo">
-                                    <div class="card-header" id="headingtwo">
-                                        <h6 class="mb-0 text-dark f-18">Eğitim durumuna göre</h6>
-                                    </div>
-                                </a>
-                                <div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo">
-                                    <div class="card-body p-0">
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected2 == 'İlköğretim' %}
-                                            <input type="radio" id="customRadio4" name="customRadio2"
-                                                   class="custom-control-input" value="İlköğretim" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio4" name="customRadio2"
-                                                   class="custom-control-input" value="İlköğretim">
-                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio4">İlköğretim</label>
-                                            {% endif %}
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected2 == 'Lise' %}
-                                            <input type="radio" id="customRadio5" name="customRadio2"
-                                                   class="custom-control-input" value="Lise" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio5" name="customRadio2"
-                                                   class="custom-control-input" value="Lise">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio5">Lise</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected2 == 'Lise' %}
-                                            <input type="radio" id="customRadio6" name="customRadio2"
-                                                   class="custom-control-input" value="Önlisans" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio6" name="customRadio2"
-                                                   class="custom-control-input" value="Önlisans">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio6">Önlisans</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected2 == 'Lisans' %}
-                                            <input type="radio" id="customRadio7" name="customRadio2"
-                                                   class="custom-control-input" value="Lisans" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio7" name="customRadio2"
-                                                   class="custom-control-input" value="Lisans">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio7">Lisans</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected2 == 'Yüksek lisans' %}
-                                            <input type="radio" id="customRadio8" name="customRadio2"
-                                                   class="custom-control-input" value="Yüksek lisans" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio8" name="customRadio2"
-                                                   class="custom-control-input" value="Yüksek lisans">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio8">Yüksek
-                                                lisans</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected2 == 'Doktora' %}
-                                            <input type="radio" id="customRadio9" name="customRadio2"
-                                                   class="custom-control-input" value="Doktora" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio9" name="customRadio2"
-                                                   class="custom-control-input" value="Doktora">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15" for="customRadio9">Doktora</label>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected1 == '3' %}
+                                                <input type="radio" id="customRadio3" name="customRadio1"
+                                                       class="custom-control-input" value="3" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio3" name="customRadio1"
+                                                       class="custom-control-input" value="3">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted" for="customRadio3">Son
+                                                    1
+                                                    ay</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- collapse one end -->
-                            <div class="card rounded mt-4">
-                                <a data-toggle="collapse" href="#collapsethree" class="job-list" aria-expanded="true"
-                                   aria-controls="collapsethree">
-                                    <div class="card-header" id="headingthree">
-                                        <h6 class="mb-0 text-dark f-18">Tecrübeye göre</h6>
-                                    </div>
-                                </a>
-                                <div id="collapsethree" class="collapse show" aria-labelledby="headingthree">
-                                    <div class="card-body p-0">
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected3 == 'Tecrübesiz' %}
-                                            <input type="radio" id="customRadio10" name="customRadio3"
-                                                   class="custom-control-input" value="Tecrübesiz" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio10" name="customRadio3"
-                                                   class="custom-control-input" value="Tecrübesiz">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio10">Tecrübesiz</label>
+                                <!-- collapse one end -->
+                                <div class="card rounded mt-4">
+                                    <a data-toggle="collapse" href="#collapsetwo" class="job-list" aria-expanded="true"
+                                       aria-controls="collapsetwo">
+                                        <div class="card-header" id="headingtwo">
+                                            <h6 class="mb-0 text-dark f-18">Eğitim durumuna göre</h6>
                                         </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected3 == '1 yıl' %}
-                                            <input type="radio" id="customRadio11" name="customRadio3"
-                                                   class="custom-control-input" value="1 yıl" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio11" name="customRadio3"
-                                                   class="custom-control-input" value="1 yıl">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio11">1 yıl</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected3 == '2 yıl' %}
-                                            <input type="radio" id="customRadio12" name="customRadio3"
-                                                   class="custom-control-input" value="2 yıl" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio12" name="customRadio3"
-                                                   class="custom-control-input" value="2 yıl">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio12">2 yıl</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected3 == '3-5 yıl' %}
-                                            <input type="radio" id="customRadio13" name="customRadio3"
-                                                   class="custom-control-input" value="3-5 yıl" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio13" name="customRadio3"
-                                                   class="custom-control-input" value="3-5 yıl">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio13">3-5 yıl</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected3 == '5-10 yıl' %}
-                                            <input type="radio" id="customRadio14" name="customRadio3"
-                                                   class="custom-control-input" value="5-10 yıl" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio14" name="customRadio3"
-                                                   class="custom-control-input" value="5-10 yıl">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio14">5-10 yıl</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected3 == '10+ yıl' %}
-                                            <input type="radio" id="customRadio15" name="customRadio3"
-                                                   class="custom-control-input" value="10+ yıl" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio15" name="customRadio3"
-                                                   class="custom-control-input" value="10+ yıl">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio15">10+ yıl</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- collapse one end -->
-                            <div class="card rounded mt-4">
-                                <a data-toggle="collapse" href="#collapsefour" class="job-list" aria-expanded="true"
-                                   aria-controls="collapsefour">
-                                    <div class="card-header" id="headingfour">
-                                        <h6 class="mb-0 text-dark f-18">Cinsiyete göre</h6>
-                                    </div>
-                                </a>
-                                <div id="collapsefour" class="collapse show" aria-labelledby="headingfour">
-                                    <div class="card-body p-0">
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected4 == 'Erkek' %}
-                                            <input type="radio" id="customRadio16" name="customRadio4"
-                                                   class="custom-control-input" value="Erkek" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio16" name="customRadio4"
-                                                   class="custom-control-input" value="Erkek">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio16">Erkek</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            {% if query_dict.selected4 == 'Kadın' %}
-                                            <input type="radio" id="customRadio17" name="customRadio4"
-                                                   class="custom-control-input" value="Kadın" checked="checked">
-                                            {% else %}
-                                            <input type="radio" id="customRadio17" name="customRadio4"
-                                                   class="custom-control-input" value="Kadın">
-                                            {% endif %}
-                                            <label class="custom-control-label ml-1 text-muted f-15"
-                                                   for="customRadio17">Kadın</label>
+                                    </a>
+                                    <div id="collapsetwo" class="collapse show" aria-labelledby="headingtwo">
+                                        <div class="card-body p-0">
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected2 == 'İlköğretim' %}
+                                                <input type="radio" id="customRadio4" name="customRadio2"
+                                                       class="custom-control-input" value="İlköğretim"
+                                                       checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio4" name="customRadio2"
+                                                       class="custom-control-input" value="İlköğretim">
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio4">İlköğretim</label>
+                                                {% endif %}
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected2 == 'Lise' %}
+                                                <input type="radio" id="customRadio5" name="customRadio2"
+                                                       class="custom-control-input" value="Lise" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio5" name="customRadio2"
+                                                       class="custom-control-input" value="Lise">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio5">Lise</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected2 == 'Lise' %}
+                                                <input type="radio" id="customRadio6" name="customRadio2"
+                                                       class="custom-control-input" value="Önlisans" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio6" name="customRadio2"
+                                                       class="custom-control-input" value="Önlisans">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio6">Önlisans</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected2 == 'Lisans' %}
+                                                <input type="radio" id="customRadio7" name="customRadio2"
+                                                       class="custom-control-input" value="Lisans" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio7" name="customRadio2"
+                                                       class="custom-control-input" value="Lisans">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio7">Lisans</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected2 == 'Yüksek lisans' %}
+                                                <input type="radio" id="customRadio8" name="customRadio2"
+                                                       class="custom-control-input" value="Yüksek lisans"
+                                                       checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio8" name="customRadio2"
+                                                       class="custom-control-input" value="Yüksek lisans">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio8">Yüksek
+                                                    lisans</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected2 == 'Doktora' %}
+                                                <input type="radio" id="customRadio9" name="customRadio2"
+                                                       class="custom-control-input" value="Doktora" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio9" name="customRadio2"
+                                                       class="custom-control-input" value="Doktora">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio9">Doktora</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- collapse one end -->
-
-                            <div class="card rounded mt-4">
-                                <input class="btn btn-primary-outline" type="submit" id="submit" name="search-form"
-                                       value="Filtrele">
-                            </div>
-                        </div>
-
-                        <!--END FILTER SIDEBAR-->
-                    </div>
-                </div>
-
-                <div class="col-lg-9 mt-4 pt-2">
-                    <div class="row align-items-center">
-                        <div class="col-lg-12">
-                            {%if job_list|length > 0 %}
-                            <div class="show-results">
-                                <div class="float-left">
-                                    <h5 class="text-dark mb-0 pt-2 f-18">0-20 Sonuç gösteriliyor</h5>
+                                <!-- collapse one end -->
+                                <div class="card rounded mt-4">
+                                    <a data-toggle="collapse" href="#collapsethree" class="job-list"
+                                       aria-expanded="true"
+                                       aria-controls="collapsethree">
+                                        <div class="card-header" id="headingthree">
+                                            <h6 class="mb-0 text-dark f-18">Tecrübeye göre</h6>
+                                        </div>
+                                    </a>
+                                    <div id="collapsethree" class="collapse show" aria-labelledby="headingthree">
+                                        <div class="card-body p-0">
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected3 == 'Tecrübesiz' %}
+                                                <input type="radio" id="customRadio10" name="customRadio3"
+                                                       class="custom-control-input" value="Tecrübesiz"
+                                                       checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio10" name="customRadio3"
+                                                       class="custom-control-input" value="Tecrübesiz">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio10">Tecrübesiz</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected3 == '1 yıl' %}
+                                                <input type="radio" id="customRadio11" name="customRadio3"
+                                                       class="custom-control-input" value="1 yıl" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio11" name="customRadio3"
+                                                       class="custom-control-input" value="1 yıl">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio11">1 yıl</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected3 == '2 yıl' %}
+                                                <input type="radio" id="customRadio12" name="customRadio3"
+                                                       class="custom-control-input" value="2 yıl" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio12" name="customRadio3"
+                                                       class="custom-control-input" value="2 yıl">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio12">2 yıl</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected3 == '3-5 yıl' %}
+                                                <input type="radio" id="customRadio13" name="customRadio3"
+                                                       class="custom-control-input" value="3-5 yıl" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio13" name="customRadio3"
+                                                       class="custom-control-input" value="3-5 yıl">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio13">3-5 yıl</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected3 == '5-10 yıl' %}
+                                                <input type="radio" id="customRadio14" name="customRadio3"
+                                                       class="custom-control-input" value="5-10 yıl" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio14" name="customRadio3"
+                                                       class="custom-control-input" value="5-10 yıl">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio14">5-10 yıl</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected3 == '10+ yıl' %}
+                                                <input type="radio" id="customRadio15" name="customRadio3"
+                                                       class="custom-control-input" value="10+ yıl" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio15" name="customRadio3"
+                                                       class="custom-control-input" value="10+ yıl">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio15">10+ yıl</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="sort-button float-right">
-                                    <select class="nice-select rounded" onChange="form.submit();"
-                                            name="sort" type="submit" >
-                                        <option data-display="Sırala"></option>
-                                        <option value="descending">Yeniden eskiye</option>
-                                        <option value="ascending">Eskiden yeniye</option>
-                                    </select>
+                                <!-- collapse one end -->
+                                <div class="card rounded mt-4">
+                                    <a data-toggle="collapse" href="#collapsefour" class="job-list" aria-expanded="true"
+                                       aria-controls="collapsefour">
+                                        <div class="card-header" id="headingfour">
+                                            <h6 class="mb-0 text-dark f-18">Cinsiyete göre</h6>
+                                        </div>
+                                    </a>
+                                    <div id="collapsefour" class="collapse show" aria-labelledby="headingfour">
+                                        <div class="card-body p-0">
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected4 == 'Erkek' %}
+                                                <input type="radio" id="customRadio16" name="customRadio4"
+                                                       class="custom-control-input" value="Erkek" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio16" name="customRadio4"
+                                                       class="custom-control-input" value="Erkek">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio16">Erkek</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                {% if query_dict.selected4 == 'Kadın' %}
+                                                <input type="radio" id="customRadio17" name="customRadio4"
+                                                       class="custom-control-input" value="Kadın" checked="checked">
+                                                {% else %}
+                                                <input type="radio" id="customRadio17" name="customRadio4"
+                                                       class="custom-control-input" value="Kadın">
+                                                {% endif %}
+                                                <label class="custom-control-label ml-1 text-muted f-15"
+                                                       for="customRadio17">Kadın</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <!-- collapse one end -->
 
+                                <div class="card rounded mt-4">
+                                    <input class="btn btn-primary-outline" type="submit" name="search-form"
+                                           value="Filtrele">
+                                </div>
                             </div>
-                            {% else %}
-                            <h5 class="text-dark mb-0 pt-2 f-18">Gösterilecek sonuç bulunamadı</h5>
-                            {% endif %}
+
+                            <!--END FILTER SIDEBAR-->
                         </div>
                     </div>
 
-                    <div class="row">
-                        <!--START-->
-                        {%for job in job_list%}
-                        <div class="col-lg-12 mt-4 pt-2">
-                            <div class="job-list-box border rounded">
-                                <div class="p-3">
-                                    <div class="row align-items-center">
-                                        <div class="col-lg-2">
-                                            <div class="company-logo-img">
-                                                <a href="/company-detail/{{job.company.slug}}" target="_blank"> <img
-                                                        src="/uploads/{{job.company.logo}}" alt=""
-                                                        class="img-fluid mx-auto d-block"></a>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-7 col-md-9">
-                                            <div class="job-list-desc">
-                                                <h6 class="mb-2"><a class="text-dark">{{job.title|title}}</a></h6>
-                                                <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2"></i>{{job.company.company_name|title}}
-                                                </p>
-                                                <ul class="list-inline mb-0">
-                                                    <li class="list-inline-item mr-3">
-                                                        <p class="text-muted mb-0"><i
-                                                                class="mdi mdi-map-marker mr-2"></i>{{job.city}}
-                                                        </p>
-                                                    </li>
+                    <div class="col-lg-9 mt-4 pt-2">
+                        <div class="row align-items-center">
+                            <div class="col-lg-12">
+                                {%if job_list|length > 0 %}
+                                <div class="show-results">
+                                    <div class="float-left">
+                                        <h5 class="text-dark mb-0 pt-2 f-18">0-20 Sonuç gösteriliyor</h5>
+                                    </div>
+                                    <div class="sort-button float-right">
+                                        <select class="nice-select rounded" onChange="this.form.submit();"
+                                                name="sort" id="sort">
+                                            <option data-display="Sırala"></option>
+                                            <option value="descending">Yeniden eskiye</option>
+                                            <option value="ascending">Eskiden yeniye</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <h5 class="text-dark mb-0 pt-2 f-18">Gösterilecek sonuç bulunamadı</h5>
+                                {% endif %}
+                            </div>
+                        </div>
 
-                                                    <li class="list-inline-item">
-                                                        <p class="text-muted mb-0"><i
-                                                                class="mdi mdi-clock-outline mr-2"></i>{{job.create_at|timesince}}
-                                                        </p>
-                                                    </li>
-                                                </ul>
+                        <div class="row">
+                            <!--START-->
+                            {%for job in job_list%}
+                            <div class="col-lg-12 mt-4 pt-2">
+                                <div class="job-list-box border rounded">
+                                    <div class="p-3">
+                                        <div class="row align-items-center">
+                                            <div class="col-lg-2">
+                                                <div class="company-logo-img">
+                                                    <a href="/company-detail/{{job.company.slug}}" target="_blank"> <img
+                                                            src="/uploads/{{job.company.logo}}" alt=""
+                                                            class="img-fluid mx-auto d-block"></a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <div class="job-list-button-sm text-right">
-                                                <span class="badge badge-success">{{job.job_type}}</span>
+                                            <div class="col-lg-7 col-md-9">
+                                                <div class="job-list-desc">
+                                                    <h6 class="mb-2"><a class="text-dark">{{job.title|title}}</a></h6>
+                                                    <p class="text-muted mb-0"><i class="mdi mdi-bank mr-2"></i>{{job.company.company_name|title}}
+                                                    </p>
+                                                    <ul class="list-inline mb-0">
+                                                        <li class="list-inline-item mr-3">
+                                                            <p class="text-muted mb-0"><i
+                                                                    class="mdi mdi-map-marker mr-2"></i>{{job.city}}
+                                                            </p>
+                                                        </li>
 
-                                                <div class="mt-3">
-                                                    <a href="/job-details/{{job.slug}}" target="_blank"
-                                                       class="btn btn-sm btn-primary">İlan Detay</a>
+                                                        <li class="list-inline-item">
+                                                            <p class="text-muted mb-0"><i
+                                                                    class="mdi mdi-clock-outline mr-2"></i>{{job.create_at|timesince}}
+                                                            </p>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3">
+                                                <div class="job-list-button-sm text-right">
+                                                    <span class="badge badge-success">{{job.job_type}}</span>
+
+                                                    <div class="mt-3">
+                                                        <a href="/job-details/{{job.slug}}" target="_blank"
+                                                           class="btn btn-sm btn-primary">İlan Detay</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {%endfor%}
+                            <!--END-->
+                            {%if job_list|length > 0 %}
+                            <div class="col-lg-12 mt-4 pt-2">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination job-pagination mb-0 justify-content-center">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                                <i class="mdi mdi-chevron-double-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">
+                                                <i class="mdi mdi-chevron-double-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            {% endif %}
                         </div>
-                        {%endfor%}
-                        <!--END-->
-                        {%if job_list|length > 0 %}
-                        <div class="col-lg-12 mt-4 pt-2">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination job-pagination mb-0 justify-content-center">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                            <i class="mdi mdi-chevron-double-left"></i>
-                                        </a>
-                                    </li>
-                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">
-                                            <i class="mdi mdi-chevron-double-right"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</form>
+        </section>
+    </form>
+</div>
 <!-- JOB LIST END -->
 
 {%endblock%}

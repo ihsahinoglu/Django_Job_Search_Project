@@ -2,12 +2,23 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group, Permission, User
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from company.models import Company
 from user.forms import SignUpForm, CompanySignUpForm, ForgetPasswordForm
 from user.models import UserProfile
+from django.shortcuts import render, redirect
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.models import User
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
 
 
 @login_required(login_url='/login')  # Check login
@@ -134,20 +145,40 @@ def change_password(request):
 
 def forget_password(request):
     if request.method == 'POST':
-        form = ForgetPasswordForm(request.user, request.POST)
+        form = ForgetPasswordForm(request.POST)
         if form.is_valid():
-            # ???
+            data = form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "user/templates/password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'ihsahin63@gmail.com', [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("/")
 
             messages.success(request, 'Your password was successfully updated!')
-            return HttpResponseRedirect('/user')
+            return HttpResponseRedirect('/')
         else:
             messages.warning(request, 'Please correct the error below.<br>' + str(form.errors))
             return HttpResponseRedirect('/forget-password')
-    else:
-        # category = Category.objects.all()
-        form = PasswordChangeForm(request.user)
-        context = {'form': form, }
-        return render(request, 'forget-password.html', context)
+
+    form = PasswordChangeForm(request.user)
+    context = {'form': form, }
+    return render(request, 'forget-password.html', context)
+
 
 @login_required(login_url='/login') # Check login
 def user_password(request):

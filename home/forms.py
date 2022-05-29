@@ -120,12 +120,7 @@ class SearchForm(forms.Form):
         fields = ('query', 'city', 'category','customRadio1', 'customRadio2', 'customRadio3', 'customRadio4','sort')
 
 
-class SortForm(forms.Form):
-    sort = forms.CharField(required=False, max_length=50)
 
-    class Meta:
-        model: Job
-        fields = ('sort',)
 
 
 class FAQForm(forms.Form):
@@ -148,8 +143,7 @@ class ContactForm(forms.Form):
         model = ContactMessage
         fields = ['name', 'email', 'subject', 'message']
 
-
-class FilterForm(forms.Form):
+class EmployersSearchForm(forms.Form):
     query = forms.CharField(required=False, max_length=50)
     city = forms.CharField(required=False, max_length=50)
     category = forms.CharField(required=False, max_length=50)
@@ -157,6 +151,10 @@ class FilterForm(forms.Form):
     customRadio2 = forms.CharField(required=False, max_length=50)
     customRadio3 = forms.CharField(required=False, max_length=50)
     customRadio4 = forms.CharField(required=False, max_length=50)
+    sort = forms.CharField(required=False, max_length=50)
 
     class Meta:
-        fields = ['query', 'city', 'category','customRadio1', 'customRadio2', 'customRadio3', 'customRadio4']
+        model = Company
+        fields = ('query', 'city', 'category','customRadio1', 'customRadio2', 'customRadio3', 'customRadio4','sort')
+
+

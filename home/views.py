@@ -13,7 +13,7 @@ from apply.models import Apply
 from company.forms import ImageForm
 from company.models import Company, CompanyPhotoGallery
 from home import forms
-from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, FilterForm, SortForm
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, EmployersSearchForm
 from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
@@ -434,13 +434,78 @@ def about(request):
     return render(request, 'about.html', context)
 
 
-def employersList(request):
+def employersList(request, **kwargs):
     setting = Setting.objects.get(id=1)
-    # employers = User.objects.filter(groups=2)  # job_seeker
+    query_dict = {'city': None,
+                  'query': None,
+                  'selected1': None,
+                  'selected2': None,
+                  'selected3': None,
+                  'selected4': None,
+                  'sort': None,
+                  }
+    for key, value in kwargs.items():
+        if kwargs[key] is not "":
+            query_dict[key] = value
+    print(query_dict)
+
+    def find_employers(**query_dict):
+        q = Q()
+        if query_dict['city']:
+            q &= Q(city=query_dict['city'])
+        if query_dict['query']:
+            q2 = Q()
+            q2 |= Q(title__icontains=query_dict['query'])  # search in title
+            q2 |= Q(company__company_name__icontains=query_dict['query'])  # search in company name
+            q2 |= Q(description__icontains=query_dict['query'])  # search in job description
+            q &= q2
+        if query_dict['selected1']:
+            if query_dict['selected1'] == '1':  # filter by last 24 hours
+                date_from = timezone.now() - timezone.timedelta(days=1)
+                q &= Q(create_at__date__gte=date_from)
+            if query_dict['selected1'] == '2':  # filter by last 1 week
+                date_from = timezone.now() - timezone.timedelta(days=7)
+                q &= Q(create_at__date__gte=date_from)
+            if query_dict['selected1'] == '3':  # filter by last 1 mounth
+                date_from = timezone.now() - timezone.timedelta(days=30)
+                q &= Q(create_at__date__gte=date_from)
+
+        if query_dict['selected2']:  # filter by education level
+            q &= Q(education_level=query_dict['selected2'])
+
+        if query_dict['selected3']:  # filter by experience level
+            q &= Q(experience=query_dict['selected3'])
+
+        if query_dict['selected4']:  # filter by gender
+            q &= Q(gender=query_dict['selected4'])
+
+        if query_dict['sort'] == 'descending':
+            return UserProfile.objects.filter(q).order_by('-create_at')[:20]
+        if query_dict['sort'] == 'ascending':
+            return UserProfile.objects.filter(q).order_by('create_at')[:20]
+
+        return UserProfile.objects.filter(q).order_by('-create_at')[:20]
+
     employers = UserProfile.objects.all()
-    print(employers)
+    #employers = find_employers(**query_dict)
+
+    if request.method == 'POST':
+        form = EmployersSearchForm(request.POST)
+        if form.is_valid():
+            query_dict['query'] = form.cleaned_data['query']
+            query_dict['city'] = form.cleaned_data['city']
+            query_dict['category'] = form.cleaned_data['category']
+            query_dict['selected1'] = form.cleaned_data['customRadio1']
+            query_dict['selected2'] = form.cleaned_data['customRadio2']
+            query_dict['selected3'] = form.cleaned_data['customRadio3']
+            query_dict['selected4'] = form.cleaned_data['customRadio4']
+            query_dict['sort'] = form.cleaned_data['sort']
+            request.method = 'GET'
+            return employersList(request, **query_dict)
+
     context = {'setting': setting,
+               'employers': employers,
                'CITY': CITY,
-               'employers': employers
+               'query_dict': query_dict,
                }
     return render(request, 'employers-list.html', context)
