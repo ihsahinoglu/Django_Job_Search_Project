@@ -13,7 +13,8 @@ from apply.models import Apply
 from company.forms import ImageForm
 from company.models import Company, CompanyPhotoGallery
 from home import forms
-from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, EmployersSearchForm
+from home.forms import CreateResumeForm, CompanyInfoForm, PostJobForm, SearchForm, ContactForm, EmployersSearchForm, \
+    RateForm
 from home.models import ContactMessage, Setting, FAQ
 from home.other import CITY, CATEGORY, EDUCATION_LEVEL, EXPERIENCE, GENDER_, JOB_TYPE
 from job.models import Job
@@ -211,7 +212,23 @@ def candidatesProfile(request, slug):
     user_skills = UserSkills.objects.all().filter(user_id=current_user.id)
     applied = Apply.objects.values_list('job_id').filter(user_id=current_user.id)
     applied_jobs = Job.objects.filter(id__in=applied)
-    jobs_for_me = Job.objects.filter(Q(title__icontains=userprofile.title) or Q(description__icontains=userprofile.title))
+    jobs_for_me = Job.objects.filter(
+        Q(title__icontains=userprofile.title) or Q(description__icontains=userprofile.title))
+    print("rate:" + str(userprofile.rate))
+
+    if request.method == 'POST':
+        form = RateForm(request.POST)
+        if form.is_valid():
+            data = userprofile
+            data.user = current_user
+            new_rate = (userprofile.rate * userprofile.rate_count + int(form.cleaned_data['rate'])) \
+                       / (userprofile.rate_count + 1)
+            data.rate = round(new_rate,1)
+            data.rate_count += 1
+            data.save()
+            messages.success(request, "Puanınız kaydedildi")
+            request.method = 'GET'
+            return candidatesProfile(request, slug)
 
     context = {'setting': setting,
                'userprofile': userprofile,
@@ -487,7 +504,7 @@ def employersList(request, **kwargs):
         return UserProfile.objects.filter(q).order_by('-create_at')[:20]
 
     employers = UserProfile.objects.all()
-    #employers = find_employers(**query_dict)
+    # employers = find_employers(**query_dict)
 
     if request.method == 'POST':
         form = EmployersSearchForm(request.POST)

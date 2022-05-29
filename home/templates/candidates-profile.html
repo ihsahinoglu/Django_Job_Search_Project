@@ -6,6 +6,11 @@
 {% block footer %} {% include 'footer.html' %}  {% endblock %}
 {% block body %}
 {% load static %}
+{% for message in messages %}
+   <script type=text/javascript>
+       toastr.{{ message.tags }}('{{ message }}')
+   </script>
+ {% endfor %}
 <section class="bg-half" style="background: url('/uploads/images/bg.jpg')">
     <div class="bg-overlay"></div>
 </section>
@@ -18,31 +23,49 @@
                 <h5 class="text-dark mb-2">{{userprofile.full_name}}</h5>
                 <p class="text-dark-50 h6 mb-2">{{userprofile.title}}</p>
                 <ul class="list-inline pt-3 mb-0">
-                        <li class="list-inline-item mr-3">
-                            <a class="text-dark f-15 mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{userprofile.address}}</a>
-                        </li>
+                    <li class="list-inline-item mr-3">
+                        <a class="text-dark f-15 mb-0"><i
+                                class="mdi mdi-map-marker mr-2"></i>{{userprofile.address}}</a>
+                    </li>
 
-                        <li class="list-inline-item mr-3">
-                            <a  class="text-dark f-15 mb-0"><i class="mdi mdi-web mr-2"></i>{{userprofile.web_site}}</a>
-                        </li>
+                    <li class="list-inline-item mr-3">
+                        <a class="text-dark f-15 mb-0"><i class="mdi mdi-web mr-2"></i>{{userprofile.web_site}}</a>
+                    </li>
 
-                        <li class="list-inline-item mr-3">
-                            <a class="text-dark f-15 mb-0"><i class="mdi mdi-email mr-2"></i>{{userprofile.email}}</a>
-                        </li>
+                    <li class="list-inline-item mr-3">
+                        <a class="text-dark f-15 mb-0"><i class="mdi mdi-email mr-2"></i>{{userprofile.email}}</a>
+                    </li>
 
-                        <li class="list-inline-item mr-3">
-                            <a class="text-dark f-15 mb-0"><i class="mdi mdi-cellphone-iphone mr-2"></i>{{userprofile.phone}}</a>
-                        </li>
+                    <li class="list-inline-item mr-3">
+                        <a class="text-dark f-15 mb-0"><i class="mdi mdi-cellphone-iphone mr-2"></i>{{userprofile.phone}}</a>
+                    </li>
+                </ul>
+                &nbsp;
+                <form class="rate-form" method="post" action="" id="rate-form" name="rate-form">
+                    {% csrf_token %}
+                    <ul class="candidates-profile-icons list-inline mb-3">
+                         <li class="list-inline-item"><a onclick="rate(1);" type="submit" class="text-warning"><i
+                                class="mdi mdi-star{% if userprofile.rate < 1 %}-outline {% endif %}"></i></a></li>
+                        <li class="list-inline-item"><a onclick="rate(2);" type="submit" class="text-warning"><i
+                                class="mdi mdi-star{% if userprofile.rate < 2 %}-outline {% endif %}"></i></a></li>
+                        <li class="list-inline-item"><a onclick="rate(3);" type="submit" class="text-warning"><i
+                                class="mdi mdi-star{% if userprofile.rate < 3 %}-outline {% endif %}"></i></a></li>
+                        <li class="list-inline-item"><a onclick="rate(4);" type="submit" class="text-warning"><i
+                                class="mdi mdi-star{% if userprofile.rate < 4 %}-outline {% endif %}"></i></a></li>
+                        <li class="list-inline-item"><a onclick="rate(5);" type="submit" class="text-warning"><i
+                                class="mdi mdi-star{% if userprofile.rate < 5 %}-outline {% endif %}"></i></a></li>
+                        <li>  <input id="rate" name="rate" hidden="hidden" ></li>
                     </ul>
-                &nbsp;
-                <ul class="candidates-profile-icons list-inline mb-3">
-                            <li class="list-inline-item"><a href="#" class="text-warning"><i class="mdi mdi-star"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-warning"><i class="mdi mdi-star"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-warning"><i class="mdi mdi-star"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-warning"><i class="mdi mdi-star"></i></a></li>
-                            <li class="list-inline-item"><a href="#" class="text-warning"><i class="mdi mdi-star"></i></a></li>
-                        </ul>
-                &nbsp;
+                <script>
+                    function rate(rate_value)
+                    {
+                        document.querySelector('#rate').value = rate_value;
+                        document.getElementById("rate-form").submit();
+
+                    }
+                </script>
+                </form>
+
                 <ul class="list-unstyled social-icon social mb-0">
                     <li class="list-inline-item"><a href="#" class="rounded"><i class="mdi mdi-facebook"></i></a>
                     </li>

@@ -376,16 +376,16 @@
                                         </p>
                                         <ul class="employers-icons list-inline mb-1">
                                             <li class="list-inline-item"><a href="#" class="text-success"><i
-                                                    class="mdi mdi-star"></i></a></li>
+                                                    class="mdi mdi-star{% if employer.rate < 1 %}-outline {% endif %}"></i></a></li>
                                             <li class="list-inline-item"><a href="#" class="text-success"><i
-                                                    class="mdi mdi-star"></i></a></li>
+                                                    class="mdi mdi-star{% if employer.rate < 2 %}-outline {% endif %}"></i></a></li>
                                             <li class="list-inline-item"><a href="#" class="text-success"><i
-                                                    class="mdi mdi-star"></i></a></li>
+                                                    class="mdi mdi-star{% if employer.rate < 3 %}-outline {% endif %}"></i></a></li>
                                             <li class="list-inline-item"><a href="#" class="text-success"><i
-                                                    class="mdi mdi-star"></i></a></li>
+                                                    class="mdi mdi-star{% if employer.rate < 4 %}-outline {% endif %}"></i></a></li>
                                             <li class="list-inline-item"><a href="#" class="text-success"><i
-                                                    class="mdi mdi-star"></i></a></li>
-                                            <li class="list-inline-item badge badge-success text-white">4.9</li>
+                                                    class="mdi mdi-star{% if employer.rate < 5 %}-outline {% endif %}"></i></a></li>
+                                            <li class="list-inline-item badge badge-success text-white">{{employer.rate}}</li>
                                         </ul>
                                     </div>
                                     <div class="apply-button text-center mt-3">

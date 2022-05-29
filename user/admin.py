@@ -5,7 +5,7 @@ from user.models import UserProfile, UserEducation, UserExperience, UserSkills
 
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'email', 'image', 'image_tag', ]
+    list_display = ['full_name', 'email', 'rate', 'image', 'image_tag', ]
     # readonly_fields = ('image_tag',)
 
 

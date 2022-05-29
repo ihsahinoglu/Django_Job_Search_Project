@@ -158,3 +158,11 @@ class EmployersSearchForm(forms.Form):
         fields = ('query', 'city', 'category','customRadio1', 'customRadio2', 'customRadio3', 'customRadio4','sort')
 
 
+class RateForm(forms.Form):
+    rate = forms.IntegerField(required=False)
+
+    class Meta:
+        model = Company
+        fields = ('rate', )
+
+
