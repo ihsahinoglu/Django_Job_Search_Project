@@ -214,7 +214,6 @@ def candidatesProfile(request, slug):
     applied_jobs = Job.objects.filter(id__in=applied)
     jobs_for_me = Job.objects.filter(
         Q(title__icontains=userprofile.title) or Q(description__icontains=userprofile.title))
-    print("rate:" + str(userprofile.rate))
 
     if request.method == 'POST':
         form = RateForm(request.POST)
@@ -457,8 +456,6 @@ def employersList(request, **kwargs):
                   'query': None,
                   'selected1': None,
                   'selected2': None,
-                  'selected3': None,
-                  'selected4': None,
                   'sort': None,
                   }
     for key, value in kwargs.items():
@@ -473,49 +470,57 @@ def employersList(request, **kwargs):
         if query_dict['query']:
             q2 = Q()
             q2 |= Q(title__icontains=query_dict['query'])  # search in title
-            q2 |= Q(company__company_name__icontains=query_dict['query'])  # search in company name
-            q2 |= Q(description__icontains=query_dict['query'])  # search in job description
+            q2 |= Q(first_name__icontains=query_dict['query'])  # search in first name
+            q2 |= Q(last_name__icontains=query_dict['query'])  # search in last name
+            q2 |= Q(presentation__icontains=query_dict['query'])  # search in presentation
+            school = UserEducation.objects.values_list('user_id', flat=True). \
+                filter(school__icontains=query_dict['query']).distinct()
+            for i in school:
+                q2 |= Q(user_id=i)
+            department = UserEducation.objects.values_list('user_id', flat=True). \
+                filter(department__icontains=query_dict['query']).distinct()
+            for i in department:
+                q2 |= Q(user_id=i)
+            company = UserExperience.objects.values_list('user_id', flat=True). \
+                filter(company__icontains=query_dict['query']).distinct()
+            for i in company:
+                q2 |= Q(user_id=i)
+            skill = UserSkills.objects.values_list('user_id', flat=True). \
+                filter(skill__icontains=query_dict['query']).distinct()
+            for i in skill:
+                q2 |= Q(user_id=i)
             q &= q2
         if query_dict['selected1']:
             if query_dict['selected1'] == '1':  # filter by last 24 hours
                 date_from = timezone.now() - timezone.timedelta(days=1)
-                q &= Q(create_at__date__gte=date_from)
+                q &= Q(user__last_login__date__gte=date_from)
             if query_dict['selected1'] == '2':  # filter by last 1 week
                 date_from = timezone.now() - timezone.timedelta(days=7)
-                q &= Q(create_at__date__gte=date_from)
+                q &= Q(user__last_login__date__gte=date_from)
             if query_dict['selected1'] == '3':  # filter by last 1 mounth
                 date_from = timezone.now() - timezone.timedelta(days=30)
-                q &= Q(create_at__date__gte=date_from)
+                q &= Q(user__last_login__date__gte=date_from)
 
-        if query_dict['selected2']:  # filter by education level
-            q &= Q(education_level=query_dict['selected2'])
-
-        if query_dict['selected3']:  # filter by experience level
-            q &= Q(experience=query_dict['selected3'])
-
-        if query_dict['selected4']:  # filter by gender
-            q &= Q(gender=query_dict['selected4'])
+        if query_dict['selected2']:  # filter by gender
+            q &= Q(gender=query_dict['selected2'])
 
         if query_dict['sort'] == 'descending':
-            return UserProfile.objects.filter(q).order_by('-create_at')[:20]
+            return UserProfile.objects.filter(q).order_by('-rate')[:20]
         if query_dict['sort'] == 'ascending':
-            return UserProfile.objects.filter(q).order_by('create_at')[:20]
+            return UserProfile.objects.filter(q).order_by('rate')[:20]
 
-        return UserProfile.objects.filter(q).order_by('-create_at')[:20]
+        return UserProfile.objects.filter(q)
 
-    employers = UserProfile.objects.all()
-    # employers = find_employers(**query_dict)
+    # employers = UserProfile.objects.all()
+    employers = find_employers(**query_dict)
 
     if request.method == 'POST':
         form = EmployersSearchForm(request.POST)
         if form.is_valid():
             query_dict['query'] = form.cleaned_data['query']
             query_dict['city'] = form.cleaned_data['city']
-            query_dict['category'] = form.cleaned_data['category']
             query_dict['selected1'] = form.cleaned_data['customRadio1']
             query_dict['selected2'] = form.cleaned_data['customRadio2']
-            query_dict['selected3'] = form.cleaned_data['customRadio3']
-            query_dict['selected4'] = form.cleaned_data['customRadio4']
             query_dict['sort'] = form.cleaned_data['sort']
             request.method = 'GET'
             return employersList(request, **query_dict)

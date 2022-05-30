@@ -18,9 +18,9 @@ class UserProfile(models.Model):
     web_site = models.CharField(blank=True, max_length=50)
     image = models.ImageField(blank=True, upload_to='images/users/', default='images/users/user.png')
     title = models.CharField(blank=True, max_length=50)
-    presentation = models.CharField(blank=True, max_length=500)
+    presentation = models.CharField(blank=True, max_length=1000)
     rate = models.FloatField(blank=True,default=1)
-    rate_count = models.FloatField(blank=True,default=1)
+    rate_count = models.IntegerField(blank=True,default=1)
 
     def __str__(self):
         return self.user.username
