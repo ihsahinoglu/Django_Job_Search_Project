@@ -6,7 +6,7 @@
 {% block footer %} {% include 'footer.html' %}  {% endblock %}
 {% block body %}
 {% load static %}
-
+{% load i18n %}
 {% for message in messages %}
 <script type=text/javascript>
     toastr.
@@ -107,7 +107,8 @@
                                             </div>
                                             <div class="overview-details">
                                                 <h6 class="text-muted mb-0">İlan Tarihi</h6>
-                                                <h6 class="text-black-50 pt-2 mb-0">{{job.create_at|timesince}}</h6>
+                                                <h6 class="text-black-50 pt-2 mb-0">{{ job.create_at|timesince}}</h6>
+
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +142,7 @@
                     </div>
                 </div>
                 &nbsp;
-                {% if job.company.email == user.email %}
+                {% if job.company.user.username == user.username %}
                 <div class="col-lg-12">
                     <h3 class="mb-2">Bu ilana başvuru yapan adaylar</a></h3>
                 </div>
@@ -160,18 +161,18 @@
                                 <p class="text-muted mb-0">{{employer.title}}</p>
                                 <p class="text-muted mb-0"><i class="mdi mdi-map-marker mr-2"></i>{{employer.city}}</p>
                                 <ul class="employers-icons list-inline mb-1">
-                                    <li class="list-inline-item"><a href="#" class="text-success"><i
-                                            class="mdi mdi-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#" class="text-success"><i
-                                            class="mdi mdi-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#" class="text-success"><i
-                                            class="mdi mdi-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#" class="text-success"><i
-                                            class="mdi mdi-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#" class="text-success"><i
-                                            class="mdi mdi-star"></i></a></li>
-                                    <li class="list-inline-item badge badge-success text-white">4.9</li>
-                                </ul>
+                                            <li class="list-inline-item"><a  class="text-success"><i
+                                                    class="mdi mdi-star{% if employer.rate < 1 %}-outline {% endif %}"></i></a></li>
+                                            <li class="list-inline-item"><a  class="text-success"><i
+                                                    class="mdi mdi-star{% if employer.rate < 2 %}-outline {% endif %}"></i></a></li>
+                                            <li class="list-inline-item"><a class="text-success"><i
+                                                    class="mdi mdi-star{% if employer.rate < 3 %}-outline {% endif %}"></i></a></li>
+                                            <li class="list-inline-item"><a class="text-success"><i
+                                                    class="mdi mdi-star{% if employer.rate < 4 %}-outline {% endif %}"></i></a></li>
+                                            <li class="list-inline-item"><a  class="text-success"><i
+                                                    class="mdi mdi-star{% if employer.rate < 5 %}-outline {% endif %}"></i></a></li>
+                                            <li class="list-inline-item badge badge-success text-white">{{employer.rate}}</li>
+                                        </ul>
                             </div>
                             <div class="apply-button text-center mt-3">
                                 <a href="/candidates-profile/{{employer.user.username}}" class="btn btn-primary btn-sm">Profile
@@ -191,14 +192,15 @@
             </div>
             <div class="col-lg-4 col-md-5 mt-4 mt-sm-0">
                 <div class="job-detail border rounded p-4">
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 float-lg-right">
                         <a href="/company-detail/{{job.company.slug}}"  target ="_blank">
                         <img  src="/uploads/{{job.company.logo}}" alt=""
                              class="img-fluid float-left mr-md-3 mr-2 mx-auto d-block">
                             </a>
                     </div>
+                     &nbsp
                     <div class="job-detail-location pt-4">
-                        &nbsp;
+
                         <div class="job-details-desc-item">
                             <div class="float-left mr-2">
                                 <i class="mdi mdi-bank text-muted"></i>

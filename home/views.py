@@ -25,7 +25,6 @@ from django.forms import modelformset_factory, formset_factory
 def index(request):
     setting = Setting.objects.get(id=1)
     recent_jobs = Job.objects.all().order_by('-create_at')[:8]
-
     popular_job_list = Apply.objects.order_by('job_id').values('job_id').distinct()
     popular_jobs = Job.objects.filter(id__in=popular_job_list)[:8]
 
