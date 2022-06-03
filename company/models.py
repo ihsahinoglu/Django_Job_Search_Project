@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import User
 from django.db import models
@@ -23,7 +24,10 @@ class Company(models.Model):
     status = models.CharField(max_length=10, choices=STATUS)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
-    slug = models.SlugField(null=False, unique=True)
+    slug = AutoSlugField(populate_from='get_slug', null=False, unique=True)
+
+    def get_slug(self):
+        return self.user.username
 
     def __str__(self):
         return self.company_name
@@ -34,9 +38,12 @@ class Company(models.Model):
         else:
             return ""
 
-    def get_absolute_url(self):
-        return reverse('company_detail', kwargs={'slug': self.slug})
 
+
+    """"
+    def get_slug(self):
+        return reverse('company_detail', kwargs={'slug': self.slug})
+    """
 class CompanyPhotoGallery(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, upload_to='images/')

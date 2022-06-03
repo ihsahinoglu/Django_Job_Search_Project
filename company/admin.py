@@ -8,8 +8,8 @@ class ImageInline(admin.TabularInline):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ['company_name', 'status', 'get_logo']
-    prepopulated_fields = {'slug': ('company_name',)}
+    list_display = ['company_name', 'slug', 'status', 'get_logo']
+    #prepopulated_fields = {'slug': ('company_name',)}
     readonly_fields = ('get_logo',)
     inlines = [
         ImageInline
